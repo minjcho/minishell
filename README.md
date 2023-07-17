@@ -33,4 +33,4 @@ You will learn a lot about processes and file descriptors.
 |6분 ~ 10분| 500원 |
 |11분 ~ 20분| 2000원 |
 |21분 ~ 30분| 4000원 |
-|31분 ~ | 10,000원 |  
+
