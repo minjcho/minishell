@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 16:14:11 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/07/27 18:30:03 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/07/28 14:19:24 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 typedef struct s_mini
 {
 	char	**command;
-	char	*
 } t_mini; 
 
 # include <errno.h>
@@ -29,5 +28,9 @@ typedef struct s_mini
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <signal.h>
+# include "../libft/libft.h"
+
+int		redirection_set(t_mini *data);
+void	exec_cmd(t_mini **data);
 
 #endif
