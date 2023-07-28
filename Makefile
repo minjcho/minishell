@@ -71,6 +71,7 @@ INC_DIR	= include
 
 SOURCES_NAMES	=	main.c \
 					parsing.c par_validcheck.c \
+					ft_split2.c \
 
 SOURCES = $(addprefix $(SRC_DIR)/, $(SOURCES_NAMES))
 OBJECTS = $(SOURCES_NAMES:%.c=$(OBJ_DIR)/%.o)
