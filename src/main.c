@@ -3,32 +3,22 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
+/*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 16:33:41 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/07/27 21:09:23 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/07/28 13:56:56 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-extern char **environ;
-
-// pipe='|'
-
-// 1. echo a | wc -l
-//    1. "echo a"
-//    2. "wc -l"
-   
-
-// 2. echo a $pipe wc -l
-//    1. "echo a $pipe wc -l"
-//       "echo" "a" "|" "wc" "-l"
-
-int main(int ac, char **av)
+int main(int ac, char **av, char **env)
 {
-    //init;
-    (void)ac;
-    (void)av;
-    printf("%s", environ[0]);
+	t_mini	mini;
+	char *line;
+	while (1)
+	{
+		line = readline("minishell$ ");
+		printf("%s\n", line);
+	}
 }
