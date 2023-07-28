@@ -6,7 +6,7 @@
 /*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 16:14:11 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/07/28 13:48:19 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/07/28 15:15:25 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,8 @@
 typedef struct s_mini
 {
 	char	**command;
-} t_mini; 
+	int		cnt;
+} t_mini;
 
 # include <errno.h>
 # include <stdio.h>
@@ -28,5 +29,7 @@ typedef struct s_mini
 # include <sys/types.h>
 # include <sys/wait.h>
 # include <signal.h>
+
+void	parsing(t_mini mini[100], char *line);
 
 #endif
