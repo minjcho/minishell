@@ -59,7 +59,7 @@ NAME			= minishell
 CC				= cc
 LIB_FLAG		= -Llibft -lft
 CFLAGS			= -Iinclude #-Wall -Wextra -Werror 추가 해야함
-READLINE_FLAG	=  -lreadline -L${HOME}/.brew/opt/readline/lib
+READLINE_FLAG	= -lreadline -L${HOME}/.brew/opt/readline/lib
 READLINE_INC	= -I${HOME}/.brew/opt/readline/include
 # READLINE_FLAG	= -lreadline -L/opt/homebrew/opt/readline/lib	# minjcho
 # READLINE_INC	= -I/opt/homebrew/opt/readline/include			# minjcho
@@ -70,7 +70,7 @@ OBJ_DIR	= obj
 INC_DIR	= include
 
 SOURCES_NAMES	=	main.c \
-					parsing.c \
+					parsing.c par_validcheck.c \
 
 SOURCES = $(addprefix $(SRC_DIR)/, $(SOURCES_NAMES))
 OBJECTS = $(SOURCES_NAMES:%.c=$(OBJ_DIR)/%.o)
