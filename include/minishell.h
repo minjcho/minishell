@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 16:14:11 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/07/27 18:30:03 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/07/27 21:07:39 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,6 @@
 typedef struct s_mini
 {
 	char	**command;
-	char	*
 } t_mini; 
 
 # include <errno.h>
