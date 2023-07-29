@@ -6,7 +6,7 @@
 /*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 15:41:39 by minjcho           #+#    #+#             */
-/*   Updated: 2023/07/28 17:05:22 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/07/29 11:19:35 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,5 @@ bool	readline_check(char *line)
 		printf("consecutive pipe!\n");
 		return (false);
 	}
-	if (!)
 	return (true);
 }

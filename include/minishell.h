@@ -6,7 +6,7 @@
 /*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 16:14:11 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/07/28 16:54:27 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/07/29 11:17:40 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,8 +31,9 @@ typedef struct s_mini
 # include <signal.h>
 # include <stdbool.h>
 
-void	parsing(t_mini *mini, char *line);
+void	parsing(t_mini **mini, char *line);
 bool	readline_check(char *line);
 char	**ft_split2(char *str, char *charset);
+int		cnt_pipe(char *line);
 
 #endif
