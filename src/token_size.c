@@ -6,11 +6,29 @@
 /*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/31 15:04:56 by minjcho           #+#    #+#             */
-/*   Updated: 2023/07/31 15:29:44 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/07/31 15:51:38 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+bool	quote_exist(char *line, int idx)
+{
+	int		i;
+	int		cnt;
+	bool	status;
+
+	i = 0;
+	cnt = 0;
+	while (i < idx)
+	{
+		if (line[i] == line[idx])
+			cnt++;
+		i++;
+	}
+	if (cnt % 2 == 1)
+		return (true);
+}
 
 int	quote_count(char *line)
 {
@@ -19,7 +37,7 @@ int	quote_count(char *line)
 	i = 0;
 	while (line[i])
 	{
-		if (line[i] == '\'' && quote_exist(&line[i]) && not_in_quote(&line[i]))
+		if (line[i] == '\'' && quote_exist(line, i) && between_quote(line, i))
 			
 	}
 }
