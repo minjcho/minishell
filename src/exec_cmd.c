@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 14:14:16 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/07/31 21:29:23 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/07/31 21:50:33 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -222,9 +222,19 @@ void	do_builtin(t_mini *data)// seperate input &data[i];
 		//do_echo(data);
 }
 
-void	do_echo(data)
+void	do_echo(t_mini *data)
 {
+	int	option_idx;
 
+	option_idx = is_echo_option(data);
+	if (option_idx)
+	{
+		
+	}
+	else
+	{
+
+	}
 }
 
 void	do_cd(t_mini *data)
