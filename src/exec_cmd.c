@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 14:14:16 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/07/31 12:02:24y jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/07/31 21:29:23 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@ void	readlilne_tester(void)
 	int		i;
 	t_mini	*node;
 
+	node = NULL;
 	while (1)
 	{
 		temp = readline("minishell : ");
@@ -68,8 +69,29 @@ void	readlilne_tester(void)
 				}
 				printf("------------------\n");
 			}
+			free(temp);
 			exec_cmd(node);
+			node_free(node);
+			command_free(token);
 		}
+	}
+}
+
+void	node_free(t_mini *node)
+{
+	int	i;
+
+	i = -1;
+	if (node)
+	{
+		while (++i < node->cnt)
+		{
+			if (&node[i])
+			{
+				command_free(node[i].command);
+			}
+		}
+		free(node);
 	}
 }
 
@@ -83,8 +105,9 @@ void	process_start2(t_mini *data)
 	i = -1;
 	prev_pipe = 0;
 
-	while (++i < data->cnt)
+	while ((++i < data->cnt))
 	{
+	
 		pipe(cur_pipe);
 		pid = fork();
 		if (pid == 0)
@@ -123,19 +146,18 @@ void	process_start2(t_mini *data)
 		}
 		else if (pid > 0)
 		{
+			if (data->builtin_cnt == 1)
+			{
+				do_builtin(data);
+				break;
+			}
 			close(cur_pipe[1]);
 			if (prev_pipe)
-			{
 				close(prev_pipe);
-			}
 			if (data[i].cnt > 1)
-			{
 				prev_pipe = cur_pipe[0];
-			}
 			else
-			{
 				close(cur_pipe[0]);
-			}
 		}
 		else
 			error_fork();
@@ -145,6 +167,108 @@ void	process_start2(t_mini *data)
 		waitpid(-1, NULL, 0);
 		i--;
 	}
+}
+
+void	builtin_counter(t_mini *data)
+{
+	int	i;
+	int	builtin_cnt;
+
+	i = -1;
+	builtin_cnt = 0;
+	while (++i < data->cnt)
+	{
+		if (builtin_check(&data[i]))
+			builtin_cnt++;
+	}
+	data->builtin_cnt = builtin_cnt;
+}
+
+int	builtin_check(t_mini *data)
+{
+	int		i;
+	char	*temp;
+
+	i = -1;
+	while (++i < data->cmd_size)
+	{
+		temp = data->command[i];
+		if (ft_strncmp(temp, "cd", ft_strlen(temp)) == 0)
+			return (1);
+		else if (ft_strncmp(temp, "echo", ft_strlen(temp)) == 0)
+			return (2);
+		else if (ft_strncmp(temp, "pwd", ft_strlen(temp)) == 0)
+			return (3);
+		else if (ft_strncmp(temp, "export", ft_strlen(temp)) == 0)
+			return (4);
+		else if (ft_strncmp(temp, "unset", ft_strlen(temp)) == 0)
+			return (5);
+		else if (ft_strncmp(temp, "env", ft_strlen(temp)) == 0)
+			return (6);
+		else if (ft_strncmp(temp, "exit", ft_strlen(temp)) == 0)
+			return (7);
+	}
+	return (0);
+}
+
+void	do_builtin(t_mini *data)// seperate input &data[i];
+{
+	if (builtin_check(data) == 1)
+		do_cd(data);
+	else if (builtin_check(data) == 2)
+	{
+
+	}
+		//do_echo(data);
+}
+
+void	do_echo(data)
+{
+
+}
+
+void	do_cd(t_mini *data)
+{
+	char	*to_directory;
+	
+	to_directory = NULL;
+	if (data->cmd_size > 1)
+		to_directory = data->command[1];
+	if (to_home_directory(to_directory))
+	{
+		ft_putstr_fd("to home directory", 2);
+		return ;
+		//get envp value set it// if the home value is nothing set => not set home error
+	}
+	if (to_back_directory(to_directory))
+		return ;
+	else if(chdir(to_directory) == -1)
+	{
+		perror(data->command[1]);
+	}
+}
+int	to_back_directory(char *to_directory)
+{
+	if (ft_strncmp(to_directory, "-", ft_strlen(to_directory)) == 0)
+	{
+		//set_oldpwd;
+		//get envp and go back 
+		ft_putstr_fd("to back directory", 2);
+		return (1);
+	}
+	else
+		return (0);
+}
+
+int	to_home_directory(char *to_directory)
+{
+	if (!to_directory)
+		return (1);
+	if (is_redirection(to_directory)\
+	|| !ft_strncmp(to_directory, ".", ft_strlen(to_directory)) \
+	|| !ft_strncmp(to_directory, "~", ft_strlen(to_directory)))
+		return (1);
+	return (0);
 }
 
 int	is_argument(char **command, t_mini *data)
@@ -195,10 +319,6 @@ void	cmd_start(t_mini *data, char **split_path)
 				cmd = ft_strjoin(slash_join, data->command[j]);
 				if (access(cmd, X_OK) == 0)
 				{
-					// for(int i = 0 ; i < data->cmd_size ; i++)
-					// {
-					// 	write(2, data->command[i], ft_strlen(data->command[i]));
-					// }
 					command_realloc(data);
 					if (execve(cmd, data->command, NULL) == -1)
 					{
@@ -236,7 +356,7 @@ void	command_realloc(t_mini *data)
 	else if (!data || !data->command) 
 		return ;
 	new_token = (char **)malloc(sizeof(char *) * (token_cnt + 1));
-	if (new_token)
+	if (!new_token)
 		error_malloc();
 	new_token[token_cnt] = NULL;
 	i = -1;
@@ -272,6 +392,12 @@ void	exec_cmd(t_mini *data)
 	{
 		redirection_ready(&data[i]);
 	}
+	builtin_counter(data);
+	if (data->builtin_cnt == 1)
+	{
+		do_builtin(data);
+		return ;
+	}
 	process_start2(data);
 }
 
@@ -290,6 +416,7 @@ int	redirection_ready(t_mini *data)
 	return (0);
 }
 
+// file open and redirection fd set; 
 void    set_redirection(t_mini *data, int i)
 {
 	if (!data->command[i])
@@ -300,6 +427,18 @@ void    set_redirection(t_mini *data, int i)
 		file_create(data, i, 0);
 	else if (is_redirection(data->command[i]) == 3)
 		file_create(data, i, 1);
+}
+
+int is_redirection(char *str)
+{
+	// < > >> <>(?)
+	if (ft_strncmp(str, "<", ft_strlen(str)) == 0)
+		return (1);
+	else if (ft_strncmp(str, ">", ft_strlen(str)) == 0)
+		return (2);
+	else if (ft_strncmp(str, ">>", ft_strlen(str)) == 0)
+		return (3);
+	return (0);
 }
 
 void    file_create(t_mini *data, int i, int flag)
@@ -358,6 +497,8 @@ void	set_cmd_null(t_mini *data, int start, int end)
 	}
 }
 
+//error msg
+
 void	error_cmdnotfound(char *cmd, t_mini *data)
 {
 	char	*str;
@@ -365,6 +506,7 @@ void	error_cmdnotfound(char *cmd, t_mini *data)
 	str = ": command not found\n";
 	write(2, cmd, ft_strlen(cmd));
 	write(2, str, ft_strlen(str));
+	exit(128);
 }
 
 void	error_execve(void)
@@ -394,16 +536,4 @@ void	error_malloc(void)
 {
 	perror("malloc");
 	exit(1);
-}
-
-int is_redirection(char *str)
-{
-	// < > >> <>(?)
-	if (ft_strncmp(str, "<", ft_strlen(str)) == 0)
-		return (1);
-	else if (ft_strncmp(str, ">", ft_strlen(str)) == 0)
-		return (2);
-	else if (ft_strncmp(str, ">>", ft_strlen(str)) == 0)
-		return (3);
-	return (0);
 }
