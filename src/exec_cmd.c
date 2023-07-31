@@ -23,15 +23,6 @@ extern char **environ;
 
 int main(int ac, char **av, char ** envp)
 {
-	// char    **temp;
-
-    // temp = (char **)malloc(sizeof(char*) * 3);
-    // temp[0] = ft_strdup("cat");
-    // temp[1] = ft_strdup("test");
-    // temp[2] = NULL;
-    // execve("/bin/cat", temp, NULL);
-	// perror("erro");
-
 	readlilne_tester();
 }
 
@@ -98,9 +89,18 @@ void	process_start2(t_mini *data)
 		pid = fork();
 		if (pid == 0)
 		{	
-			if (data[i].input_fd != 0)
+			if (data->input_fd == - 1 || data->output_fd == -1)
+				exit(128);
+			if (is_argument(data[i].command, &data[i]))
 			{
-				dup2(data[i].input_fd, 0);
+				if (data[i].input_fd)
+					close(data[i].input_fd);
+				data[i].input_fd = 0;
+			}
+			else if (data[i].input_fd != 0)
+			{
+				if (dup2(data[i].input_fd, 0) == -1)
+					write(2, "in", 2);
 				close(data[i].input_fd);
 			}
 			if (prev_pipe)
@@ -147,6 +147,25 @@ void	process_start2(t_mini *data)
 	}
 }
 
+int	is_argument(char **command, t_mini *data)
+{
+	int	i;
+	int	is_argument;
+
+	i = -1;
+	is_argument = 0;
+	while (++i < data->cmd_size)
+	{
+		if (data->command[i] == NULL)
+			continue;
+		else if (ft_strncmp("-", data->command[i], 1) != 0)
+			is_argument++;
+	}
+	if (is_argument > 1)
+		return (1);
+	return (0);
+}
+
 void	cmd_find(t_mini *data)
 {
 	char	*temp;
@@ -176,13 +195,71 @@ void	cmd_start(t_mini *data, char **split_path)
 				cmd = ft_strjoin(slash_join, data->command[j]);
 				if (access(cmd, X_OK) == 0)
 				{
+					// for(int i = 0 ; i < data->cmd_size ; i++)
+					// {
+					// 	write(2, data->command[i], ft_strlen(data->command[i]));
+					// }
+					command_realloc(data);
 					if (execve(cmd, data->command, NULL) == -1)
+					{
 						error_execve();
+					}
 				}
 				free(cmd);
 			}
 		}
 		free(slash_join);
+	}
+	error_cmdnotfound(data->command[0], data);
+}
+
+void	command_realloc(t_mini *data)
+{
+	int		i;
+	int		j;
+	int		token_cnt;
+	char	**new_token;
+
+	i = -1;
+	token_cnt = 0;
+	if (data)
+	{
+		if (data->command)
+		{
+			while (++i < data->cmd_size)
+			{
+				if (data->command[i])
+					token_cnt++;
+			}
+		}
+	}
+	else if (!data || !data->command) 
+		return ;
+	new_token = (char **)malloc(sizeof(char *) * (token_cnt + 1));
+	if (new_token)
+		error_malloc();
+	new_token[token_cnt] = NULL;
+	i = -1;
+	j = -1;
+	while (++i < data->cmd_size)
+	{
+		if (data->command[i])
+			new_token[++j] = ft_strdup(data->command[i]);
+	}
+	command_free(data->command);
+	data->command = new_token;
+}
+
+void	command_free(char **command)
+{
+	int	i;
+
+	i = -1;
+	if (command)
+	{
+		while (command[++i])
+			free(command[i]);
+		free(command);
 	}
 }
 
@@ -231,8 +308,8 @@ void    file_create(t_mini *data, int i, int flag)
 
 	if (i + 1 > data->cmd_size) // this condition need to be handle in parsing part
 		exit(258);
-	if (data->input_fd != 0)
-		close(data->input_fd);
+	if (data->output_fd != 0)
+		close(data->output_fd);
 	if (flag)
 	{    
 		fd = open(data->command[i + 1],  O_WRONLY | O_CREAT | O_APPEND, 0644);
@@ -257,7 +334,9 @@ void    file_open(t_mini *data, int i)
 	if (i + 1 > data->cmd_size)
 		exit(258);
 	if (data->input_fd != 0)
+	{
 		close(data->input_fd);
+	}
 	file_name = data->command[i + 1];
 	fd = open (file_name, O_RDONLY);
 	if (fd == -1)
@@ -278,6 +357,16 @@ void	set_cmd_null(t_mini *data, int start, int end)
 		start++;
 	}
 }
+
+void	error_cmdnotfound(char *cmd, t_mini *data)
+{
+	char	*str;
+
+	str = ": command not found\n";
+	write(2, cmd, ft_strlen(cmd));
+	write(2, str, ft_strlen(str));
+}
+
 void	error_execve(void)
 {
 	perror("execve");
@@ -287,7 +376,6 @@ void	error_execve(void)
 void    error_file(void)
 {
 	perror("file");
-	exit(128);
 }
 
 void	error_fork(void)
@@ -299,6 +387,12 @@ void	error_fork(void)
 void	error_pipe(void)
 {
 	perror("pipe");
+	exit(1);
+}
+
+void	error_malloc(void)
+{
+	perror("malloc");
 	exit(1);
 }
 
