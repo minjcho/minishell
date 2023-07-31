@@ -1,24 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_isprint.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jinhyeok <jinhyeok@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/27 16:33:41 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/07/28 13:56:56 by minjcho          ###   ########.fr       */
+/*   Created: 2023/03/13 18:57:54 by jinhyeok          #+#    #+#             */
+/*   Updated: 2023/03/14 11:06:13 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-
-int main(int ac, char **av, char **env)
+int	ft_isprint(int c)
 {
-	t_mini	mini;
-	char *line;
-	while (1)
-	{
-		line = readline("minishell$ ");
-		printf("%s\n", line);
-	}
+	return (c >= 32 && c <= 126);
 }

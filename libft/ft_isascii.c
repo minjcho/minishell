@@ -1,24 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_isascii.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jinhyeok <jinhyeok@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/27 16:33:41 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/07/28 13:56:56 by minjcho          ###   ########.fr       */
+/*   Created: 2023/03/13 18:51:23 by jinhyeok          #+#    #+#             */
+/*   Updated: 2023/03/14 11:06:59 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
-
-int main(int ac, char **av, char **env)
+int	ft_isascii(int c)
 {
-	t_mini	mini;
-	char *line;
-	while (1)
-	{
-		line = readline("minishell$ ");
-		printf("%s\n", line);
-	}
+	return (c >= 0 && c <= 127);
 }

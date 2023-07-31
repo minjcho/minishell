@@ -1,24 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_putchar_fd.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jinhyeok <jinhyeok@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/27 16:33:41 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/07/28 13:56:56 by minjcho          ###   ########.fr       */
+/*   Created: 2023/03/16 21:37:12 by jinhyeok          #+#    #+#             */
+/*   Updated: 2023/03/17 10:54:48 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include"libft.h"
 
-int main(int ac, char **av, char **env)
+void	ft_putchar_fd(char c, int fd)
 {
-	t_mini	mini;
-	char *line;
-	while (1)
-	{
-		line = readline("minishell$ ");
-		printf("%s\n", line);
-	}
+	if (fd < 0)
+		return ;
+	write (fd, &c, 1);
 }

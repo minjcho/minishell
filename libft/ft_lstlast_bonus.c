@@ -1,24 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_lstlast.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jinhyeok <jinhyeok@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/27 16:33:41 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/07/28 13:56:56 by minjcho          ###   ########.fr       */
+/*   Created: 2023/03/17 13:59:13 by jinhyeok          #+#    #+#             */
+/*   Updated: 2023/03/17 16:36:55 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int main(int ac, char **av, char **env)
+t_list	*ft_lstlast(t_list *lst)
 {
-	t_mini	mini;
-	char *line;
-	while (1)
-	{
-		line = readline("minishell$ ");
-		printf("%s\n", line);
-	}
+	if (!lst)
+		return (0);
+	while (lst->next)
+		lst = lst->next;
+	return (lst);
 }

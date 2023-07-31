@@ -1,24 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_memcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jinhyeok <jinhyeok@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/27 16:33:41 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/07/28 13:56:56 by minjcho          ###   ########.fr       */
+/*   Created: 2023/03/13 20:01:54 by jinhyeok          #+#    #+#             */
+/*   Updated: 2023/03/20 17:18:25 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int main(int ac, char **av, char **env)
+void	*ft_memcpy(void *dst, const void *src, size_t n)
 {
-	t_mini	mini;
-	char *line;
-	while (1)
+	char			*d;
+	const char		*s;
+	size_t			i;
+
+	if (!dst && !src)
+		return (0);
+	d = (char *)dst;
+	s = (const char *)src;
+	i = 0;
+	while (i < n)
 	{
-		line = readline("minishell$ ");
-		printf("%s\n", line);
+		d[i] = s[i];
+		i++;
 	}
+	return (dst);
 }

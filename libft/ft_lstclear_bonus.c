@@ -1,24 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_lstclear_bonus.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jinhyeok <jinhyeok@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/27 16:33:41 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/07/28 13:56:56 by minjcho          ###   ########.fr       */
+/*   Created: 2023/03/17 14:41:00 by jinhyeok          #+#    #+#             */
+/*   Updated: 2023/03/21 13:21:45 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include"libft.h"
 
-int main(int ac, char **av, char **env)
+void	ft_lstclear(t_list **lst, void (*del)(void *))
 {
-	t_mini	mini;
-	char *line;
-	while (1)
+	t_list	*temp;
+	t_list	*throw;
+
+	if (!lst || !del || !(*lst))
+		return ;
+	temp = *lst;
+	while (temp)
 	{
-		line = readline("minishell$ ");
-		printf("%s\n", line);
+		throw = temp;
+		temp = temp->next;
+		ft_lstdelone(throw, del);
 	}
+	*lst = 0;
 }

@@ -1,24 +1,30 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   ft_lstadd_back_bonus.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jinhyeok <jinhyeok@student.42seoul.kr>     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/27 16:33:41 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/07/28 13:56:56 by minjcho          ###   ########.fr       */
+/*   Created: 2023/03/17 14:03:26 by jinhyeok          #+#    #+#             */
+/*   Updated: 2023/03/21 12:33:05 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "minishell.h"
+#include "libft.h"
 
-int main(int ac, char **av, char **env)
+void	ft_lstadd_back(t_list **lst, t_list *new)
 {
-	t_mini	mini;
-	char *line;
-	while (1)
+	t_list	*temp;
+
+	if (!lst || !new)
+		return ;
+	temp = *lst;
+	if (!temp)
 	{
-		line = readline("minishell$ ");
-		printf("%s\n", line);
+		*lst = new;
+		return ;
 	}
+	while (temp->next)
+		temp = temp->next;
+	temp->next = new;
 }
