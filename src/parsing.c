@@ -6,73 +6,62 @@
 /*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 14:06:50 by minjcho           #+#    #+#             */
-/*   Updated: 2023/07/29 12:09:30 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/07/31 14:32:46 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	cnt_pipe(char *line)
+int	pipe_cnt(char *line)
 {
 	int	cnt;
-	int	i;
 
-	i = 0;
 	cnt = 0;
-	while (line[i])
+	while (*line)
 	{
-		if (line[i] == '|')
+		if (*line == '|')
 			cnt++;
-		i++;
+		line++;
 	}
-	if (line[i - 1] == '|')
-		return (cnt - 1);
 	return (cnt);
 }
 
-// void	parsing(t_mini *mini, char *line)
-// {
-// 	char **splited_pipe;
-
-// 	if (!readline_check(line))
-// 		return ;
-// 	mini = malloc(sizeof(t_mini) * cnt_pipe(line) + 2);
-// 	if (!mini)
-// 		exit(1);
-// 	splited_pipe = ft_split2(line, "|");
-// 	int	i = 0;
-// 	while (splited_pipe[i])
-// 	{
-// 		printf("i : %d\n", i);
-// 		mini[i].command = ft_split2(splited_pipe[i], " ");
-// 		int j = 0;
-// 		while (mini[i].command[j])
-// 		{
-// 			printf("%s\n", mini[i].command[j]);
-// 			j++;
-// 		}
-// 		i++;
-// 	}
-// 	free(splited_pipe);
-// }
-
-void parsing(t_mini **mini, char *line)
+int	token_size(char *str)
 {
-	char **splited_pipe;
-	if (!readline_check(line))
-		return ;
-	*mini = malloc(sizeof(t_mini) * cnt_pipe(line) + 1);
+	int	i;
+	int	j;
+
+	i = 0;
+	while (str[i])
+	{
+		j = 0;
+		while (str[i + j] == ' ' || str[i + j] == '\t')
+			j++;
+		i += j;
+	}
+}
+
+void	split_splited_pipe(char *str)
+{
+
+}
+
+void	parsing(t_mini **mini, char *line)
+{
+	int		i;
+	char	**splited_pipe;
+
+	*mini = malloc(sizeof(t_mini) * pipe_cnt(line) + 1);
 	if (!*mini)
 		exit(1);
 	splited_pipe = ft_split2(line, "|");
-	int	i = 0;
+	i = 0;
 	while (splited_pipe[i])
 	{
-		(*mini)[i].command = ft_split2(splited_pipe[i], " ");
-		i++;
-	}
-	for(i = 0; splited_pipe[i]; i++) {
+		()
+		(*mini)[i].token = split_splited_pipe(splited_pipe[i]);
 		free(splited_pipe[i]);
+		i++;
 	}
 	free(splited_pipe);
 }
