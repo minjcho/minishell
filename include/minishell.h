@@ -6,7 +6,7 @@
 /*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 16:14:11 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/07/31 13:38:43 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/07/31 15:05:32 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,5 +38,6 @@ typedef struct s_mini
 void	parsing(t_mini **mini, char *line);
 bool	readline_check(char *line);
 char	**ft_split2(char *str, char *charset);
+int		token_size(char *line);
 
 #endif

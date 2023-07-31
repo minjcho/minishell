@@ -16,6 +16,7 @@ SOURCES_NAMES	=	main.c \
 					parsing.c \
 					readline_check.c \
 					ft_split2.c \
+					token_size.c \
 
 SOURCES = $(addprefix $(SRC_DIR)/, $(SOURCES_NAMES))
 OBJECTS = $(SOURCES_NAMES:%.c=$(OBJ_DIR)/%.o)

@@ -6,7 +6,7 @@
 /*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 14:06:50 by minjcho           #+#    #+#             */
-/*   Updated: 2023/07/31 14:32:46 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/07/31 15:11:13 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,24 +26,16 @@ int	pipe_cnt(char *line)
 	return (cnt);
 }
 
-int	token_size(char *str)
+void	split_splited_pipe(char *line)
 {
-	int	i;
-	int	j;
+	char	**splited;
 
-	i = 0;
-	while (str[i])
-	{
-		j = 0;
-		while (str[i + j] == ' ' || str[i + j] == '\t')
-			j++;
-		i += j;
-	}
-}
-
-void	split_splited_pipe(char *str)
-{
-
+	splited = malloc(sizeof(char *) * token_size(line) + 1);
+	if (!splited)
+		exit(1);
+	// tokenize(splited);
+	tmp[token_size(line)] = 0;
+	return (splited);
 }
 
 void	parsing(t_mini **mini, char *line)
