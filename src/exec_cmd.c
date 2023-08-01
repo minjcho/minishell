@@ -6,11 +6,13 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 14:14:16 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/07/31 21:50:33 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/01 10:23:53by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+t_env env;
 
 void	leaks(void)
 {
@@ -35,6 +37,14 @@ void	readlilne_tester(void)
 	t_mini	*node;
 
 	node = NULL;
+	env.node = (t_env_node *)malloc(sizeof(t_env_node) * 4);
+	env.node[0].key = "PWD";
+	env.node[0].value = ft_strdup(getenv("PWD"));
+	env.node[1].key = "OLDPWD";
+	env.node[1].value = NULL;
+	env.node[2].key = "HOME";
+	env.node[2].value = ft_strdup(getenv("HOME"));
+	env.node[3].key = NULL;
 	while (1)
 	{
 		temp = readline("minishell : ");
@@ -47,6 +57,7 @@ void	readlilne_tester(void)
 				i++;
 			size = i;
 			node = (t_mini *)malloc(sizeof(t_mini) * i);
+		
 			i = -1;
 			while (token[++i])
 			{
@@ -60,15 +71,15 @@ void	readlilne_tester(void)
 					j++;
 				node[i].cmd_size = j;
 			}
-			int	k = -1;
-			while (++k < node->cnt)
-			{
-				for (int i = 0 ; i < node[k].cmd_size ; i++)
-				{
-					printf("%s\n", node[k].command[i]);
-				}
-				printf("------------------\n");
-			}
+			// int	k = -1;
+			// while (++k < node->cnt)
+			// {
+			// 	for (int i = 0 ; i < node[k].cmd_size ; i++)
+			// 	{
+			// 		printf("%s\n", node[k].command[i]);
+			// 	}
+			// 	printf("------------------\n");
+			// }
 			free(temp);
 			exec_cmd(node);
 			node_free(node);
@@ -146,11 +157,11 @@ void	process_start2(t_mini *data)
 		}
 		else if (pid > 0)
 		{
-			if (data->builtin_cnt == 1)
-			{
-				do_builtin(data);
-				break;
-			}
+			// if (data->builtin_cnt == 1)
+			// {
+			// 	do_builtin(data);
+			// 	break;
+			// }
 			close(cur_pipe[1]);
 			if (prev_pipe)
 				close(prev_pipe);
@@ -186,13 +197,11 @@ void	builtin_counter(t_mini *data)
 
 int	builtin_check(t_mini *data)
 {
-	int		i;
 	char	*temp;
 
-	i = -1;
-	while (++i < data->cmd_size)
+	if (data->command[0])
 	{
-		temp = data->command[i];
+		temp = data->command[0];
 		if (ft_strncmp(temp, "cd", ft_strlen(temp)) == 0)
 			return (1);
 		else if (ft_strncmp(temp, "echo", ft_strlen(temp)) == 0)
@@ -211,59 +220,214 @@ int	builtin_check(t_mini *data)
 	return (0);
 }
 
+// int	builtin_check(t_mini *data)
+// {
+// 	int		i;
+// 	char	*temp;
+
+// 	i = -1;
+// 	while (++i < data->cmd_size)
+// 	{
+// 		temp = data->command[i];
+// 		if (ft_strncmp(temp, "cd", ft_strlen(temp)) == 0)
+// 			return (1);
+// 		else if (ft_strncmp(temp, "echo", ft_strlen(temp)) == 0)
+// 			return (2);
+// 		else if (ft_strncmp(temp, "pwd", ft_strlen(temp)) == 0)
+// 			return (3);
+// 		else if (ft_strncmp(temp, "export", ft_strlen(temp)) == 0)
+// 			return (4);
+// 		else if (ft_strncmp(temp, "unset", ft_strlen(temp)) == 0)
+// 			return (5);
+// 		else if (ft_strncmp(temp, "env", ft_strlen(temp)) == 0)
+// 			return (6);
+// 		else if (ft_strncmp(temp, "exit", ft_strlen(temp)) == 0)
+// 			return (7);
+// 	}
+// 	return (0);
+// }
+
 void	do_builtin(t_mini *data)// seperate input &data[i];
 {
-	if (builtin_check(data) == 1)
+	if (builtin_check(data) == 1) // need update evn val
 		do_cd(data);
 	else if (builtin_check(data) == 2)
-	{
+		do_echo(data);
+	else if (builtin_check(data) == 3)
+		do_pwd(data);
+}
 
-	}
-		//do_echo(data);
+void	do_pwd(t_mini *data)
+{
+	char *temp;
+
+	temp = ft_getenv("PWD");
+	write(1, temp, ft_strlen(temp));
+	write(1, "\n", 1);
 }
 
 void	do_echo(t_mini *data)
 {
-	int	option_idx;
+	int		option_idx;
+	char	*new_line;
+	int		i;
 
+	i = 0;
 	option_idx = is_echo_option(data);
-	if (option_idx)
+	if (option_idx > 1)
 	{
-		
+		while (option_idx < data->cmd_size)
+		{
+			write(1, data->command[option_idx], \
+			ft_strlen(data->command[option_idx]));
+			write(1, " ", 1);
+			option_idx++;
+		}
 	}
 	else
 	{
-
+		while (option_idx < data->cmd_size)
+		{
+			write(1, data->command[option_idx], \
+			ft_strlen(data->command[option_idx]));
+			write(1, " ", 1);
+			option_idx++;
+		}
+		write(1, "\n", 1);
 	}
 }
+
+int	is_echo_option(t_mini *data)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while(data->command[++i])
+	{
+		j = 0;
+		if (data->command[i][j] == '-')
+		{
+			while (data->command[i][++j])
+			{
+				if (data->command[i][j] != 'n')
+					return (i);
+			}
+		}
+		else
+			return (i);
+	}
+	return (i);
+}
+
+void	ft_setenv(char *key, char *value)
+{
+	int		i;
+	char	*temp;
+
+	i = -1;
+	temp = NULL;
+	while (env.node[++i].key)
+	{
+		if (ft_strncmp(key, env.node[i].key, ft_strlen(key)) == 0)
+		{
+			if (env.node[i].value)
+				temp = env.node[i].value;
+			env.node[i].value = ft_strdup(value);
+			if (temp)
+				free(temp);
+		}
+	}// need realloc; if the key val is not in here, make the new keyvalue
+}
+
+// void	do_cd(t_mini *data)
+// {
+// 	char	*to_directory;
+// 	int		flag;
+	
+// 	to_directory = NULL;
+// 	flag = 0;
+// 	if (data->cmd_size > 1)
+// 		to_directory = data->command[1];
+// 	if (to_home_directory(to_directory))
+// 		to_directory = ft_getenv("HOME");
+// 	else if (to_back_directory(to_directory))
+// 		to_directory = ft_getenv("OLDPWD");
+// 	else
+// 	{
+// 		flag = 1;
+// 		if(chdir(to_directory) == -1)
+// 		{
+// 			perror(data->command[1]);
+// 			return ;
+// 		}
+// 	}
+// 	if (flag)
+// 		ft_setenv("PWD", to_directory);
+// 	else
+// 	{
+
+// 	}
+// }
 
 void	do_cd(t_mini *data)
 {
 	char	*to_directory;
+	char	full_direcotry[256];
 	
 	to_directory = NULL;
 	if (data->cmd_size > 1)
 		to_directory = data->command[1];
 	if (to_home_directory(to_directory))
+		to_directory = ft_getenv("HOME");
+	else if (to_back_directory(to_directory))
 	{
-		ft_putstr_fd("to home directory", 2);
-		return ;
-		//get envp value set it// if the home value is nothing set => not set home error
+		to_directory = ft_getenv("OLDPWD");
+		if (!to_directory)
+		{
+			error_oldpath_not_set();
+			return ;
+		}
 	}
-	if (to_back_directory(to_directory))
-		return ;
-	else if(chdir(to_directory) == -1)
+	if (getcwd(full_direcotry, sizeof(full_direcotry)) != NULL)
+		ft_setenv("OLDPWD", full_direcotry);
+	if(chdir(to_directory) == -1)
 	{
 		perror(data->command[1]);
+		return ;
 	}
+	if (getcwd(full_direcotry, sizeof(full_direcotry)) != NULL)
+		ft_setenv("PWD", full_direcotry);
+		//write(1, env.node[0].value, ft_strlen(env.node[0].value));
 }
+
+// void	cd_move_set(,char *to_directory)
+// {
+
+
+// }
+char	*ft_getenv(char *key)
+{
+	int	i;
+
+	i = -1;
+	if (env.node)
+	{
+		while (env.node[++i].key)
+		{
+			if (ft_strncmp(key, env.node[i].key, ft_strlen(key)) == 0)
+			{
+				return (env.node[i].value);
+			}
+		}
+	}
+	return (NULL);
+}
+
 int	to_back_directory(char *to_directory)
 {
 	if (ft_strncmp(to_directory, "-", ft_strlen(to_directory)) == 0)
 	{
-		//set_oldpwd;
-		//get envp and go back 
-		ft_putstr_fd("to back directory", 2);
 		return (1);
 	}
 	else
@@ -274,9 +438,7 @@ int	to_home_directory(char *to_directory)
 {
 	if (!to_directory)
 		return (1);
-	if (is_redirection(to_directory)\
-	|| !ft_strncmp(to_directory, ".", ft_strlen(to_directory)) \
-	|| !ft_strncmp(to_directory, "~", ft_strlen(to_directory)))
+	if (!ft_strncmp(to_directory, "~", ft_strlen(to_directory)))
 		return (1);
 	return (0);
 }
@@ -506,8 +668,14 @@ void	set_cmd_null(t_mini *data, int start, int end)
 		start++;
 	}
 }
-
 //error msg
+void	error_oldpath_not_set(void)
+{
+	char	*str;
+
+	str = "cd: OLDPWD not set\n";
+	write(2, str, ft_strlen(str));
+}
 
 void	error_cmdnotfound(char *cmd, t_mini *data)
 {
