@@ -34,6 +34,8 @@ void	readlilne_tester(void)
 	char	**token;
 	char	**to_cmmand;
 	int		i;
+	int		origin_in;
+	int		origin_out;
 	t_mini	*node;
 
 	node = NULL;
@@ -45,6 +47,8 @@ void	readlilne_tester(void)
 	env.node[2].key = "HOME";
 	env.node[2].value = ft_strdup(getenv("HOME"));
 	env.node[3].key = NULL;
+	origin_in = dup(0);
+	origin_out = dup(1);
 	while (1)
 	{
 		temp = readline("minishell : ");
@@ -57,7 +61,6 @@ void	readlilne_tester(void)
 				i++;
 			size = i;
 			node = (t_mini *)malloc(sizeof(t_mini) * i);
-		
 			i = -1;
 			while (token[++i])
 			{
@@ -66,6 +69,9 @@ void	readlilne_tester(void)
 				node[i].cnt = size;
 				node[i].input_fd = 0;
 				node[i].output_fd = 0;
+				node[i].origin_in = origin_in;
+				node[i].origin_out = origin_out;
+				node[i].delete = 0;
 				int	j = 0;
 				while (to_cmmand[j])
 					j++;
@@ -118,42 +124,48 @@ void	process_start2(t_mini *data)
 
 	while ((++i < data->cnt))
 	{
-	
 		pipe(cur_pipe);
 		pid = fork();
 		if (pid == 0)
 		{	
 			if (data->input_fd == - 1 || data->output_fd == -1)
 				exit(128);
-			if (is_argument(data[i].command, &data[i]))
+			if (data[i].input_fd)
 			{
-				if (data[i].input_fd)
-					close(data[i].input_fd);
-				data[i].input_fd = 0;
-			}
-			else if (data[i].input_fd != 0)
-			{
-				if (dup2(data[i].input_fd, 0) == -1)
-					write(2, "in", 2);
+				dup2(data[i].input_fd, 0);
 				close(data[i].input_fd);
 			}
-			if (prev_pipe)
+			else if (data[i].cnt > 1 && prev_pipe)
 			{
 				dup2(prev_pipe, 0);
 				close(prev_pipe);
 			}
-			if (data[i].cnt > 1 && data[i].cnt - 1 != i)
+			else
+				dup2(0, data[i].origin_in);
+			if (data[i].output_fd)
+			{
+				dup2(data[i].output_fd, 1);
+				close(data[i].output_fd);
+			}
+			else if (data[i].cnt > 1 && data[i].cnt - 1 != i)
 			{
 				close(cur_pipe[0]);
 				dup2(cur_pipe[1], 1);
 				close(cur_pipe[1]);
 			}
-			if (data[i].output_fd != 0)
+			else
+				dup2(1, data[i].origin_out);
+			if (!data[i].builtin_cnt && data[i].cmd_size - data[i].delete > 0)
 			{
-				dup2(data[i].output_fd, 1);
-				close(data[i].output_fd);
+				cmd_find(&data[i]);
 			}
-			cmd_find(&data[i]);
+			else if (data[i].builtin_cnt == 1)
+			{
+				do_builtin(&data[i]);
+				exit(0);
+			}
+			else
+				exit(0);
 		}
 		else if (pid > 0)
 		{
@@ -178,7 +190,96 @@ void	process_start2(t_mini *data)
 		waitpid(-1, NULL, 0);
 		i--;
 	}
-}
+} 
+
+// void	process_start2(t_mini *data)
+// {
+// 	int		i;
+// 	int		prev_pipe;
+// 	int		cur_pipe[2];
+// 	pid_t	pid;
+
+// 	i = -1;
+// 	prev_pipe = 0;
+
+// 	while ((++i < data->cnt))
+// 	{
+	
+// 		pipe(cur_pipe);
+// 		pid = fork();
+// 		if (pid == 0)
+// 		{	
+// 			if (data->input_fd == - 1 || data->output_fd == -1)
+// 				exit(128);
+// 			// if (is_argument(data[i].command, &data[i]))
+// 			// {
+// 			// 	ft_putstr_fd("1", 2);
+// 			// 	if (data[i].input_fd)
+// 			// 		close(data[i].input_fd);
+// 			// 	data[i].input_fd = 0;
+// 			// }
+// 			if (data[i].input_fd != 0)
+// 			{
+// 				ft_putstr_fd("2", 2);
+// 				if (dup2(data[i].input_fd, 0) == -1)
+// 					write(2, "in", 2);
+// 				close(data[i].input_fd);
+// 			}
+// 			if (prev_pipe)
+// 			{
+// 				ft_putstr_fd("3", 2);
+// 				dup2(prev_pipe, 0);
+// 				close(prev_pipe);
+// 			}
+// 			if (data[i].cnt > 1 && data[i].cnt - 1 != i)
+// 			{
+// 				ft_putstr_fd("4", 2);
+// 				close(cur_pipe[0]);
+// 				dup2(cur_pipe[1], 1);
+// 				close(cur_pipe[1]);
+// 			}
+// 			if (data[i].output_fd != 0)
+// 			{
+// 				ft_putstr_fd("5", 2);
+// 				dup2(data[i].output_fd, 1);
+// 				close(data[i].output_fd);
+// 			}
+// 			if (!data[i].builtin_cnt)
+// 			{
+// 				ft_putstr_fd("6", 2);
+// 				cmd_find(&data[i]);
+// 			}
+// 			else
+// 			{
+// 				ft_putstr_fd("7", 2);
+// 				do_builtin(&data[i]);
+// 				exit(0);
+// 			}
+// 		}
+// 		else if (pid > 0)
+// 		{
+// 			// if (data->builtin_cnt == 1)
+// 			// {
+// 			// 	do_builtin(data);
+// 			// 	break;
+// 			// }
+// 			close(cur_pipe[1]);
+// 			if (prev_pipe)
+// 				close(prev_pipe);
+// 			if (data[i].cnt > 1)
+// 				prev_pipe = cur_pipe[0];
+// 			else
+// 				close(cur_pipe[0]);
+// 		}
+// 		else
+// 			error_fork();
+// 	}
+// 	while (i)
+// 	{
+// 		waitpid(-1, NULL, 0);
+// 		i--;
+// 	}
+// }
 
 void	builtin_counter(t_mini *data)
 {
@@ -189,11 +290,38 @@ void	builtin_counter(t_mini *data)
 	builtin_cnt = 0;
 	while (++i < data->cnt)
 	{
+		builtin_cnt = 0;
 		if (builtin_check(&data[i]))
 			builtin_cnt++;
+		data[i].builtin_cnt = builtin_cnt;
 	}
-	data->builtin_cnt = builtin_cnt;
 }
+
+// void	value_switch()
+// {
+
+// }
+
+// void	bubble_sort_env(void)
+// {
+// 	int	i;
+// 	int	j;
+
+// 	char	*temp_key;
+// 	char	*temp_val;
+// 	i = 0;
+// 	temp_key = NULL;
+// 	temp_val = NULL;
+// 	while (env.export[i].key)
+// 	{
+// 		j = i + 1;
+// 		while (env.export[j].key)
+// 		{
+
+
+// 		}
+// 	}
+// }
 
 int	builtin_check(t_mini *data)
 {
@@ -220,33 +348,6 @@ int	builtin_check(t_mini *data)
 	return (0);
 }
 
-// int	builtin_check(t_mini *data)
-// {
-// 	int		i;
-// 	char	*temp;
-
-// 	i = -1;
-// 	while (++i < data->cmd_size)
-// 	{
-// 		temp = data->command[i];
-// 		if (ft_strncmp(temp, "cd", ft_strlen(temp)) == 0)
-// 			return (1);
-// 		else if (ft_strncmp(temp, "echo", ft_strlen(temp)) == 0)
-// 			return (2);
-// 		else if (ft_strncmp(temp, "pwd", ft_strlen(temp)) == 0)
-// 			return (3);
-// 		else if (ft_strncmp(temp, "export", ft_strlen(temp)) == 0)
-// 			return (4);
-// 		else if (ft_strncmp(temp, "unset", ft_strlen(temp)) == 0)
-// 			return (5);
-// 		else if (ft_strncmp(temp, "env", ft_strlen(temp)) == 0)
-// 			return (6);
-// 		else if (ft_strncmp(temp, "exit", ft_strlen(temp)) == 0)
-// 			return (7);
-// 	}
-// 	return (0);
-// }
-
 void	do_builtin(t_mini *data)// seperate input &data[i];
 {
 	if (builtin_check(data) == 1) // need update evn val
@@ -255,6 +356,26 @@ void	do_builtin(t_mini *data)// seperate input &data[i];
 		do_echo(data);
 	else if (builtin_check(data) == 3)
 		do_pwd(data);
+	// else if (builtin_check(data) == 4)
+	// 	do_export(data);
+}
+
+void	do_export(t_mini *data)
+{
+	int	i;
+
+	i = 0;
+	if (data->command[1])
+	{
+		// add all export
+	}
+	else
+	{
+		// need to sort following ascii (ASD);
+		// export a cant see in env, export a=1 can see in env;
+		//show all export members
+	}
+
 }
 
 void	do_pwd(t_mini *data)
@@ -270,17 +391,22 @@ void	do_echo(t_mini *data)
 {
 	int		option_idx;
 	char	*new_line;
+	int		temp;
 	int		i;
 
 	i = 0;
+	// if (data->output_fd)
+	// 	temp = data->output_fd;
+	// else 
+		temp = 1;
 	option_idx = is_echo_option(data);
 	if (option_idx > 1)
 	{
 		while (option_idx < data->cmd_size)
 		{
-			write(1, data->command[option_idx], \
+			write(temp, data->command[option_idx], \
 			ft_strlen(data->command[option_idx]));
-			write(1, " ", 1);
+			write(temp, " ", 1);
 			option_idx++;
 		}
 	}
@@ -288,12 +414,12 @@ void	do_echo(t_mini *data)
 	{
 		while (option_idx < data->cmd_size)
 		{
-			write(1, data->command[option_idx], \
+			write(temp, data->command[option_idx], \
 			ft_strlen(data->command[option_idx]));
-			write(1, " ", 1);
+			write(temp, " ", 1);
 			option_idx++;
 		}
-		write(1, "\n", 1);
+		write(temp, "\n", 1);
 	}
 }
 
@@ -389,6 +515,13 @@ void	do_cd(t_mini *data)
 			return ;
 		}
 	}
+	do_cd2(to_directory, data);
+}
+
+void	do_cd2(char *to_directory, t_mini *data)
+{
+	char	full_direcotry[256];
+
 	if (getcwd(full_direcotry, sizeof(full_direcotry)) != NULL)
 		ft_setenv("OLDPWD", full_direcotry);
 	if(chdir(to_directory) == -1)
@@ -398,14 +531,8 @@ void	do_cd(t_mini *data)
 	}
 	if (getcwd(full_direcotry, sizeof(full_direcotry)) != NULL)
 		ft_setenv("PWD", full_direcotry);
-		//write(1, env.node[0].value, ft_strlen(env.node[0].value));
 }
 
-// void	cd_move_set(,char *to_directory)
-// {
-
-
-// }
 char	*ft_getenv(char *key)
 {
 	int	i;
@@ -427,9 +554,7 @@ char	*ft_getenv(char *key)
 int	to_back_directory(char *to_directory)
 {
 	if (ft_strncmp(to_directory, "-", ft_strlen(to_directory)) == 0)
-	{
 		return (1);
-	}
 	else
 		return (0);
 }
@@ -565,9 +690,22 @@ void	exec_cmd(t_mini *data)
 		redirection_ready(&data[i]);
 	}
 	builtin_counter(data);
-	if (data->builtin_cnt == 1)
+	if (data->builtin_cnt == 1 && data->cnt == 1)
 	{
+		// redirection
+		if (data->input_fd)
+		{
+			dup2(data->input_fd, 0);
+			close(data->input_fd);
+		}
+		if (data->output_fd)
+		{
+			dup2(data->output_fd, 1);
+			close(data->output_fd);
+		}
 		do_builtin(data);
+		dup2(data->origin_in, 0);
+		dup2(data->origin_out, 1);
 		return ;
 	}
 	process_start2(data);
@@ -665,6 +803,7 @@ void	set_cmd_null(t_mini *data, int start, int end)
 		temp = data->command[start];
 		data->command[start] = NULL;
 		free(temp);
+		data->delete++;
 		start++;
 	}
 }
