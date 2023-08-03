@@ -6,13 +6,12 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 14:14:16 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/01 10:23:53by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/02 16:29:52by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-t_env env;
 
 void	leaks(void)
 {
@@ -37,18 +36,31 @@ void	readlilne_tester(void)
 	int		origin_in;
 	int		origin_out;
 	t_mini	*node;
+	t_env	env;
 
 	node = NULL;
 	env.node = (t_env_node *)malloc(sizeof(t_env_node) * 4);
-	env.node[0].key = "PWD";
+	env.node[0].key = ft_strdup("PWD");
 	env.node[0].value = ft_strdup(getenv("PWD"));
-	env.node[1].key = "OLDPWD";
+	env.node[1].key = ft_strdup("OLDPWD");
 	env.node[1].value = NULL;
-	env.node[2].key = "HOME";
+	env.node[2].key = ft_strdup("HOME");
 	env.node[2].value = ft_strdup(getenv("HOME"));
 	env.node[3].key = NULL;
 	origin_in = dup(0);
 	origin_out = dup(1);
+	env.export = (t_env_node *)malloc(sizeof(t_env_node) * 6);
+	env.export[0].key = ft_strdup("PWD");
+	env.export[0].value = ft_strdup(getenv("PWD"));
+	env.export[1].key = ft_strdup("A");
+	env.export[1].value = NULL;
+	env.export[2].key = ft_strdup("BBbb");
+	env.export[2].value = NULL;
+	env.export[3].key = ft_strdup("a");
+	env.export[3].value = NULL;
+	env.export[4].key = ft_strdup("AAA");
+	env.export[4].value = NULL;
+	env.export[5].key = NULL;
 	while (1)
 	{
 		temp = readline("minishell : ");
@@ -87,7 +99,7 @@ void	readlilne_tester(void)
 			// 	printf("------------------\n");
 			// }
 			free(temp);
-			exec_cmd(node);
+			exec_cmd(node, &env);
 			node_free(node);
 			command_free(token);
 		}
@@ -112,7 +124,7 @@ void	node_free(t_mini *node)
 	}
 }
 
-void	process_start2(t_mini *data)
+void	process_start2(t_mini *data, t_env *env)
 {
 	int		i;
 	int		prev_pipe;
@@ -161,7 +173,7 @@ void	process_start2(t_mini *data)
 			}
 			else if (data[i].builtin_cnt == 1)
 			{
-				do_builtin(&data[i]);
+				do_builtin(&data[i], env);
 				exit(0);
 			}
 			else
@@ -169,11 +181,6 @@ void	process_start2(t_mini *data)
 		}
 		else if (pid > 0)
 		{
-			// if (data->builtin_cnt == 1)
-			// {
-			// 	do_builtin(data);
-			// 	break;
-			// }
 			close(cur_pipe[1]);
 			if (prev_pipe)
 				close(prev_pipe);
@@ -297,32 +304,6 @@ void	builtin_counter(t_mini *data)
 	}
 }
 
-// void	value_switch()
-// {
-
-// }
-
-// void	bubble_sort_env(void)
-// {
-// 	int	i;
-// 	int	j;
-
-// 	char	*temp_key;
-// 	char	*temp_val;
-// 	i = 0;
-// 	temp_key = NULL;
-// 	temp_val = NULL;
-// 	while (env.export[i].key)
-// 	{
-// 		j = i + 1;
-// 		while (env.export[j].key)
-// 		{
-
-
-// 		}
-// 	}
-// }
-
 int	builtin_check(t_mini *data)
 {
 	char	*temp;
@@ -348,41 +329,363 @@ int	builtin_check(t_mini *data)
 	return (0);
 }
 
-void	do_builtin(t_mini *data)// seperate input &data[i];
+void	do_builtin(t_mini *data, t_env *env)// seperate input &data[i];
 {
 	if (builtin_check(data) == 1) // need update evn val
-		do_cd(data);
+		do_cd(data, env);
 	else if (builtin_check(data) == 2)
 		do_echo(data);
 	else if (builtin_check(data) == 3)
-		do_pwd(data);
-	// else if (builtin_check(data) == 4)
-	// 	do_export(data);
+		do_pwd(data, env);
+	else if (builtin_check(data) == 4)
+		do_export(data, env);
+	else if (builtin_check(data) == 6)
+		do_env(env);
+	else if (builtin_check(data) == 7)
+		do_exit(data);
 }
 
-void	do_export(t_mini *data)
+void	do_export(t_mini *data, t_env *env)
+{
+	if (data->command[1] == NULL)
+		export_print(env);
+	else if (data->command[1])
+	{
+		export_val(data, env);
+	}
+}
+
+void	export_val(t_mini *data, t_env *env)
+{
+	int		i;
+	char	*key;
+	char	*value;
+	char	**temp;
+
+	i = 0;
+	key = NULL;
+	value = NULL;
+	while (data->command[++i])
+	{
+		temp = ft_split(data->command[i], '=');
+		key = temp[0];
+		value = temp[1];
+		if (!value)
+			ft_setexport(key, value, env);
+		else
+		{
+			ft_setexport(key, value, env);
+			ft_setenv(key, value, env);
+		}
+		command_free(temp);
+	}
+}
+
+t_env_node	*realloc_evnode(char *key, char *value, t_env_node *node, int flag)
+{
+	// flag 1 => pluse. flag = -1 minus
+	int			new_len;
+	t_env_node	*new_node;
+
+	new_len = ft_envlen(node) + flag;
+	new_node = (t_env_node *)malloc(sizeof(t_env_node) * (new_len + 1));
+	if (!new_node)
+		error_malloc();
+	new_node[new_len].key = NULL;
+	if (flag == -1)
+		ft_nodecpy(new_node, node, key);
+	else
+	{
+		ft_nodecpy(new_node, node, NULL);
+		if (key)
+			new_node[new_len - 1].key = ft_strdup(key);
+		else
+			new_node[new_len - 1].key = NULL;
+		if (value)
+			new_node[new_len - 1].value = ft_strdup(value);
+		else
+			new_node[new_len - 1].value = NULL;
+	}
+	return (new_node);
+}
+
+void	ft_setexport(char *key, char *value, t_env *env)
+{
+	int			i;
+	t_env_node	*temp;
+
+	i = -1;
+	while (env->export[++i].key)
+	{
+		if (ft_strncmp(key, env->export[i].key, ft_strlen(key)) == 0)
+		{
+			env->export[i].value = value;
+			return ;
+		}
+	}
+	temp = env->export;
+	env->export = realloc_evnode(key, value, temp, 1);
+	env_free(temp);
+}
+
+void	ft_setenv(char *key, char *value, t_env *env)
+{
+	int			i;
+	t_env_node	*temp;
+
+	i = -1;
+	while (env->node[++i].key)
+	{
+		if (ft_strncmp(key, env->node[i].key, ft_strlen(key)) == 0)
+		{
+			free(env->node[i].value);
+			env->node[i].value = value;
+			return ;
+		}
+	}
+	temp = env->node;
+	env->node = realloc_evnode(key, value, temp, 1);
+	env_free(temp);
+}
+
+// void	ft_setenv(char *key, char *value, t_env *env)
+// {
+// 	int		i;
+// 	char	*temp;
+
+// 	i = -1;
+// 	temp = NULL;
+// 	while (env->node[++i].key)
+// 	{
+// 		if (ft_strncmp(key, env->node[i].key, ft_strlen(key)) == 0)
+// 		{
+// 			if (env->node[i].value)
+// 				temp = env->node[i].value;
+// 			env->node[i].value = ft_strdup(value);
+// 			if (temp)
+// 				free(temp);
+// 			return ;
+// 		}
+// 	}// need realloc; if the key val is not in here, make the new keyvalue
+// 	//realloc_set(key, value, 0);
+// }
+
+void	env_free(t_env_node *node)
 {
 	int	i;
 
-	i = 0;
-	if (data->command[1])
+	i = -1;
+	if (node)
 	{
-		// add all export
+		while (node[++i].key)
+		{
+			free(node[i].key);
+			free(node[i].value);
+		}
+		free(node);
 	}
-	else
-	{
-		// need to sort following ascii (ASD);
-		// export a cant see in env, export a=1 can see in env;
-		//show all export members
-	}
-
 }
 
-void	do_pwd(t_mini *data)
+void	ft_nodecpy(t_env_node *new_node, t_env_node *old, char *delete)
+{
+	int	i;
+	int	j;
+	int	len;
+
+	i = -1;
+	j = 0;
+	len = ft_envlen(old);
+	while (++i < len)
+	{
+		if (delete != NULL && ft_strncmp(delete, old[i].key, ft_strlen(delete)) == 0)
+			continue;
+		if (old[i].key)
+			new_node[j].key = ft_strdup(old[i].key);
+		else
+			new_node[j].key = NULL;
+		if (old[i].value)
+			new_node[j].value = ft_strdup(old[i].value);
+		else
+			new_node[j].value = NULL;
+		j++;
+	}
+}
+
+// need to be check
+// void	ft_set_envexoprt(char *key, char *value, t_env *node)
+// {
+// 	int		i;
+// 	char	*temp;
+
+// 	i = -1;
+// 	temp = NULL;
+// 	while (node[++i].key)
+// 	{
+// 		if (ft_strncmp(key, node[i].key, ft_strlen(key)) == 0)
+// 		{
+// 			if (node[i].value)
+// 				temp = node[i].value;
+// 				node[i].value = ft_strdup(value);
+// 			if (temp)
+// 				free(temp);
+// 			return ;
+// 		}
+// 	}// need realloc; if the key val is not in here, make the new keyvalue
+// 	realloc_add(key, value, node);
+// }
+
+// void	realloc_add(char *key, char *value, t_env_node *node)
+// {
+// 	int			cur_len;
+// 	t_env_node	*node;
+
+// 	cur_len = ft_envlen(node);
+// 	if (cur_len)
+// 	{
+
+
+// 	}
+// }
+
+// void	realloc_sub(char *key, char *value, t_env_node *node)
+// {
+
+// }
+
+int	is_equal(char *str)
+{
+	int	i;
+
+	i = -1;
+	if (str)
+	{
+		while (str[i++])
+		{
+			if (str[i] == '=')
+				return (1);
+		}
+	}
+	return (0);
+}
+
+void	export_print(t_env *env)
+{
+	int		i;
+	char	*temp;
+
+	i = -1;
+	temp = "declare -x ";
+	if (env->export)
+	{
+		export_sorting(env);
+		while (env->export[++i].key)
+		{
+			write(1, temp, ft_strlen(temp));
+			write(1, env->export[i].key, ft_strlen(env->export[i].key));
+			if (env->export[i].value)
+			{
+				write(1, "=\"", 2);
+				write(1, env->export[i].value, ft_strlen(env->export[i].value));
+				write(1, "\"", 1);
+			}
+			write(1, "\n", 1);
+		}
+	}
+}
+
+void	export_sorting(t_env *env)
+{
+	int	i;
+	int	j;
+	char	*k1;
+	char	*k2;
+	t_env_node temp;
+
+	i = -1;
+	while (env->export[++i].key)
+	{
+		j = i + 1;
+		while (env->export[j].key)
+		{
+			k1 = env->export[i].key;
+			k2 = env->export[j].key;
+			if (ft_strncmp(k1, k2, ft_strlen(k1)) > 0)
+			{
+				temp.key = k1;
+				temp.value = env->export[i].value;
+				env->export[i].key = env->export[j].key;
+				env->export[i].value = env->export[j].value;
+				env->export[j].key = temp.key;
+				env->export[j].value = temp.value;
+			}
+			j++;
+		}
+	}
+}
+
+int	ft_envlen(t_env_node *node)
+{
+	int			i;
+	int			cnt;
+
+	i = -1;
+	cnt = 0;
+	if (node->key)
+	{
+		while (node[++i].key)
+			cnt++;
+	}
+	return (cnt);
+}
+
+void	do_exit(t_mini *data)
+{
+	exit(0); // need to free??
+}
+
+void	do_env(t_env *env)
+{
+	int		i;
+	char	*k_temp;
+	char	*v_temp;
+
+	i = -1;
+	if (env->node)
+	{
+		while (env->node[++i].key)
+		{
+			k_temp = env->node[i].key;
+			v_temp = env->node[i].value;
+			write(1, k_temp, ft_strlen(k_temp));
+			write(1, "=", 1);
+			write(1, v_temp, ft_strlen(v_temp));
+			write(1, "\n", 1);
+		}
+	}
+}
+
+// void	do_export(t_mini *data)
+// {
+// 	int	i;
+
+// 	i = 0;
+// 	if (data->command[1])
+// 	{
+// 		// add all export
+// 	}
+// 	else
+// 	{
+// 		// need to sort following ascii (ASD);
+// 		// export a cant see in env, export a=1 can see in env;
+// 		//show all export members
+// 	}
+// }
+
+void	do_pwd(t_mini *data, t_env *env)
 {
 	char *temp;
 
-	temp = ft_getenv("PWD");
+	temp = ft_getenv("PWD", env);
 	write(1, temp, ft_strlen(temp));
 	write(1, "\n", 1);
 }
@@ -446,25 +749,16 @@ int	is_echo_option(t_mini *data)
 	return (i);
 }
 
-void	ft_setenv(char *key, char *value)
-{
-	int		i;
-	char	*temp;
 
-	i = -1;
-	temp = NULL;
-	while (env.node[++i].key)
-	{
-		if (ft_strncmp(key, env.node[i].key, ft_strlen(key)) == 0)
-		{
-			if (env.node[i].value)
-				temp = env.node[i].value;
-			env.node[i].value = ft_strdup(value);
-			if (temp)
-				free(temp);
-		}
-	}// need realloc; if the key val is not in here, make the new keyvalue
-}
+
+// void	realloc_set(char *key, char *value, int flag)
+// {
+// 	t_env_node *new_one;
+
+// 	new_one = (t_env_node *)malloc(sizeof(t_env_node) * ft_envlen(flag));
+
+// }
+
 
 // void	do_cd(t_mini *data)
 // {
@@ -496,7 +790,7 @@ void	ft_setenv(char *key, char *value)
 // 	}
 // }
 
-void	do_cd(t_mini *data)
+void	do_cd(t_mini *data, t_env *env)
 {
 	char	*to_directory;
 	char	full_direcotry[256];
@@ -505,46 +799,46 @@ void	do_cd(t_mini *data)
 	if (data->cmd_size > 1)
 		to_directory = data->command[1];
 	if (to_home_directory(to_directory))
-		to_directory = ft_getenv("HOME");
+		to_directory = ft_getenv("HOME", env);
 	else if (to_back_directory(to_directory))
 	{
-		to_directory = ft_getenv("OLDPWD");
+		to_directory = ft_getenv("OLDPWD", env);
 		if (!to_directory)
 		{
 			error_oldpath_not_set();
 			return ;
 		}
 	}
-	do_cd2(to_directory, data);
+	do_cd2(to_directory, data, env);
 }
 
-void	do_cd2(char *to_directory, t_mini *data)
+void	do_cd2(char *to_directory, t_mini *data, t_env *env)
 {
 	char	full_direcotry[256];
 
 	if (getcwd(full_direcotry, sizeof(full_direcotry)) != NULL)
-		ft_setenv("OLDPWD", full_direcotry);
+		ft_setenv("OLDPWD", ft_strdup(full_direcotry), env);
 	if(chdir(to_directory) == -1)
 	{
 		perror(data->command[1]);
 		return ;
 	}
 	if (getcwd(full_direcotry, sizeof(full_direcotry)) != NULL)
-		ft_setenv("PWD", full_direcotry);
+		ft_setenv("PWD", ft_strdup(full_direcotry), env);
 }
 
-char	*ft_getenv(char *key)
+char	*ft_getenv(char *key, t_env *env)
 {
 	int	i;
 
 	i = -1;
-	if (env.node)
+	if (env->node)
 	{
-		while (env.node[++i].key)
+		while (env->node[++i].key)
 		{
-			if (ft_strncmp(key, env.node[i].key, ft_strlen(key)) == 0)
+			if (ft_strncmp(key, env->node[i].key, ft_strlen(key)) == 0)
 			{
-				return (env.node[i].value);
+				return (env->node[i].value);
 			}
 		}
 	}
@@ -680,7 +974,7 @@ void	command_free(char **command)
 	}
 }
 
-void	exec_cmd(t_mini *data)
+void	exec_cmd(t_mini *data, t_env *env)
 {
 	int	i;
 
@@ -703,12 +997,12 @@ void	exec_cmd(t_mini *data)
 			dup2(data->output_fd, 1);
 			close(data->output_fd);
 		}
-		do_builtin(data);
+		do_builtin(data, env);
 		dup2(data->origin_in, 0);
 		dup2(data->origin_out, 1);
 		return ;
 	}
-	process_start2(data);
+	process_start2(data, env);
 }
 
 int	redirection_ready(t_mini *data)
