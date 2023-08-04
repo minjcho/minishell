@@ -24,6 +24,12 @@ extern char **environ;
 
 int main(int ac, char **av, char ** envp)
 {
+	(void)ac;
+	// for (int i = 0 ; envp[i] ; i++)
+	// {
+	// 	ft_putstr_fd(envp[i], 2);
+	// 	write(2, "\n", 2);
+	// }
 	readlilne_tester();
 }
 
@@ -39,14 +45,19 @@ void	readlilne_tester(void)
 	t_env	env;
 
 	node = NULL;
-	env.node = (t_env_node *)malloc(sizeof(t_env_node) * 4);
+	env.node = (t_env_node *)malloc(sizeof(t_env_node) * 5);
 	env.node[0].key = ft_strdup("PWD");
 	env.node[0].value = ft_strdup(getenv("PWD"));
+	//env.node[0].value = NULL;
 	env.node[1].key = ft_strdup("OLDPWD");
 	env.node[1].value = NULL;
 	env.node[2].key = ft_strdup("HOME");
+	//env.node[2].key = NULL;
 	env.node[2].value = ft_strdup(getenv("HOME"));
-	env.node[3].key = NULL;
+	//env.node[2].value = NULL;
+	env.node[3].key = ft_strdup("PATH");
+	env.node[3].value = ft_strdup(getenv("PATH"));
+	env.node[4].key = NULL;
 	origin_in = dup(0);
 	origin_out = dup(1);
 	env.export = (t_env_node *)malloc(sizeof(t_env_node) * 6);
@@ -169,7 +180,7 @@ void	process_start2(t_mini *data, t_env *env)
 				dup2(1, data[i].origin_out);
 			if (!data[i].builtin_cnt && data[i].cmd_size - data[i].delete > 0)
 			{
-				cmd_find(&data[i]);
+				cmd_find(&data[i], env);
 			}
 			else if (data[i].builtin_cnt == 1)
 			{
@@ -370,6 +381,8 @@ void	export_val(t_mini *data, t_env *env)
 		temp = ft_split(data->command[i], '=');
 		key = temp[0];
 		value = temp[1];
+		if (!export_valid_check(key))
+			continue;
 		if (!value)
 			ft_setexport(key, value, env);
 		else
@@ -379,6 +392,37 @@ void	export_val(t_mini *data, t_env *env)
 		}
 		command_free(temp);
 	}
+}
+
+int	export_valid_check(char *key)
+{
+	int	i;
+
+	i = -1;
+	if (key)
+	{
+		if (key[0] >= '0' && key[0] <= '9')
+		{
+			error_export_valid(key);
+			return (0);
+		}
+		while (key[++i])
+		{
+			if (key[i] <= 47 || key[i] >= 123 || (key[i] >= 58 && key[i] <= 64) || \
+			(key[i] >= 91 && key[i] <= 94) || key[i] == 96)
+			{
+				error_export_valid(key);
+				return (0);
+			}
+		}
+	}
+	return (1);
+}
+void	error_export_valid(char *key)
+{
+	ft_putstr_fd("export: `", 2);
+	ft_putstr_fd(key, 2);
+	ft_putstr_fd("': not a valid identifier\n", 2);
 }
 
 t_env_node	*realloc_evnode(char *key, char *value, t_env_node *node, int flag)
@@ -419,7 +463,11 @@ void	ft_setexport(char *key, char *value, t_env *env)
 	{
 		if (ft_strncmp(key, env->export[i].key, ft_strlen(key)) == 0)
 		{
-			env->export[i].value = value;
+			if (value)
+			{
+				free(env->export[i].value);
+				env->export[i].value = ft_strdup(value);
+			}
 			return ;
 		}
 	}
@@ -438,8 +486,11 @@ void	ft_setenv(char *key, char *value, t_env *env)
 	{
 		if (ft_strncmp(key, env->node[i].key, ft_strlen(key)) == 0)
 		{
-			free(env->node[i].value);
-			env->node[i].value = value;
+			if (value)
+			{
+				free(env->node[i].value);
+				env->node[i].value = ft_strdup(value);
+			}
 			return ;
 		}
 	}
@@ -881,17 +932,75 @@ int	is_argument(char **command, t_mini *data)
 	return (0);
 }
 
-void	cmd_find(t_mini *data)
+void	cmd_find(t_mini *data, t_env *env)
 {
 	char	*temp;
 	char	**split_path;
 	
-	temp = getenv("PATH");
-	split_path = ft_split(temp, ':');
-	cmd_start(data, split_path);
+	temp = ft_getenv("PATH", env);
+	if (temp)
+		split_path = ft_split(temp, ':');
+	else
+		split_path = NULL;
+	first_excute(data, env);
+	cmd_start(data, split_path, env);
+	command_free(split_path);
 }
 
-void	cmd_start(t_mini *data, char **split_path)
+void	first_excute(t_mini *data, t_env *env)
+{
+	int		i;
+
+	i = -1;
+	while (++i < data->cmd_size)
+	{
+		if (data->command[i] != NULL)
+		{
+			command_realloc(data);
+			//if (access(data->command[i], X_OK) == 0) // error issue
+			execve(data->command[i], data->command, env_tochar(env->node));
+		}
+	}
+}
+
+char	**env_tochar(t_env_node *env)
+{
+	int		i;
+	int		size;
+	char	*equal_sign;
+	char	*origin_envstr;	
+	char	**ret;
+
+	i = -1;
+	ret = NULL;
+	if (env)
+		size = ft_envlen(env);
+	if (size)
+	{
+		ret = (char **)malloc(sizeof(char *) * (size + 1));
+		if (!ret)
+			error_malloc();
+		while (++i < size)
+		{
+			if (env[i].key)
+				equal_sign = ft_strjoin(env[i].key, "=");
+			else
+				equal_sign = NULL;
+			if (env[i].value)
+				origin_envstr = ft_strjoin(equal_sign, env[i].value);
+			else
+				origin_envstr = ft_strdup(equal_sign);
+			ret[i] = origin_envstr;
+			// ft_putstr_fd(ret[i], 2);
+			// ft_putstr_fd("\n", 2);
+			free(equal_sign);
+			origin_envstr = NULL;
+		}
+	}
+	return (ret);
+}
+
+void	cmd_start(t_mini *data, char **split_path, t_env *env)
 {
 	char	*slash_join;
 	char	*cmd;
@@ -899,7 +1008,7 @@ void	cmd_start(t_mini *data, char **split_path)
 	int		j;
 
 	i = -1;
-	while (split_path[++i])
+	while (split_path && split_path[++i])
 	{
 		slash_join = ft_strjoin(split_path[i], "/");
 		j = -1;
@@ -911,10 +1020,7 @@ void	cmd_start(t_mini *data, char **split_path)
 				if (access(cmd, X_OK) == 0)
 				{
 					command_realloc(data);
-					if (execve(cmd, data->command, NULL) == -1)
-					{
-						error_execve();
-					}
+					execve(cmd, data->command, NULL);
 				}
 				free(cmd);
 			}
@@ -923,6 +1029,37 @@ void	cmd_start(t_mini *data, char **split_path)
 	}
 	error_cmdnotfound(data->command[0], data);
 }
+
+// void	cmd_start(t_mini *data, char **split_path)
+// {
+// 	char	*slash_join;
+// 	char	*cmd;
+// 	int		i;
+// 	int		j;
+
+// 	i = -1;
+// 	while (split_path && split_path[++i])
+// 	{
+// 		slash_join = ft_strjoin(split_path[i], "/");
+// 		j = -1;
+// 		while (++j < data->cmd_size)
+// 		{
+// 			if (data->command[j] != NULL)
+// 			{
+// 				cmd = ft_strjoin(slash_join, data->command[j]);
+// 				if (access(cmd, X_OK) == 0)
+// 				{
+// 					command_realloc(data);
+// 					if (execve(cmd, data->command, NULL) == -1)
+// 						error_execve();
+// 				}
+// 				free(cmd);
+// 			}
+// 		}
+// 		free(slash_join);
+// 	}
+// 	error_cmdnotfound(data->command[0], data);
+// }
 
 void	command_realloc(t_mini *data)
 {
