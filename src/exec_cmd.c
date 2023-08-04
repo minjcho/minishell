@@ -1194,14 +1194,14 @@ void	exec_cmd(t_mini *data, t_env *env)
 	int	i;
 
 	i = -1;
-	while (++i < data[0].cnt)
+	heredoc_ready(data, env);
+	while (++i < data->cnt)
 	{
 		redirection_ready(&data[i]);
 	}
 	builtin_counter(data);
 	if (data->builtin_cnt == 1 && data->cnt == 1)
 	{
-		// redirection
 		if (data->input_fd)
 		{
 			dup2(data->input_fd, 0);
@@ -1218,6 +1218,37 @@ void	exec_cmd(t_mini *data, t_env *env)
 		return ;
 	}
 	process_start2(data, env);
+}
+
+void	heredoc_ready(t_mini *data, t_env *env)
+{
+	int		heredoc_cnt;
+	char	**file_container;
+
+	heredoc_cnt = heredoc_counter(data);
+	file_container = (char **)malloc(sizeof(char *) * (heredoc_cnt + 1));
+	file_container[heredoc_cnt] = NULL;
+
+}
+
+int	heredoc_counter(t_mini *data)
+{
+	int	i;
+	int	j;
+	int	cnt;
+
+	i = -1;
+	cnt = 0;
+	while (++i < data->cnt)
+	{
+		j = 0;
+		while (data[i].command[j])
+		{
+			if (ft_strcmp("<<", data[i].command[j]) == 0)
+				cnt++;
+		}
+	}
+	return (cnt);
 }
 
 int	redirection_ready(t_mini *data)
