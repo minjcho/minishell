@@ -132,7 +132,7 @@ void	node_free(t_mini *node)
 			if (&node[i])
 			{
 				command_free(node[i].command);
-				command_free(node[i].temp_files);
+				//command_free(node[i].temp_files);
 			}
 		}
 		free(node);
@@ -1217,7 +1217,7 @@ void	exec_cmd(t_mini *data, t_env *env)
 	int	i;
 
 	i = -1;
-	heredoc_ready(data, env);
+	//heredoc_ready(data, env);
 	while (++i < data->cnt)
 	{
 		redirection_ready(&data[i]);
