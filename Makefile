@@ -69,7 +69,27 @@ SRC_DIR	= src
 OBJ_DIR	= obj
 INC_DIR	= include
 
-SOURCES_NAMES	=	main.c \
+SOURCES_NAMES	=	builtin_ready.c \
+					do_cd.c \
+					do_echo.c \
+					do_env.c \
+					do_exit.c \
+					do_export.c \
+					do_pwd.c \
+					do_unset.c \
+					env_utils.c \
+					env_utils2.c \
+					error.c \
+					error2.c \
+					exec_cmd.c \
+					export_utils.c \
+					free.c \
+					here_doc2.c \
+					heredoc.c \
+					process_utils.c \
+					process.c \
+					redirection_set.c \
+					redirection_util.c
 
 SOURCES = $(addprefix $(SRC_DIR)/, $(SOURCES_NAMES))
 OBJECTS = $(SOURCES_NAMES:%.c=$(OBJ_DIR)/%.o)
@@ -78,7 +98,7 @@ all : $(NAME)
 
 $(NAME) : $(OBJ_DIR) $(OBJECTS)
 	@make -C libft
-	@$(CC) $(CFLAGS) $(LIBLIBS) $(READLINE_FLAG) $(OBJECTS) -o $(NAME)
+	@$(CC) $(CFLAGS) $(LIB_FLAG) $(READLINE_FLAG) $(OBJECTS) -o $(NAME)
 
 $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)

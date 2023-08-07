@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 16:14:11 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/07 19:26:27 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/07 20:07:33 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,17 +61,20 @@ void	readlilne_tester(void);
 //start in exec_cmd;
 //void	exec_cmd(t_mini *data);
 void	exec_cmd(t_mini *data, t_env *env);
-int		redirection_ready(t_mini *data);
-int		is_redirection(char *str);
-void	set_redirection(t_mini *data, int i);
 void	file_open(t_mini *data, int i);
 void	error_file(void);
 
+//redirection_util.c
 void	file_create(t_mini *data, int i, int flag);
 void	file_open(t_mini *data, int i);
+void	set_cmd_null(t_mini *data, int start, int end);
+
+//redirection_set.c
+int		redirection_ready(t_mini *data);
+void	set_redirection(t_mini *data, int i);
+int		is_redirection(char *str);
 
 //file util
-void	set_cmd_null(t_mini *data, int start, int end);
 int		is_argument(char **command, t_mini *data);
 
 //process
@@ -143,6 +146,7 @@ t_env_node	*realloc_evnode(char *key, char *value, t_env_node *node, int flag);
 void		ft_nodecpy(t_env_node *new_node, t_env_node *old, char *delete);
 
 //error_msg
+//error.c error2.c
 void	error_export_valid(char *key);
 void	error_oldpath_not_set(void);
 void	error_malloc(void);
