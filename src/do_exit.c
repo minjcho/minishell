@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 20:52:49 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/07 20:53:06 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/08 16:05:18 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,5 +14,6 @@
 
 void	do_exit(t_mini *data)
 {
+	(void)data;
 	exit(0); // need to free??
 }

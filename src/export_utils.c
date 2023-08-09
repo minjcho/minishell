@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 20:49:04 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/07 20:49:43 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/08 16:18:14 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,6 @@ void	ft_setexport(char *key, char *value, t_env *env)
 char	*ft_getexport(char *key, t_env *env)
 {
 	int	i;
-	int	temp;
 
 	i = -1;
 	if (env->export)

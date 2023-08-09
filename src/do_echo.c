@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 20:47:56 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/07 20:48:18 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/08 15:53:48 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 void	do_echo(t_mini *data)
 {
 	int		option_idx;
-	char	*new_line;
+	//char	*new_line;
 	int		temp;
 	int		i;
 

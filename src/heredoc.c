@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 20:27:15 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/07 20:29:03 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/09 10:35:38 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,6 +42,7 @@ char	*set_temp_file(t_mini *data, int k)
 	char	*temp_num;
 	char	*res_path;
 	char	*temp_file;
+	(void)data;
 
 	i = 0;
 	res_path = "/Users/jinhyeok/goinfre/temp";
@@ -67,25 +68,39 @@ char	*set_temp_file(t_mini *data, int k)
 void	do_heredoc(t_mini *data, char **limmiter, char **temp_files)
 {
 	int		i;
+	pid_t	id;
 	int		fd;
 	char	*str;
 
 	i = -1;
 	fd = 0;
+	(void)data;
 	while (limmiter[++i])
 	{
-		ft_putstr_fd(temp_files[i], 2);
-		fd = open(temp_files[i], O_WRONLY | O_CREAT, 0644);
-		if (fd == -1)
-			error_file();
-		while (1)
+		id = fork();
+		if (id == 0)
 		{
-			str = readline("> ");
-			if (!str || ft_strcmp(str, limmiter[i]) == 0)
-				break ;
-			write(fd, str, ft_strlen(str));
+			ft_putstr_fd(temp_files[i], 2);
+			fd = open(temp_files[i], O_WRONLY | O_CREAT, 0644);
+			if (fd == -1)
+				error_file();
+			while (1)
+			{
+				str = readline("> ");
+				if (!str || ft_strcmp(str, limmiter[i]) == 0)
+					break ;
+				write(fd, str, ft_strlen(str));
+				write(fd, "\n", 1);
+				free(str);
+			}
+			close (fd);
 		}
-		close (fd);
+		else if (id > 0)
+		{
+			wait(NULL);
+		}
+		else
+			error_fork();
 	}
 }
 
@@ -100,6 +115,7 @@ void	heredoc_ready(t_mini *data, t_env *env)
 	int		heredoc;
 
 	i = -1;
+	(void)env;
 	heredoc = 0;
 	while (++i < data->cnt)
 	{

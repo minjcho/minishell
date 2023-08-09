@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 16:14:11 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/07 20:07:33 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/08 21:37:39 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -159,5 +159,11 @@ void	first_excute(t_mini *data, t_env *env);
 
 //free
 void	env_free(t_env_node *node);
+//temp
+
+void	red_left(t_mini *data, t_env *env, int i);
+void	heredoc_left(t_mini *data, t_env *env, int i);
+void	heredoc_right(t_mini *data, t_env *env, int i);
+void	red_right(t_mini *data, t_env *env, int i);
 
 #endif

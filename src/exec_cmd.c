@@ -25,6 +25,8 @@ extern char **environ;
 int main(int ac, char **av, char ** envp)
 {
 	(void)ac;
+	(void)av;
+	(void)envp;
 	readlilne_tester();
 }
 
@@ -33,7 +35,6 @@ void	readlilne_tester(void)
 	char	*temp;
 	char	**token;
 	char	**to_cmmand;
-	int		i;
 	int		origin_in;
 	int		origin_out;
 	t_mini	*node;
@@ -127,6 +128,7 @@ void	process_start2(t_mini *data, t_env *env)
 
 	while ((++i < data->cnt))
 	{
+		//heredoc_ready2(&data[i], env);
 		pipe(cur_pipe);
 		pid = fork();
 		if (pid == 0)
@@ -192,8 +194,61 @@ void	process_start2(t_mini *data, t_env *env)
 		waitpid(-1, NULL, 0);
 		i--;
 	}
-	//temp_deleter(data);
+	temp_deleter(data);
 } 
+
+// void	heredoc_ready2(t_mini *data, t_env *env)
+// {
+// 	int		heredoc;
+// 	char	**limmiter;
+// 	int		i;
+// 	pid_t	id;
+// 	int		fd[2];
+
+// 	heredoc = 0;
+// 	heredoc = heredoc_counter(data);
+// 	limmiter = limmiter_set(data, heredoc);
+// 	if (!heredoc)
+// 		return ;
+// 	pipe(fd);
+
+// 	while (i < heredoc)
+// 	{
+// 		id = fork();
+// 		if (id == 0)
+// 		{
+// 		}
+// 		else if (id > 0)
+// 		{
+// 			close(fd[1]);
+// 			dup2(fd[0], 0);
+// 		}
+// 		else
+// 			error_fork();
+// 	}
+// }
+
+// char	**limmiter_set(t_mini *data, int heredoc)
+// {
+// 	char	**ret;
+// 	int		i;
+// 	int		j;
+
+// 	i = -1;
+// 	j = 0;
+// 	ret = (char **)malloc(sizeof(char *) *(heredoc + 1));
+// 	ret[heredoc] = NULL;
+// 	while (++i < data->cmd_size)
+// 	{
+// 		if (data->command[i] && ft_strcmp("<<", data->command[i]) == 0)
+// 		{
+// 			ret[j] = ft_strdup(data->command[i + 1]);
+// 			set_cmd_null(data, i, i + 1);
+// 			j++;
+// 		}
+// 	}
+// 	return (ret);
+// }
 
 int		ft_strcmp(char *s1, char *s2)
 {
