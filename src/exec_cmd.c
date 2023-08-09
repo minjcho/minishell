@@ -113,6 +113,8 @@ void	readlilne_tester(void)
 			node_free(node);
 			command_free(token);
 		}
+		dup2(origin_in, 0);
+		dup2(origin_out, 1);
 	}
 }
 

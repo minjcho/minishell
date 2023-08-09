@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 20:27:15 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/09 10:35:38 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/09 14:18:35 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int	heredoc_counter(t_mini *data)
 	while (++i < data->cnt)
 	{
 		j = 0;
-		while (data[i].command[j])
+		while (j < data[i].cmd_size)
 		{
 			if (ft_strcmp("<<", data[i].command[j]) == 0)
 			{
