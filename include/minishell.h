@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 16:14:11 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/09 20:54:56 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/09 21:38:29 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,13 +23,11 @@ typedef struct s_env
 {
 	t_env_node	*node;
 	t_env_node	*export;
-	char		**file_container;
 } t_env;
 
 typedef struct s_mini
 {
 	char	**command;
-	char	**temp_files;
 	int		doc_cnt;
 	int		cmd_size;
 	int		delete;
@@ -122,7 +120,7 @@ int		is_echo_option(t_mini *data);
 // builtin pwd
 void	do_pwd(t_mini *data, t_env *env);
 void	do_env(t_env *env);
-void	do_exit(t_mini *data);
+void	do_exit(t_mini *data, t_env *env)
 
 // builtin unset
 void	do_unset(t_mini *data, t_env *env);
@@ -159,6 +157,7 @@ void	first_excute(t_mini *data, t_env *env);
 
 //free
 void	env_free(t_env_node *node);
+void	free_all(t_mini *node, t_env *env);
 //temp
 
 void	heredoc_read(char *limiter, int *fd);

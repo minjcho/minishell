@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 20:29:20 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/08 15:42:47 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/09 21:36:28 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,12 +59,15 @@ void	node_free(t_mini *node)
 		while (++i < node->cnt)
 		{
 			if (&node[i])
-			{
 				command_free(node[i].command);
-				if (node->doc_cnt)
-					command_free(node[i].temp_files);
-			}
 		}
 		free(node);
 	}
+}
+
+void	free_all(t_mini *node, t_env *env)
+{
+	node_free(node);
+	env_free(env->node);
+	env_free(env->export);
 }
