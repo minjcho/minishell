@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 20:41:21 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/09 17:44:34 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/09 21:30:07 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,6 @@ void	heredoc_right(t_mini *data, t_env *env, int i)
 void	heredoc_left(t_mini *data, t_env *env, int i)
 {
 	char	*limiter;
-	char	*str;
 	int		fd[2];
 	int		status;
 	pid_t	id;
@@ -114,19 +113,7 @@ void	heredoc_left(t_mini *data, t_env *env, int i)
 	if (id == 0)
 	{
 		close(fd[0]);
-		while (1)
-		{
-			str = readline("> ");
-			if (!str || ft_strcmp(str, limiter) == 0)
-			{
-				free(str);
-				close(fd[1]);
-				exit(0);
-			}
-			write(fd[1], str, ft_strlen(str));
-			write(fd[1], "\n", 1);
-			free(str);
-		}
+		heredoc_read(limiter, fd);
 	}
 	else if (id > 0)
 	{
@@ -138,6 +125,26 @@ void	heredoc_left(t_mini *data, t_env *env, int i)
 	}
 	else
 		error_fork();
+}
+
+void	heredoc_read(char *limiter, int *fd)
+{
+	char	*str;
+
+	while (1)
+	{
+		str = readline("> ");
+		if (!str || ft_strcmp(str, limiter) == 0)
+		{
+			free(limiter);
+			free(str);
+			close(fd[1]);
+			exit(0);
+		}
+		write(fd[1], str, ft_strlen(str));
+		write(fd[1], "\n", 1);
+		free(str);
+	}
 }
 
 void	red_right(t_mini *data, t_env *env, int i)
@@ -196,7 +203,6 @@ void	exec_cmd(t_mini *data, t_env *env)
 	int	prev_pipe;
 
 	i = -1;
-	(void)env;
 	prev_pipe = 0;
 	while (++i < data->cnt)
 	{
@@ -215,17 +221,17 @@ void	exec_cmd(t_mini *data, t_env *env)
 				dup2(prev_pipe, 0);
 				close(prev_pipe);
 			}
-			else if (data[i].cnt > 1 && data[i].cnt - 1 != i)
+			if (data[i].cnt > 1 && data[i].cnt - 1 != i)
 			{
 				close(cur_pipe[0]);
 				dup2(cur_pipe[1], 1);
 				close(cur_pipe[1]);
 			}
-			else
-			{
-				close(cur_pipe[0]);
-				close(cur_pipe[1]);
-			}
+			// else
+			// {
+			// 	close(cur_pipe[0]);
+			// 	close(cur_pipe[1]);
+			// }
 			if (!data[i].builtin_cnt && (data[i].cmd_size - data[i].delete) > 0)
 				cmd_find(&data[i], env);
 			else if (data[i].builtin_cnt == 1)
@@ -233,22 +239,31 @@ void	exec_cmd(t_mini *data, t_env *env)
 			exit (0);
 		}
 		else if(id1 > 0)
-		{
-			close(cur_pipe[1]);
-			if (prev_pipe)
-				close(prev_pipe);
-			if (data[i].cnt > 1)
-				prev_pipe = cur_pipe[0];
-			else
-				close(cur_pipe[0]);
-		}
+			parentset(data, cur_pipe, prev_pipe, i);
 		else
 			error_fork();
 	}
-	int	j;
-	j = -1;
-	while (++j < i)
-		wait(NULL);
+	ft_wait(i);
+}
+
+void	parentset(t_mini *data, int *cur_pipe, int prev_pipe, int i)
+{
+	close(cur_pipe[1]);
+	if (prev_pipe)
+		close(prev_pipe);
+	if (data[i].cnt > 1)
+		prev_pipe = cur_pipe[0];
+	else
+		close(cur_pipe[0]);
+}
+
+void	ft_wait(int n)
+{
+	int	i;
+
+	i = -1;
+	while (++i < n)
+		waitpid(-1, NULL, 0);
 }
 
 // void	heredoc_ready2(t_mini *data, t_env *env)
@@ -293,7 +308,10 @@ void	first_excute(t_mini *data, t_env *env)
 	while (++i < data->cmd_size)
 	{
 		if (data->command[i] != NULL)
-			execve(data->command[i], cmd_realoc(data), env_tochar(env->node));
+		{
+			if (execve(data->command[i], cmd_realoc(data), env_tochar(env->node)) == -1)
+				break;
+		}
 	}
 }
 
@@ -305,7 +323,6 @@ void	cmd_start(t_mini *data, char **split_path, t_env *env)
 	int		j;
 
 	i = -1;
-	(void)env;
 	while (split_path && split_path[++i])
 	{
 		slash_join = ft_strjoin(split_path[i], "/");
@@ -315,8 +332,11 @@ void	cmd_start(t_mini *data, char **split_path, t_env *env)
 			if (data->command[j] != NULL)
 			{
 				cmd = ft_strjoin(slash_join, data->command[j]);
-				execve(cmd, cmd_realoc(data), NULL);
+				if (access(cmd, X_OK) != 0)
+					continue;
+				execve(cmd, cmd_realoc(data), env_tochar(env->node));
 				free(cmd);
+				cmd = NULL;
 			}
 		}
 		free(slash_join);

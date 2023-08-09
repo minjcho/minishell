@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 16:14:11 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/08 21:37:39 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/09 20:54:56 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -161,9 +161,13 @@ void	first_excute(t_mini *data, t_env *env);
 void	env_free(t_env_node *node);
 //temp
 
+void	heredoc_read(char *limiter, int *fd);
 void	red_left(t_mini *data, t_env *env, int i);
 void	heredoc_left(t_mini *data, t_env *env, int i);
 void	heredoc_right(t_mini *data, t_env *env, int i);
 void	red_right(t_mini *data, t_env *env, int i);
 
+void	ft_wait(int n);
+void	parentset(t_mini *data, int *cur_pipe, int prev_pipe, int i);
+void	childset(t_mini *data, t_env *env, int prev_pipe, int *cur_pipe);
 #endif

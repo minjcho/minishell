@@ -118,86 +118,86 @@ void	readlilne_tester(void)
 	}
 }
 
-void	process_start2(t_mini *data, t_env *env)
-{
-	int		i;
-	int		prev_pipe;
-	int		cur_pipe[2];
-	pid_t	pid;
+// void	process_start2(t_mini *data, t_env *env)
+// {
+// 	int		i;
+// 	int		prev_pipe;
+// 	int		cur_pipe[2];
+// 	pid_t	pid;
 
-	i = -1;
-	prev_pipe = 0;
+// 	i = -1;
+// 	prev_pipe = 0;
 
-	while ((++i < data->cnt))
-	{
-		//heredoc_ready2(&data[i], env);
-		pipe(cur_pipe);
-		pid = fork();
-		if (pid == 0)
-		{	
-			if (data->input_fd == - 1 || data->output_fd == -1)
-				exit(128);
-			if (data[i].input_fd)
-			{
-				dup2(data[i].input_fd, 0);
-				close(data[i].input_fd);
-			}
-			else if (data[i].cnt > 1 && prev_pipe)
-			{
-				dup2(prev_pipe, 0);
-				close(prev_pipe);
-			}
-			else
-			{
-				dup2(0, data[i].origin_in);
-			}
-			if (data[i].output_fd)
-			{
-				dup2(data[i].output_fd, 1);
-				close(data[i].output_fd);
-			}
-			else if (data[i].cnt > 1 && data[i].cnt - 1 != i)
-			{
-				close(cur_pipe[0]);
-				dup2(cur_pipe[1], 1);
-				close(cur_pipe[1]);
-			}
-			else
-			{
-				dup2(1, data[i].origin_out);
-			}
-			if (!data[i].builtin_cnt && data[i].cmd_size - data[i].delete > 0)
-			{
-				cmd_find(&data[i], env);
-			}
-			else if (data[i].builtin_cnt == 1)
-			{
-				do_builtin(&data[i], env);
-				exit(0);
-			}
-			else
-				exit(0);
-		}
-		else if (pid > 0)
-		{
-			close(cur_pipe[1]);
-			if (prev_pipe)
-				close(prev_pipe);
-			if (data[i].cnt > 1)
-				prev_pipe = cur_pipe[0];
-			else
-				close(cur_pipe[0]);
-		}
-		else
-			error_fork();
-	}
-	while (i)
-	{
-		waitpid(-1, NULL, 0);
-		i--;
-	}
-	temp_deleter(data);
-} 
+// 	while ((++i < data->cnt))
+// 	{
+// 		//heredoc_ready2(&data[i], env);
+// 		pipe(cur_pipe);
+// 		pid = fork();
+// 		if (pid == 0)
+// 		{	
+// 			if (data->input_fd == - 1 || data->output_fd == -1)
+// 				exit(128);
+// 			if (data[i].input_fd)
+// 			{
+// 				dup2(data[i].input_fd, 0);
+// 				close(data[i].input_fd);
+// 			}
+// 			else if (data[i].cnt > 1 && prev_pipe)
+// 			{
+// 				dup2(prev_pipe, 0);
+// 				close(prev_pipe);
+// 			}
+// 			else
+// 			{
+// 				dup2(0, data[i].origin_in);
+// 			}
+// 			if (data[i].output_fd)
+// 			{
+// 				dup2(data[i].output_fd, 1);
+// 				close(data[i].output_fd);
+// 			}
+// 			else if (data[i].cnt > 1 && data[i].cnt - 1 != i)
+// 			{
+// 				close(cur_pipe[0]);
+// 				dup2(cur_pipe[1], 1);
+// 				close(cur_pipe[1]);
+// 			}
+// 			else
+// 			{
+// 				dup2(1, data[i].origin_out);
+// 			}
+// 			if (!data[i].builtin_cnt && data[i].cmd_size - data[i].delete > 0)
+// 			{
+// 				cmd_find(&data[i], env);
+// 			}
+// 			else if (data[i].builtin_cnt == 1)
+// 			{
+// 				do_builtin(&data[i], env);
+// 				exit(0);
+// 			}
+// 			else
+// 				exit(0);
+// 		}
+// 		else if (pid > 0)
+// 		{
+// 			close(cur_pipe[1]);
+// 			if (prev_pipe)
+// 				close(prev_pipe);
+// 			if (data[i].cnt > 1)
+// 				prev_pipe = cur_pipe[0];
+// 			else
+// 				close(cur_pipe[0]);
+// 		}
+// 		else
+// 			error_fork();
+// 	}
+// 	while (i)
+// 	{
+// 		waitpid(-1, NULL, 0);
+// 		i--;
+// 	}
+// 	temp_deleter(data);
+// } 
 
 // void	heredoc_ready2(t_mini *data, t_env *env)
 // {
