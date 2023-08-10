@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 20:41:21 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/09 21:30:07 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/10 13:45:12 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,9 @@ void	redirection_set(t_mini *data, t_env *env) // &data[i];
 		if (data->command[i])
 		{
 			if (is_redirection2(data->command[i]) == 1)
+			{
 				red_left(data, env, i);
+			}
 			else if (is_redirection2(data->command[i]) == 2)
 				red_right(data, env, i);
 			else if (is_redirection2(data->command[i]) == 3)
@@ -91,7 +93,7 @@ void	heredoc_right(t_mini *data, t_env *env, int i)
 	(void)env;
 	fd = open(data->command[i + 1],  O_WRONLY | O_CREAT | O_APPEND, 0644);
 	if (fd == -1)
-		error_file();
+		error_file(data->command[i + 1]);
 	set_cmd_null(data, i, i + 1);
 	dup2(fd, 1);
 	close(fd);
@@ -154,7 +156,7 @@ void	red_right(t_mini *data, t_env *env, int i)
 	(void)env;
 	fd = open(data->command[i + 1], O_WRONLY | O_CREAT | O_TRUNC, 0644 );
 	if (fd == -1)
-		error_file();
+		error_file(data->command[i + 1]);
 	set_cmd_null(data, i, i + 1);
 	dup2(fd, 1);
 	close(fd);
@@ -168,9 +170,10 @@ void	red_left(t_mini *data, t_env *env, int i)
 	(void)env;
 	fd = open(data->command[i + 1], O_RDONLY);
 	if (fd == -1)
-		error_file(); // error ?
+		error_file(data->command[i + 1]); // error ?
 	set_cmd_null(data, i, i + 1);
-	dup2(fd, 0);
+	if (dup2(fd, 0) == -1)
+		exit(0);
 	close(fd);
 }
 
@@ -179,19 +182,19 @@ int	only_builtin(t_mini *data, t_env *env)
 	builtin_counter(data);
 	if (data->builtin_cnt == 1 && data->cnt == 1)
 	{
-		if (data->input_fd)
-		{
-			dup2(data->input_fd, 0);
-			close(data->input_fd);
-		}
-		if (data->output_fd)
-		{
-			dup2(data->output_fd, 1);
-			close(data->output_fd);
-		}
+		// if (data->input_fd)
+		// {
+		// 	dup2(data->input_fd, 0);
+		// 	close(data->input_fd);
+		// }
+		// if (data->output_fd)
+		// {
+		// 	dup2(data->output_fd, 1);
+		// 	close(data->output_fd);
+		// }
 		do_builtin(data, env);
-		dup2(data->origin_in, 0);
-		dup2(data->origin_out, 1);
+		// dup2(data->origin_in, 0);
+		// dup2(data->origin_out, 1);
 		return (1);
 	}
 	return (0);
@@ -209,13 +212,11 @@ void	exec_cmd(t_mini *data, t_env *env)
 		int		cur_pipe[2];
 		pid_t	id1;
 
-		redirection_set(&data[i], env);
-		if (only_builtin(data, env))
-			return ;
 		pipe(cur_pipe);
 		id1 = fork();
 		if (id1 == 0)
 		{
+			redirection_set(&data[i], env);
 			if (data[i].cnt > 1 && prev_pipe)
 			{
 				dup2(prev_pipe, 0);
@@ -229,9 +230,11 @@ void	exec_cmd(t_mini *data, t_env *env)
 			}
 			// else
 			// {
-			// 	close(cur_pipe[0]);
-			// 	close(cur_pipe[1]);
+				// close(cur_pipe[0]);
+				// close(cur_pipe[1]);
 			// }
+			if (only_builtin(data, env))
+				return ;
 			if (!data[i].builtin_cnt && (data[i].cmd_size - data[i].delete) > 0)
 				cmd_find(&data[i], env);
 			else if (data[i].builtin_cnt == 1)
@@ -239,22 +242,22 @@ void	exec_cmd(t_mini *data, t_env *env)
 			exit (0);
 		}
 		else if(id1 > 0)
-			parentset(data, cur_pipe, prev_pipe, i);
+			parentset(data, cur_pipe, &prev_pipe, i);
 		else
 			error_fork();
 	}
 	ft_wait(i);
 }
 
-void	parentset(t_mini *data, int *cur_pipe, int prev_pipe, int i)
+void	parentset(t_mini *data, int *cur_pipe, int *prev_pipe, int i)
 {
 	close(cur_pipe[1]);
-	if (prev_pipe)
-		close(prev_pipe);
+	if (*prev_pipe)
+		close(*prev_pipe);
 	if (data[i].cnt > 1)
-		prev_pipe = cur_pipe[0];
-	else
-		close(cur_pipe[0]);
+	{
+		*prev_pipe = cur_pipe[0];
+	}
 }
 
 void	ft_wait(int n)

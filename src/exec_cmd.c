@@ -24,6 +24,7 @@ extern char **environ;
 
 int main(int ac, char **av, char ** envp)
 {
+	global_signal = 0;
 	(void)ac;
 	(void)av;
 	(void)envp;

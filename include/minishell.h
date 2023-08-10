@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 16:14:11 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/09 21:58:45 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/10 13:43:41 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -54,13 +54,13 @@ typedef struct s_mini
 
 // jinhyeok exec
 // test driver;
+int		global_signal;
 void	readlilne_tester(void);
 
 //start in exec_cmd;
 //void	exec_cmd(t_mini *data);
 void	exec_cmd(t_mini *data, t_env *env);
 void	file_open(t_mini *data, int i);
-void	error_file(void);
 
 //redirection_util.c
 void	file_create(t_mini *data, int i, int flag);
@@ -113,6 +113,7 @@ int		to_back_directory(char *to_directory);
 int		to_home_directory(char *to_directory);
 
 // builtin echo
+void	echo_write(t_mini *data, int option_idx);
 void	do_echo(t_mini *data);
 int		is_echo_option(t_mini *data);
 //void	echo_option_checker(t_mini *data);
@@ -150,7 +151,7 @@ void	error_oldpath_not_set(void);
 void	error_malloc(void);
 void	error_pipe(void);
 void	error_fork(void);
-void    error_file(void);
+void    error_file(char *file);
 void	error_execve(void);
 void	error_cmdnotfound(char *str, t_mini *data);
 void	first_excute(t_mini *data, t_env *env);
@@ -167,6 +168,6 @@ void	heredoc_right(t_mini *data, t_env *env, int i);
 void	red_right(t_mini *data, t_env *env, int i);
 
 void	ft_wait(int n);
-void	parentset(t_mini *data, int *cur_pipe, int prev_pipe, int i);
+void	parentset(t_mini *data, int *cur_pipe, int *prev_pipe, int i);
 void	childset(t_mini *data, t_env *env, int prev_pipe, int *cur_pipe);
 #endif

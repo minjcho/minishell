@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 20:47:56 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/08 15:53:48 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/10 11:25:13y jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,23 +15,18 @@
 void	do_echo(t_mini *data)
 {
 	int		option_idx;
-	//char	*new_line;
-	int		temp;
 	int		i;
 
 	i = 0;
-	// if (data->output_fd)
-	// 	temp = data->output_fd;
-	// else 
-		temp = 1;
 	option_idx = is_echo_option(data);
 	if (option_idx > 1)
 	{
 		while (option_idx < data->cmd_size)
 		{
-			write(temp, data->command[option_idx], \
-			ft_strlen(data->command[option_idx]));
-			write(temp, " ", 1);
+			// write(1, data->command[option_idx], \
+			// ft_strlen(data->command[option_idx]));
+			// write(1, " ", 1);
+			echo_write(data, option_idx);
 			option_idx++;
 		}
 	}
@@ -39,13 +34,32 @@ void	do_echo(t_mini *data)
 	{
 		while (option_idx < data->cmd_size)
 		{
-			write(temp, data->command[option_idx], \
-			ft_strlen(data->command[option_idx]));
-			write(temp, " ", 1);
+			// if (ft_strcmp("$?", data->command[option_idx]) == 0)
+			// {
+			// 	ft_putnbr_fd(global_signal, 1);
+			// 	option_idx++;
+			// }
+			// write(1, data->command[option_idx], \
+			// ft_strlen(data->command[option_idx]));
+			// write(1, " ", 1);
+			echo_write(data, option_idx);
 			option_idx++;
 		}
-		write(temp, "\n", 1);
+		write(1, "\n", 1);
 	}
+}
+
+void	echo_write(t_mini *data, int option_idx)
+{
+	if (ft_strcmp("$?", data->command[option_idx]) == 0)
+	{
+		ft_putnbr_fd(global_signal, 1);
+		write(1, " ", 1);
+		option_idx++;
+	}
+	write(1, data->command[option_idx], \
+	ft_strlen(data->command[option_idx]));
+	write(1, " ", 1);
 }
 
 int	is_echo_option(t_mini *data)

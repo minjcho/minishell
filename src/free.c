@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 20:29:20 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/09 21:36:28 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/10 11:20:25 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,23 +51,25 @@ void	env_free(t_env_node *node)
 
 void	node_free(t_mini *node)
 {
-	int	i;
+	int		i;
+	t_mini	*temp;
 
 	i = -1;
 	if (node)
 	{
+		temp = node;
 		while (++i < node->cnt)
 		{
 			if (&node[i])
 				command_free(node[i].command);
 		}
-		free(node);
+		node = NULL;
+		free(temp);
 	}
 }
 
 void	free_all(t_mini *node, t_env *env)
 {
+	(void)env;
 	node_free(node);
-	env_free(env->node);
-	env_free(env->export);
 }

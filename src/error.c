@@ -6,21 +6,21 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 19:58:00 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/07 19:59:12 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/10 11:23:20 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	error_execve(void)
-{
-	perror("execve");
-	exit(1);
-}
+// void	error_execve(void)
+// {
+// 	perror("execve");
+// 	exit(1);
+// }
 
-void	error_file(void)
+void	error_file(char *file)
 {
-	perror("file");
+	perror(file);
 }
 
 void	error_fork(void)
