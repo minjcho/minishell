@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 16:14:11 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/09 21:38:29 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/09 21:58:45 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -120,7 +120,7 @@ int		is_echo_option(t_mini *data);
 // builtin pwd
 void	do_pwd(t_mini *data, t_env *env);
 void	do_env(t_env *env);
-void	do_exit(t_mini *data, t_env *env)
+void	do_exit(t_mini *data, t_env *env);
 
 // builtin unset
 void	do_unset(t_mini *data, t_env *env);
