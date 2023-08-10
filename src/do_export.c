@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 20:15:49 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/07 20:19:51 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/10 18:56:48 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,11 @@ void	export_val(t_mini *data, t_env *env)
 		temp = ft_split(cmd[i], '=');
 		key = temp[0];
 		value = temp[1];
-		if (!export_valid_check(key))
+		if (!export_valid_check2(cmd[i]) || !export_valid_check(key))
+		{
+			command_free(temp);
 			continue;
+		}
 		if (!value)
 			ft_setexport(key, value, env);
 		else
@@ -50,6 +53,17 @@ void	export_val(t_mini *data, t_env *env)
 	}
 	command_free(cmd);
 }
+
+int	export_valid_check2(char *str)
+{
+	if (*str == '=')
+	{
+		error_export_valid(str);
+		return (0);
+	}
+	return (1);
+}
+
 
 int	export_valid_check(char *key)
 {

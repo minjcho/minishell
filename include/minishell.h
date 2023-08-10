@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 16:14:11 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/10 17:56:37 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/10 18:57:12 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -133,6 +133,7 @@ void	export_sorting(t_env *env);
 void	export_print(t_env *env);
 void	export_val(t_mini *data, t_env *env);
 int		export_valid_check(char *key);
+int		export_valid_check2(char *str);
 
 //here_doc
 // char	*set_temp_file(t_mini *data, int k);
