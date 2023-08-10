@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 20:13:22 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/09 21:38:50 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/10 17:57:37 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,23 @@ void	builtin_counter(t_mini *data)
 		data[i].builtin_cnt = builtin_cnt;
 	}
 }
+
+void	builtin_counter2(t_mini *data)
+{
+	int	i;
+	int	builtin_cnt;
+
+	i = -1;
+	builtin_cnt = 0;
+	while (++i < data->cnt)
+	{
+		builtin_cnt = 0;
+		if (builtin_check(data))
+			builtin_cnt++;
+		data[i].builtin_cnt = builtin_cnt;
+	}
+}
+
 
 int	builtin_check(t_mini *data)
 {
@@ -68,5 +85,5 @@ void	do_builtin(t_mini *data, t_env *env)
 	else if (builtin_check(data) == 6)
 		do_env(env);
 	else if (builtin_check(data) == 7)
-		do_exit(data, env);
+		do_exit(data);
 }

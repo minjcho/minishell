@@ -51,9 +51,10 @@ void	do_echo(t_mini *data)
 
 void	echo_write(t_mini *data, int option_idx)
 {
-	if (ft_strcmp("$?", data->command[option_idx]) == 0)
+	if (data->command[option_idx] && ft_strcmp("$?", data->command[option_idx]) == 0)
 	{
 		ft_putnbr_fd(global_signal, 1);
+		global_signal = 0;
 		write(1, " ", 1);
 		option_idx++;
 	}
