@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 20:15:49 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/10 18:56:48 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/11 11:37:51 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,41 +17,102 @@ void	do_export(t_mini *data, t_env *env)
 	if ((data->cmd_size - data->delete) == 1)
 		export_print(env);
 	else if ((data->cmd_size - data->delete) > 1)
-		export_val(data, env);
+		export_val2(data, env);
 }
 
-void	export_val(t_mini *data, t_env *env)
+// void	export_val(t_mini *data, t_env *env)
+// {
+// 	int		i;
+// 	char	*key;
+// 	char	*value;
+// 	char	**temp;
+// 	char	**cmd;
+
+// 	i = 0;
+// 	key = NULL;
+// 	value = NULL;
+// 	cmd = cmd_realoc(data);
+// 	while (cmd[++i])
+// 	{
+// 		temp = ft_split(cmd[i], '=');
+// 		key = temp[0];
+// 		value = temp[1];
+// 		if (!export_valid_check2(cmd[i]) || !export_valid_check(key))
+// 		{
+// 			command_free(temp);
+// 			continue;
+// 		}
+// 		if (!value)
+// 			ft_setexport(key, value, env);
+// 		else
+// 		{
+// 			ft_setexport(key, value, env);
+// 			ft_setenv(key, value, env);
+// 		}
+// 		command_free(temp);
+// 	}
+// 	command_free(cmd);
+// }
+
+void	export_val2(t_mini *data, t_env *env)
 {
 	int		i;
-	char	*key;
-	char	*value;
 	char	**temp;
 	char	**cmd;
+	char	*temp1;
 
 	i = 0;
-	key = NULL;
-	value = NULL;
 	cmd = cmd_realoc(data);
 	while (cmd[++i])
 	{
-		temp = ft_split(cmd[i], '=');
-		key = temp[0];
-		value = temp[1];
-		if (!export_valid_check2(cmd[i]) || !export_valid_check(key))
-		{
-			command_free(temp);
+		if (!export_valid_check2(cmd[i]) || !export_valid_check(cmd[i]))
 			continue;
-		}
-		if (!value)
-			ft_setexport(key, value, env);
-		else
+		temp = ft_split(cmd[i], '=');
+		if (!is_equal(cmd[i]))
+			ft_setexport(cmd[i], NULL, env);
+		else if (equal_checker(cmd[i]))
 		{
-			ft_setexport(key, value, env);
-			ft_setenv(key, value, env);
+			temp1 = malloc(1);
+			set_export_env(temp[0], temp1, env);
+			free(temp1);
 		}
+		else if (is_equal(cmd[i]) && !equal_checker(cmd[i]))
+			set_export_env(temp[0], temp[1], env);
 		command_free(temp);
 	}
 	command_free(cmd);
+}
+
+void	set_export_env(char *key, char *value, t_env *env)
+{
+	ft_setexport(key, value, env);
+	ft_setenv(key, value, env);
+}
+
+int	equal_checker(char *str)
+{
+	int	i;
+
+	i = -1;
+	while (str[++i])
+	{
+		if (str[i] == '=' && !str[i + 1])
+			return (1);
+	}
+	return (0);
+}
+
+int	is_equal(char *str)
+{
+	int	i;
+
+	i = -1;
+	while (str[++i])
+	{
+		if (str[i] == '=')
+			return (1);
+	}
+	return (0);
 }
 
 int	export_valid_check2(char *str)
@@ -63,7 +124,6 @@ int	export_valid_check2(char *str)
 	}
 	return (1);
 }
-
 
 int	export_valid_check(char *key)
 {
@@ -79,8 +139,8 @@ int	export_valid_check(char *key)
 		}
 		while (key[++i])
 		{
-			if (key[i] <= 47 || key[i] >= 123 || (key[i] >= 58 && key[i] <= 64) || \
-			(key[i] >= 91 && key[i] <= 94) || key[i] == 96)
+			if (key[i] <= 47 || key[i] >= 123 || (key[i] >= 58 && key[i] <= 60) || \
+			(key[i] >= 91 && key[i] <= 94) || key[i] == 96 || (key[i] >= 62 && key[i] <= 64))
 			{
 				error_export_valid(key);
 				return (0);

@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 16:14:11 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/10 18:57:12 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/11 11:34:32 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,9 +132,13 @@ void	do_export(t_mini *data, t_env *env);
 void	export_sorting(t_env *env);
 void	export_print(t_env *env);
 void	export_val(t_mini *data, t_env *env);
+void	export_val2(t_mini *data, t_env *env);
 int		export_valid_check(char *key);
 int		export_valid_check2(char *str);
+void	set_export_env(char *key, char *value, t_env *env);
 
+int	equal_checker(char *str);
+int	is_equal(char *str);
 //here_doc
 // char	*set_temp_file(t_mini *data, int k);
 // void	do_heredoc(t_mini *data, char **limmiter, char **temp_files);
