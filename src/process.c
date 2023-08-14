@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 20:41:21 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/10 16:39:55 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/14 18:37:38 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,6 +131,7 @@ void	heredoc_left(t_mini *data, t_env *env, int i)
 void	heredoc_read(char *limiter, int *fd)
 {
 	char	*str;
+	//char	**temp;
 
 	while (1)
 	{
@@ -142,10 +143,90 @@ void	heredoc_read(char *limiter, int *fd)
 			close(fd[1]);
 			exit(0);
 		}
-		write(fd[1], str, ft_strlen(str));
-		write(fd[1], "\n", 1);
+		if (dollar_counter(str))
+		{
+			int	i;
+
+			i = -1;
+			while (str[i])
+			{
+				if (str[i] == '$')
+				{
+					if (str[i + 1] == ' ' || str[i + 1] == '\0')
+						write(fd[1], &str[i], 1);
+					else if (str[i + 1])
+					{
+						//get ft_env values 
+
+					}
+				}
+			}
+		}
+		else
+		{
+			//set normal
+			write(fd[1], str, ft_strlen(str));
+			write(fd[1], "\n", 1);
+		}
 		free(str);
 	}
+}
+
+int	dollar_counter(char *str)
+{
+	int	i;
+	int	cnt;
+
+	i = 0;
+	cnt = 0;
+	while (str[i])
+	{
+		if (str[i] == '$')
+			cnt++;
+		i++;
+	}
+	return (cnt);
+}
+
+// char	**dollar_check(char **str)
+// {
+// 	int		i;
+// 	char	**ret;
+
+// 	i = -1;
+// 	while (str[++i])
+// 	{
+// 		if (is_dollar(str[i]))
+// 			split_token(str, i);
+// 	}
+// }
+
+// void	split_token(char **str, int i)
+// {
+// 	char *temp;
+// 	char	**split;
+// 	int	i;
+
+// 	temp = str[i];
+// 	i = -1;
+// 	split = ft_split(str[i]);
+// 	free(temp);
+// }
+
+int	is_dollar(char *str)
+{
+	int	i;
+
+	i = -1;
+	while (str[++i])
+	{
+		if (str[i] == '$')
+		{
+			if (str[i + 1] && str[i + 1] != ' ')
+				return (1);
+		}
+	}
+	return (0);
 }
 
 void	red_right(t_mini *data, t_env *env, int i)

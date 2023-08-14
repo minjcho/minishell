@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 16:14:11 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/11 11:34:32 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/14 18:38:56 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,10 @@ typedef struct s_mini
 # include <fcntl.h>
 # include <readline/readline.h>
 # include <readline/history.h>
+# include <termios.h>
 # include <sys/types.h>
 # include <sys/wait.h>
-#include <sys/stat.h>
+# include <sys/stat.h>
 # include <signal.h>
 # include "../libft/libft.h"
 
@@ -105,6 +106,7 @@ int		ft_strcmp(char *s1, char *s2);
 void	builtin_counter(t_mini *data);
 int		builtin_check(t_mini *data);
 void	do_builtin(t_mini *data, t_env *env);// seperate input &data[i];
+int	is_dollar(char *str);
 
 // builtin cd
 void	do_cd(t_mini *data, t_env *env);
@@ -124,6 +126,7 @@ void	do_pwd(t_mini *data, t_env *env);
 void	do_env(t_env *env);
 void	do_exit(t_mini *data);
 void	do_exit2(char * str);
+void	do_exit3(int temp);
 
 // builtin unset
 void	do_unset(t_mini *data, t_env *env);
@@ -160,9 +163,11 @@ void	error_pipe(void);
 void	error_fork(void);
 void    error_file(char *file);
 void	error_exit(char *str);
+void	error_exit2(void);
 void	error_execve(void);
 void	error_cmdnotfound(char *str, t_mini *data);
 void	first_excute(t_mini *data, t_env *env);
+int		str_digit(char *str);
 
 //free
 void	env_free(t_env_node *node);
@@ -174,6 +179,7 @@ void	red_left(t_mini *data, t_env *env, int i);
 void	heredoc_left(t_mini *data, t_env *env, int i);
 void	heredoc_right(t_mini *data, t_env *env, int i);
 void	red_right(t_mini *data, t_env *env, int i);
+int		dollar_counter(char *str);
 
 void	ft_wait(int n);
 void	parentset(t_mini *data, int *cur_pipe, int *prev_pipe, int i);

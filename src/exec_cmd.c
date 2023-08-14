@@ -22,13 +22,34 @@ int	origin_out;
 
 extern char **environ;
 
+void	signal_get(int sig_num)
+{
+	if (sig_num == 2)
+	{
+	}
+}
+
 int main(int ac, char **av, char ** envp)
 {
+	// struct termios origin;
+	// struct termios temp;
+
+	// tcgetattr(0, &origin);
+	// tcgetattr(0, &temp);
+	// temp.c_lflag &= ~(ICANON | ECHO);
+	// temp.c_cc[VMIN] = 1;
+    // temp.c_cc[VTIME] = 0;
+	// tcsetattr(0, TCSANOW, &temp);
+
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, signal_get);
+
 	global_signal = 0;
 	(void)ac;
 	(void)av;
 	(void)envp;
 	readlilne_tester();
+	// tcsetattr(0, TCSANOW, &origin);
 }
 
 void	readlilne_tester(void)
@@ -72,6 +93,12 @@ void	readlilne_tester(void)
 	while (1)
 	{
 		temp = readline("minishell : ");
+		// if (!temp)
+		// {
+		// 	write(1, "exit\n", 5);
+		// 	global_signal = 0;
+		// 	exit(0);
+		// }
 		if (temp)
 		{
 			token = ft_split(temp, '|');
