@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 20:13:22 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/10 17:57:37 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/16 14:45:34 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,22 +28,21 @@ void	builtin_counter(t_mini *data)
 	}
 }
 
-void	builtin_counter2(t_mini *data)
-{
-	int	i;
-	int	builtin_cnt;
+// void	builtin_counter2(t_mini *data)
+// {
+// 	int	i;
+// 	int	builtin_cnt;
 
-	i = -1;
-	builtin_cnt = 0;
-	while (++i < data->cnt)
-	{
-		builtin_cnt = 0;
-		if (builtin_check(data))
-			builtin_cnt++;
-		data[i].builtin_cnt = builtin_cnt;
-	}
-}
-
+// 	i = -1;
+// 	builtin_cnt = 0;
+// 	while (++i < data->cnt)
+// 	{
+// 		builtin_cnt = 0;
+// 		if (builtin_check(data))
+// 			builtin_cnt++;
+// 		data[i].builtin_cnt = builtin_cnt;
+// 	}
+// }
 
 int	builtin_check(t_mini *data)
 {
@@ -77,7 +76,7 @@ void	do_builtin(t_mini *data, t_env *env)
 	else if (builtin_check(data) == 2)
 		do_echo(data);
 	else if (builtin_check(data) == 3)
-		do_pwd(data, env);
+		do_pwd();
 	else if (builtin_check(data) == 4)
 		do_export(data, env);
 	else if (builtin_check(data) == 5)

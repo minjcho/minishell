@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 20:47:56 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/10 11:25:13y jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/16 14:21:45 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,9 +23,6 @@ void	do_echo(t_mini *data)
 	{
 		while (option_idx < data->cmd_size)
 		{
-			// write(1, data->command[option_idx], \
-			// ft_strlen(data->command[option_idx]));
-			// write(1, " ", 1);
 			echo_write(data, option_idx);
 			option_idx++;
 		}
@@ -34,14 +31,6 @@ void	do_echo(t_mini *data)
 	{
 		while (option_idx < data->cmd_size)
 		{
-			// if (ft_strcmp("$?", data->command[option_idx]) == 0)
-			// {
-			// 	ft_putnbr_fd(global_signal, 1);
-			// 	option_idx++;
-			// }
-			// write(1, data->command[option_idx], \
-			// ft_strlen(data->command[option_idx]));
-			// write(1, " ", 1);
 			echo_write(data, option_idx);
 			option_idx++;
 		}
@@ -51,7 +40,8 @@ void	do_echo(t_mini *data)
 
 void	echo_write(t_mini *data, int option_idx)
 {
-	if (data->command[option_idx] && ft_strcmp("$?", data->command[option_idx]) == 0)
+	if (data->command[option_idx] && \
+	ft_strcmp("$?", data->command[option_idx]) == 0)
 	{
 		ft_putnbr_fd(global_signal, 1);
 		global_signal = 0;
@@ -69,7 +59,7 @@ int	is_echo_option(t_mini *data)
 	int	j;
 
 	i = 0;
-	while(data->command[++i])
+	while (data->command[++i])
 	{
 		j = 0;
 		if (data->command[i][j] == '-')

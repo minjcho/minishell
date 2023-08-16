@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 16:14:11 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/16 13:38:53 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/16 14:46:08 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,46 @@ typedef struct s_mini
 // test driver;
 unsigned char	global_signal;
 void	readlilne_tester(void);
+
+//builtin_ready.c
+void	builtin_counter(t_mini *data);
+int		builtin_check(t_mini *data);
+void	do_builtin(t_mini *data, t_env *env);
+
+//do_cd.c
+void	do_cd(t_mini *data, t_env *env);
+void	goto_directory(char *target, t_env *env);
+void	back_directory(t_env *env);
+void	home_directory(t_env *env);
+
+//do_echo.c
+void	do_echo(t_mini *data);
+void	echo_write(t_mini *data, int option_idx);
+int		is_echo_option(t_mini *data);
+
+//do_env.c
+void	do_env(t_env *env);
+
+//do_exit.c
+void	do_exit(t_mini *data);
+int		str_digit(char *str);
+void	do_exit3(int temp);
+void	do_exit2(char *str);
+
+//do_export.c
+void	do_export(t_mini *data, t_env *env);
+void	export_val2(t_mini *data, t_env *env);
+void	set_export_env(char *key, char *value, t_env *env);
+int		equal_checker(char *str);
+
+//do_export2.c
+int		is_equal(char *str);
+int		export_valid_check2(char *str);
+int		export_valid_check(char *key);
+void	export_print(t_env *env);
+
+//do_pwd.c
+void	do_pwd(void);
 
 //start in exec_cmd;
 //void	exec_cmd(t_mini *data);
@@ -118,11 +158,11 @@ void	do_cd(t_mini *data, t_env *env);
 void	echo_write(t_mini *data, int option_idx);
 void	do_echo(t_mini *data);
 int		is_echo_option(t_mini *data);
-void	builtin_counter2(t_mini *data);
+//void	builtin_counter2(t_mini *data);
 //void	echo_option_checker(t_mini *data);
 
 // builtin pwd
-void	do_pwd(t_mini *data, t_env *env);
+//void	do_pwd(t_mini *data, t_env *env);
 void	do_env(t_env *env);
 void	do_exit(t_mini *data);
 void	do_exit2(char * str);

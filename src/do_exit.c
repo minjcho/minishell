@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 20:52:49 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/11 16:26:02 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/16 14:24:33 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,7 @@ int	str_digit(char *str)
 	return (1);
 }
 
-void	do_exit2(char * str)
+void	do_exit2(char *str)
 {
 	global_signal = 255;
 	error_exit(str);

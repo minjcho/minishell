@@ -75,6 +75,7 @@ SOURCES_NAMES	=	builtin_ready.c \
 					do_env.c \
 					do_exit.c \
 					do_export.c \
+					do_export2.c \
 					do_pwd.c \
 					do_unset.c \
 					env_utils.c \

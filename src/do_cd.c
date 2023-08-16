@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 20:32:07 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/07 20:34:06 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/16 14:18:22 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,7 @@ void	do_cd(t_mini *data, t_env *env)
 				back_directory(env);
 			else
 				goto_directory(ft_strdup(data->command[i]), env);
-			return;
+			return ;
 		}
 	}
 	home_directory(env);
@@ -68,8 +68,8 @@ void	back_directory(t_env *env)
 
 void	home_directory(t_env *env)
 {
-	char *target;
-	char *temp;
+	char	*target;
+	char	*temp;
 
 	temp = ft_getenv("HOME", env);
 	if (!temp)
@@ -80,20 +80,3 @@ void	home_directory(t_env *env)
 	target = ft_strdup(temp);
 	goto_directory(target, env);
 }
-
-// int	to_back_directory(char *to_directory)
-// {
-// 	if (ft_strcmp(to_directory, "-") == 0)
-// 		return (1);
-// 	else
-// 		return (0);
-// }
-
-// int	to_home_directory(char *to_directory)
-// {
-// 	if (!to_directory)
-// 		return (1);
-// 	if (!ft_strcmp(to_directory, "~"))
-// 		return (1);
-// 	return (0);
-// }
