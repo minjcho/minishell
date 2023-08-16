@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 16:14:11 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/14 18:38:56 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/16 13:38:53 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,7 +174,7 @@ void	env_free(t_env_node *node);
 void	free_all(t_mini *node, t_env *env);
 //temp
 
-void	heredoc_read(char *limiter, int *fd);
+void	heredoc_read(char *limiter, int *fd, t_env *env);
 void	red_left(t_mini *data, t_env *env, int i);
 void	heredoc_left(t_mini *data, t_env *env, int i);
 void	heredoc_right(t_mini *data, t_env *env, int i);
@@ -184,4 +184,8 @@ int		dollar_counter(char *str);
 void	ft_wait(int n);
 void	parentset(t_mini *data, int *cur_pipe, int *prev_pipe, int i);
 void	childset(t_mini *data, t_env *env, int prev_pipe, int *cur_pipe);
+
+void	dollor_conver(char *str, int *fd, t_env* env);
+int	dollar_conver2(int i, t_env *env, char *str, int *fd);
+int	dollar_conver3(int i, char *str, int *fd);
 #endif

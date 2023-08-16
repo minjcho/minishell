@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 20:41:21 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/14 18:37:38 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/16 14:00:01 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -105,7 +105,6 @@ void	heredoc_left(t_mini *data, t_env *env, int i)
 	int		status;
 	pid_t	id;
 
-	(void)env;
 	status = 0;
 	limiter = ft_strdup(data->command[i + 1]);
 	set_cmd_null(data, i, i + 1);
@@ -114,7 +113,7 @@ void	heredoc_left(t_mini *data, t_env *env, int i)
 	if (id == 0)
 	{
 		close(fd[0]);
-		heredoc_read(limiter, fd);
+		heredoc_read(limiter, fd, env);
 	}
 	else if (id > 0)
 	{
@@ -128,10 +127,129 @@ void	heredoc_left(t_mini *data, t_env *env, int i)
 		error_fork();
 }
 
-void	heredoc_read(char *limiter, int *fd)
+void	dollor_conver(char *str, int *fd, t_env* env)
+{
+	int	i;
+
+	i = -1;
+	while (str[++i])
+	{
+		if (str[i] == '$')
+		{
+			if (str[i + 1] == ' ' || str[i + 1] == '\0')
+				write(fd[1], &str[i], 1);
+			else if (str[i + 1] == '$')
+				i += dollar_conver3(i, str, fd);
+			else if (str[i + 1])
+				i += dollar_conver2(i, env, str, fd);
+		}
+		else
+			write(fd[1], &str[i], 1);
+	}
+	write(fd[1], "\n", 1);
+}
+
+int	dollar_conver3(int i, char *str, int *fd)
+{
+	int	j;
+
+	j = i;
+	while (str[j])
+	{
+		if (str[j] != '$')
+			break;
+		write(fd[1], &str[j], 1);
+		j++;
+	}
+	return (j - i - 1);
+}
+
+int	dollar_conver2(int i, t_env *env, char *str, int *fd)
+{
+	int		j;
+	char	*environ;
+	char	*env_val;
+
+	j = i + 1;
+	env_val = NULL;
+	while (str[j])
+	{
+		if (str[j] == ' ' || !str[j] || str[j] == '$')
+			break;
+		j++;
+	}
+	environ = ft_substr(str, i + 1, j - i - 1);
+	env_val = ft_getenv(environ, env);
+	write(fd[1], env_val, ft_strlen(env_val));
+	free(environ);
+	return (j - i - 1);
+}
+
+// void	heredoc_read(char *limiter, int *fd, t_env *env)
+// {
+// 	char	*str;
+// 	//char	**temp;
+
+// 	while (1)
+// 	{
+// 		str = readline("> ");
+// 		if (!str || ft_strcmp(str, limiter) == 0)
+// 		{
+// 			free(limiter);
+// 			free(str);
+// 			close(fd[1]);
+// 			exit(0);
+// 		}
+// 		if (dollar_counter(str))
+// 		{
+// 			int	i;
+
+// 			i = -1;
+// 			while (str[++i])
+// 			{
+// 				if (str[i] == '$')
+// 				{
+// 					if (str[i + 1] == ' ' || str[i + 1] == '\0')
+// 						write(fd[1], &str[i], 1);
+// 					else if (str[i + 1])
+// 					{
+// 						int		j;
+// 						char	*environ;
+// 						char	*env_val;
+
+// 						j = i + 1;
+// 						while (str[j])
+// 						{
+// 							if (str[j] == ' ' || !str[j] || str[j] == '$')
+// 								break;
+// 							j++;
+// 						}
+// 						j--;
+// 						environ = ft_substr(str, i + 1, j);
+// 						env_val = ft_getenv(environ, env);
+// 						write(fd[1], env_val, ft_strlen(env_val));
+// 						i += j;
+// 						free(environ);
+// 					}
+// 				}
+// 				else
+// 					write(fd[1], &str[i], 1);
+// 			}
+// 			write(fd[1], "\n", 1);
+// 		}
+// 		else
+// 		{
+// 			//set normal
+// 			write(fd[1], str, ft_strlen(str));
+// 			write(fd[1], "\n", 1);
+// 		}
+// 		free(str);
+// 	}
+// }
+
+void	heredoc_read(char *limiter, int *fd, t_env *env)
 {
 	char	*str;
-	//char	**temp;
 
 	while (1)
 	{
@@ -144,24 +262,7 @@ void	heredoc_read(char *limiter, int *fd)
 			exit(0);
 		}
 		if (dollar_counter(str))
-		{
-			int	i;
-
-			i = -1;
-			while (str[i])
-			{
-				if (str[i] == '$')
-				{
-					if (str[i + 1] == ' ' || str[i + 1] == '\0')
-						write(fd[1], &str[i], 1);
-					else if (str[i + 1])
-					{
-						//get ft_env values 
-
-					}
-				}
-			}
-		}
+			dollor_conver(str, fd, env);
 		else
 		{
 			//set normal
@@ -289,11 +390,11 @@ void	exec_cmd(t_mini *data, t_env *env)
 		int		cur_pipe[2];
 		pid_t	id1;
 
+		redirection_set(&data[i], env);
 		pipe(cur_pipe);
 		id1 = fork();
 		if (id1 == 0)
 		{
-			redirection_set(&data[i], env);
 			if (data[i].cnt > 1 && prev_pipe)
 			{
 				dup2(prev_pipe, 0);

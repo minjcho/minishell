@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 20:35:31 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/11 11:07:47 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/16 10:47:07 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,9 +45,7 @@ char	*ft_getenv(char *key, t_env *env)
 		while (env->node[++i].key)
 		{
 			if (ft_strcmp(key, env->node[i].key) == 0)
-			{
 				return (env->node[i].value);
-			}
 		}
 	}
 	return (NULL);
