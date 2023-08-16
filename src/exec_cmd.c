@@ -122,6 +122,7 @@ void	readlilne_tester(void)
 				node[i].origin_out = origin_out;
 				node[i].delete = 0;
 				node[i].doc_cnt = 0;
+				node[i].is_heredoc = 0;
 				int	j = 0;
 				while (to_cmmand[j])
 					j++;

@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 16:14:11 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/16 15:28:47 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/16 17:32:17 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ typedef struct s_mini
 	int		origin_in;
 	int		origin_out;
 	int		cnt;
+	int		is_heredoc;
 	int		builtin_cnt;
 } t_mini; 
 
@@ -102,10 +103,50 @@ void	do_pwd(void);
 void	do_unset(t_mini *data, t_env *env);
 void	do_unset2(t_mini *data, int i, t_env *env);
 
+//env_utils.c
+void	ft_setenv(char *key, char *value, t_env *env);
+char	*ft_getenv(char *key, t_env *env);
+int		ft_envlen(t_env_node *node);
+char	**env_tochar(t_env_node *env);
+char	**env_tochar_join(int size, t_env_node *env);
+
+//env_utils2.c
+t_env_node	*realloc_evnode(char *key, char *value, t_env_node *node, int flag);
+void		ft_nodecpy(t_env_node *new_node, t_env_node *old, char *delete);
+
+//error.c
+void	error_file(char *file);
+void	error_fork(void);
+void	error_pipe(void);
+void	error_malloc(void);
+
+//error2.c
+void	error_cmdnotfound(char *cmd);
+void	error_export_valid(char *key);
+void	error_exit(char *str);
+void	error_exit2(void);
 
 //start in exec_cmd;
 //void	exec_cmd(t_mini *data);
 void	exec_cmd(t_mini *data, t_env *env);
+
+//export_utils.c
+char	*ft_getexport(char *key, t_env *env);
+void	ft_setexport(char *key, char *value, t_env *env);
+
+//free.c
+void	command_free(char **command);
+void	env_free(t_env_node *node);
+void	node_free(t_mini *node);
+
+//process_utils.c
+char	**cmd_realoc(t_mini *data);
+int		token_counter(t_mini *data);
+
+//process.c
+
+//heredoc.c
+
 void	file_open(t_mini *data, int i);
 
 //redirection_util.c
@@ -140,7 +181,6 @@ char	*ft_getexport(char *key, t_env *env);
 void	ft_setexport(char *key,char *value, t_env *env);
 void	ft_setenv(char *key, char *value, t_env *env);
 char	**env_tochar(t_env_node *env);
-void	error_path_not_set(char *path_name);
 
 void	goto_directory(char *target, t_env *env);
 void	home_directory(t_env *env);
@@ -210,13 +250,12 @@ void    error_file(char *file);
 void	error_exit(char *str);
 void	error_exit2(void);
 void	error_execve(void);
-void	error_cmdnotfound(char *str, t_mini *data);
+//void	error_cmdnotfound(char *str, t_mini *data);
 void	first_excute(t_mini *data, t_env *env);
 int		str_digit(char *str);
 
 //free
 void	env_free(t_env_node *node);
-void	free_all(t_mini *node, t_env *env);
 //temp
 
 void	heredoc_read(char *limiter, int *fd, t_env *env);

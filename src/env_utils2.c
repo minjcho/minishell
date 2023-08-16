@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 20:38:56 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/07 20:50:48 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/16 15:39:47 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,6 @@
 
 t_env_node	*realloc_evnode(char *key, char *value, t_env_node *node, int flag)
 {
-	// flag 1 => pluse. flag = -1 minus
 	int			new_len;
 	t_env_node	*new_node;
 
@@ -52,7 +51,7 @@ void	ft_nodecpy(t_env_node *new_node, t_env_node *old, char *delete)
 	while (++i < len)
 	{
 		if (delete != NULL && ft_strcmp(delete, old[i].key) == 0)
-			continue;
+			continue ;
 		if (old[i].key)
 			new_node[j].key = ft_strdup(old[i].key);
 		else

@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 20:29:20 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/10 11:20:25 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/16 15:56:25 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,10 +66,4 @@ void	node_free(t_mini *node)
 		node = NULL;
 		free(temp);
 	}
-}
-
-void	free_all(t_mini *node, t_env *env)
-{
-	(void)env;
-	node_free(node);
 }

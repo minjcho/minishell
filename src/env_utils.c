@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 20:35:31 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/16 10:47:07 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/16 15:39:15 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,8 +70,6 @@ char	**env_tochar(t_env_node *env)
 {
 	int		i;
 	int		size;
-	char	*equal_sign;
-	char	*origin_envstr;	
 	char	**ret;
 
 	i = -1;
@@ -80,26 +78,72 @@ char	**env_tochar(t_env_node *env)
 	if (env)
 		size = ft_envlen(env);
 	if (size)
+		ret = env_tochar_join(size, env);
+	return (ret);
+}
+
+char	**env_tochar_join(int size, t_env_node *env)
+{
+	char	**ret;
+	int		i;
+	char	*equal_sign;
+	char	*origin_envstr;	
+
+	i = -1;
+	ret = (char **)malloc(sizeof(char *) * (size + 1));
+	if (!ret)
+		error_malloc();
+	ret[size] = NULL;
+	while (++i < size)
 	{
-		ret = (char **)malloc(sizeof(char *) * (size + 1));
-		if (!ret)
-			error_malloc();
-		while (++i < size)
-		{
-			if (env[i].key)
-				equal_sign = ft_strjoin(env[i].key, "=");
-			else
-				equal_sign = NULL;
-			if (env[i].value)
-				origin_envstr = ft_strjoin(equal_sign, env[i].value);
-			else
-				origin_envstr = ft_strdup(equal_sign);
-			ret[i] = origin_envstr;
-			// ft_putstr_fd(ret[i], 2);
-			// ft_putstr_fd("\n", 2);
-			free(equal_sign);
-			origin_envstr = NULL;
-		}
+		if (env[i].key)
+			equal_sign = ft_strjoin(env[i].key, "=");
+		else
+			equal_sign = NULL;
+		if (env[i].value)
+			origin_envstr = ft_strjoin(equal_sign, env[i].value);
+		else
+			origin_envstr = ft_strdup(equal_sign);
+		ret[i] = origin_envstr;
+		free(equal_sign);
+		origin_envstr = NULL;
 	}
 	return (ret);
 }
+
+// char	**env_tochar(t_env_node *env)
+// {
+// 	int		i;
+// 	int		size;
+// 	char	*equal_sign;
+// 	char	*origin_envstr;	
+// 	char	**ret;
+
+// 	i = -1;
+// 	ret = NULL;
+// 	size = 0;
+// 	if (env)
+// 		size = ft_envlen(env);
+// 	if (size)
+// 	{
+// 		ret = (char **)malloc(sizeof(char *) * (size + 1));
+// 		if (!ret)
+// 			error_malloc();
+// 		while (++i < size)
+// 		{
+// 			if (env[i].key)
+// 				equal_sign = ft_strjoin(env[i].key, "=");
+// 			else
+// 				equal_sign = NULL;
+// 			if (env[i].value)
+// 				origin_envstr = ft_strjoin(equal_sign, env[i].value);
+// 			else
+// 				origin_envstr = ft_strdup(equal_sign);
+// 			ret[i] = origin_envstr;
+// 			free(equal_sign);
+// 			origin_envstr = NULL;
+// 		}
+// 		ret = env_tochar_join(size, env);
+// 	}
+// 	return (ret);
+// }

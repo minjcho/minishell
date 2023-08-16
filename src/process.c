@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 20:41:21 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/16 14:00:01 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/16 18:10:09 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ void	redirection_set(t_mini *data, t_env *env) // &data[i];
 			{
 				dup2(data->origin_in, 0);
 				dup2(data->origin_out, 1);
+				data->is_heredoc = 1;
 				heredoc_left(data, env, i);
 			}
 			else if (is_redirection2(data->command[i]) == 4)
@@ -127,63 +128,7 @@ void	heredoc_left(t_mini *data, t_env *env, int i)
 		error_fork();
 }
 
-void	dollor_conver(char *str, int *fd, t_env* env)
-{
-	int	i;
 
-	i = -1;
-	while (str[++i])
-	{
-		if (str[i] == '$')
-		{
-			if (str[i + 1] == ' ' || str[i + 1] == '\0')
-				write(fd[1], &str[i], 1);
-			else if (str[i + 1] == '$')
-				i += dollar_conver3(i, str, fd);
-			else if (str[i + 1])
-				i += dollar_conver2(i, env, str, fd);
-		}
-		else
-			write(fd[1], &str[i], 1);
-	}
-	write(fd[1], "\n", 1);
-}
-
-int	dollar_conver3(int i, char *str, int *fd)
-{
-	int	j;
-
-	j = i;
-	while (str[j])
-	{
-		if (str[j] != '$')
-			break;
-		write(fd[1], &str[j], 1);
-		j++;
-	}
-	return (j - i - 1);
-}
-
-int	dollar_conver2(int i, t_env *env, char *str, int *fd)
-{
-	int		j;
-	char	*environ;
-	char	*env_val;
-
-	j = i + 1;
-	env_val = NULL;
-	while (str[j])
-	{
-		if (str[j] == ' ' || !str[j] || str[j] == '$')
-			break;
-		j++;
-	}
-	environ = ft_substr(str, i + 1, j - i - 1);
-	env_val = ft_getenv(environ, env);
-	write(fd[1], env_val, ft_strlen(env_val));
-	free(environ);
-	return (j - i - 1);
-}
 
 // void	heredoc_read(char *limiter, int *fd, t_env *env)
 // {
@@ -247,47 +192,47 @@ int	dollar_conver2(int i, t_env *env, char *str, int *fd)
 // 	}
 // }
 
-void	heredoc_read(char *limiter, int *fd, t_env *env)
-{
-	char	*str;
+// void	heredoc_read(char *limiter, int *fd, t_env *env)
+// {
+// 	char	*str;
 
-	while (1)
-	{
-		str = readline("> ");
-		if (!str || ft_strcmp(str, limiter) == 0)
-		{
-			free(limiter);
-			free(str);
-			close(fd[1]);
-			exit(0);
-		}
-		if (dollar_counter(str))
-			dollor_conver(str, fd, env);
-		else
-		{
-			//set normal
-			write(fd[1], str, ft_strlen(str));
-			write(fd[1], "\n", 1);
-		}
-		free(str);
-	}
-}
+// 	while (1)
+// 	{
+// 		str = readline("> ");
+// 		if (!str || ft_strcmp(str, limiter) == 0)
+// 		{
+// 			free(limiter);
+// 			free(str);
+// 			close(fd[1]);
+// 			exit(0);
+// 		}
+// 		if (dollar_counter(str))
+// 			dollor_conver(str, fd, env);
+// 		else
+// 		{
+// 			//set normal
+// 			write(fd[1], str, ft_strlen(str));
+// 			write(fd[1], "\n", 1);
+// 		}
+// 		free(str);
+// 	}
+// }
 
-int	dollar_counter(char *str)
-{
-	int	i;
-	int	cnt;
+// int	dollar_counter(char *str)
+// {
+// 	int	i;
+// 	int	cnt;
 
-	i = 0;
-	cnt = 0;
-	while (str[i])
-	{
-		if (str[i] == '$')
-			cnt++;
-		i++;
-	}
-	return (cnt);
-}
+// 	i = 0;
+// 	cnt = 0;
+// 	while (str[i])
+// 	{
+// 		if (str[i] == '$')
+// 			cnt++;
+// 		i++;
+// 	}
+// 	return (cnt);
+// }
 
 // char	**dollar_check(char **str)
 // {
@@ -314,21 +259,21 @@ int	dollar_counter(char *str)
 // 	free(temp);
 // }
 
-int	is_dollar(char *str)
-{
-	int	i;
+// int	is_dollar(char *str)
+// {
+// 	int	i;
 
-	i = -1;
-	while (str[++i])
-	{
-		if (str[i] == '$')
-		{
-			if (str[i + 1] && str[i + 1] != ' ')
-				return (1);
-		}
-	}
-	return (0);
-}
+// 	i = -1;
+// 	while (str[++i])
+// 	{
+// 		if (str[i] == '$')
+// 		{
+// 			if (str[i + 1] && str[i + 1] != ' ')
+// 				return (1);
+// 		}
+// 	}
+// 	return (0);
+// }
 
 void	red_right(t_mini *data, t_env *env, int i)
 {
@@ -395,7 +340,7 @@ void	exec_cmd(t_mini *data, t_env *env)
 		id1 = fork();
 		if (id1 == 0)
 		{
-			if (data[i].cnt > 1 && prev_pipe)
+			if (data[i].cnt > 1 && prev_pipe && !data[i].is_heredoc)
 			{
 				dup2(prev_pipe, 0);
 				close(prev_pipe);
@@ -415,9 +360,7 @@ void	exec_cmd(t_mini *data, t_env *env)
 			if (!data[i].builtin_cnt && (data[i].cmd_size - data[i].delete) > 0)
 				cmd_find(&data[i], env);
 			else if(data[i].builtin_cnt == 1)
-			{
 				do_builtin(&data[i], env);
-			}
 			exit (0);
 		}
 		else if(id1 > 0)
@@ -523,7 +466,7 @@ void	cmd_start(t_mini *data, char **split_path, t_env *env)
 		}
 		free(slash_join);
 	}
-	error_cmdnotfound(data->command[0], data);
+	error_cmdnotfound(data->command[0]);
 }
 
 void	cmd_find(t_mini *data, t_env *env)

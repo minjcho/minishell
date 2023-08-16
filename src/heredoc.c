@@ -5,150 +5,109 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/07 20:27:15 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/09 21:59:07 by jinhyeok         ###   ########.fr       */
+/*   Created: 2023/08/16 16:17:33 by jinhyeok          #+#    #+#             */
+/*   Updated: 2023/08/16 16:21:33 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	heredoc_counter(t_mini *data)
+void	heredoc_read(char *limiter, int *fd, t_env *env)
+{
+	char	*str;
+
+	while (1)
+	{
+		str = readline("> ");
+		if (!str || ft_strcmp(str, limiter) == 0)
+		{
+			free(limiter);
+			free(str);
+			close(fd[1]);
+			exit(0);
+		}
+		if (dollar_counter(str))
+			dollor_conver(str, fd, env);
+		else
+		{
+			//set normal
+			write(fd[1], str, ft_strlen(str));
+			write(fd[1], "\n", 1);
+		}
+		free(str);
+	}
+}
+
+int	dollar_counter(char *str)
 {
 	int	i;
-	int	j;
 	int	cnt;
 
-	i = -1;
+	i = 0;
 	cnt = 0;
-	while (++i < data->cnt)
+	while (str[i])
 	{
-		j = 0;
-		while (j < data[i].cmd_size)
-		{
-			if (ft_strcmp("<<", data[i].command[j]) == 0)
-			{
-				cnt++;
-			}
-			j++;
-		}
+		if (str[i] == '$')
+			cnt++;
+		i++;
 	}
 	return (cnt);
 }
 
-// char	*set_temp_file(t_mini *data, int k)
-// {
-// 	int		i;
-// 	int		fd;
-// 	char	*temp_num;
-// 	char	*res_path;
-// 	char	*temp_file;
-// 	(void)data;
+void	dollor_conver(char *str, int *fd, t_env* env)
+{
+	int	i;
 
-// 	i = 0;
-// 	res_path = "/Users/jinhyeok/goinfre/temp";
-// 	while (1)
-// 	{
-// 		temp_num = ft_itoa(k + i);
-// 		temp_file = ft_strjoin(res_path, temp_num);
-// 		fd = open(temp_file, O_RDONLY);
-// 		if (fd > 0)
-// 		{
-// 			close(fd);
-// 			free(temp_file);
-// 			free(temp_num);
-// 		}
-// 		else
-// 			break ;
-// 		i++;
-// 	}
-// 	free(temp_num);
-// 	return (temp_file);
-// }
+	i = -1;
+	while (str[++i])
+	{
+		if (str[i] == '$')
+		{
+			if (str[i + 1] == ' ' || str[i + 1] == '\0')
+				write(fd[1], &str[i], 1);
+			else if (str[i + 1] == '$')
+				i += dollar_conver3(i, str, fd);
+			else if (str[i + 1])
+				i += dollar_conver2(i, env, str, fd);
+		}
+		else
+			write(fd[1], &str[i], 1);
+	}
+	write(fd[1], "\n", 1);
+}
 
-// void	do_heredoc(t_mini *data, char **limmiter, char **temp_files)
-// {
-// 	int		i;
-// 	pid_t	id;
-// 	int		fd;
-// 	char	*str;
+int	dollar_conver3(int i, char *str, int *fd)
+{
+	int	j;
 
-// 	i = -1;
-// 	fd = 0;
-// 	(void)data;
-// 	while (limmiter[++i])
-// 	{
-// 		id = fork();
-// 		if (id == 0)
-// 		{
-// 			ft_putstr_fd(temp_files[i], 2);
-// 			fd = open(temp_files[i], O_WRONLY | O_CREAT, 0644);
-// 			if (fd == -1)
-// 				error_file();
-// 			while (1)
-// 			{
-// 				str = readline("> ");
-// 				if (!str || ft_strcmp(str, limmiter[i]) == 0)
-// 					break ;
-// 				write(fd, str, ft_strlen(str));
-// 				write(fd, "\n", 1);
-// 				free(str);
-// 			}
-// 			close (fd);
-// 		}
-// 		else if (id > 0)
-// 		{
-// 			wait(NULL);
-// 		}
-// 		else
-// 			error_fork();
-// 	}
-// }
+	j = i;
+	while (str[j])
+	{
+		if (str[j] != '$')
+			break;
+		write(fd[1], &str[j], 1);
+		j++;
+	}
+	return (j - i - 1);
+}
 
-// void	heredoc_ready(t_mini *data, t_env *env)
-// {
-// 	int		i;
-// 	int		j;
-// 	int		k;
-// 	char	*temp;
-// 	char	**temp_files;
-// 	char	**limmiter;
-// 	int		heredoc;
+int	dollar_conver2(int i, t_env *env, char *str, int *fd)
+{
+	int		j;
+	char	*environ;
+	char	*env_val;
 
-// 	i = -1;
-// 	(void)env;
-// 	heredoc = 0;
-// 	while (++i < data->cnt)
-// 	{
-// 		heredoc = heredoc_counter(&data[i]);
-// 		if (!heredoc)
-// 			continue;
-// 		limmiter = (char **)malloc(sizeof(char *) * (heredoc + 1));
-// 		temp_files = (char **)malloc(sizeof(char *) * (heredoc + 1));
-// 		if (!limmiter)
-// 			error_malloc();
-// 		limmiter[heredoc] = NULL;
-// 		temp_files[heredoc] = NULL;
-// 		j = 0;
-// 		k = 0;
-// 		while (data[i].command[j])
-// 		{
-// 			if (data[i].command[j] && ft_strcmp("<<", data[i].command[j]) == 0)
-// 			{
-// 				temp = data[i].command[j];
-// 				data[i].command[j] = ft_strdup("<");
-// 				free(temp);
-// 				limmiter[k] = data[i].command[j + 1];
-// 				data[i].command[j + 1] = set_temp_file(data, k);
-// 				temp_files[k] = ft_strdup(data[i].command[j + 1]);
-// 				k++;
-// 			}
-// 			j++;
-// 		}
-// 		data[i].temp_files = temp_files;
-// 		if (heredoc)
-// 		{
-// 			data->doc_cnt = 1;
-// 			do_heredoc(data, limmiter, temp_files);
-// 		}
-// 	}
-// }
+	j = i + 1;
+	env_val = NULL;
+	while (str[j])
+	{
+		if (str[j] == ' ' || !str[j] || str[j] == '$')
+			break;
+		j++;
+	}
+	environ = ft_substr(str, i + 1, j - i - 1);
+	env_val = ft_getenv(environ, env);
+	write(fd[1], env_val, ft_strlen(env_val));
+	free(environ);
+	return (j - i - 1);
+}
