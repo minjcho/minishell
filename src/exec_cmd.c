@@ -33,7 +33,6 @@ int main(int ac, char **av, char ** envp)
 {
 	// struct termios origin;
 	// struct termios temp;
-
 	// tcgetattr(0, &origin);
 	// tcgetattr(0, &temp);
 	// temp.c_lflag &= ~(ICANON | ECHO);
@@ -41,8 +40,8 @@ int main(int ac, char **av, char ** envp)
     // temp.c_cc[VTIME] = 0;
 	// tcsetattr(0, TCSANOW, &temp);
 
-	signal(SIGQUIT, SIG_IGN);
-	signal(SIGINT, signal_get);
+	// signal(SIGQUIT, SIG_IGN);
+	// signal(SIGINT, signal_get);
 
 	global_signal = 0;
 	(void)ac;
@@ -63,7 +62,7 @@ void	readlilne_tester(void)
 	t_env	env;
 
 	node = NULL;
-	env.node = (t_env_node *)malloc(sizeof(t_env_node) * 5);
+	env.node = (t_env_node *)malloc(sizeof(t_env_node) * 6);
 	env.node[0].key = ft_strdup("PWD");
 	env.node[0].value = ft_strdup(getenv("PWD"));
 	//env.node[0].value = NULL;
@@ -75,7 +74,9 @@ void	readlilne_tester(void)
 	//env.node[2].value = NULL;
 	env.node[3].key = ft_strdup("PATH");
 	env.node[3].value = ft_strdup(getenv("PATH"));
-	env.node[4].key = NULL;
+	env.node[4].key = ft_strdup("TERM");
+	env.node[4].value = ft_strdup(getenv("TERM"));
+	env.node[5].key = NULL;
 	origin_in = dup(0);
 	origin_out = dup(1);
 	env.export = (t_env_node *)malloc(sizeof(t_env_node) * 6);

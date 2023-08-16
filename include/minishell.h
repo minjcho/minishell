@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 16:14:11 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/16 17:32:17 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/16 20:12:11 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,6 +40,14 @@ typedef struct s_mini
 	int		builtin_cnt;
 } t_mini; 
 
+typedef struct  s_params
+{
+    t_mini      *data;
+    t_env       *env;
+    int         i;
+    int         prev_pipe;
+} t_params;
+
 # include <errno.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -63,6 +71,7 @@ void	readlilne_tester(void);
 void	builtin_counter(t_mini *data);
 int		builtin_check(t_mini *data);
 void	do_builtin(t_mini *data, t_env *env);
+int		only_builtin(t_mini *data, t_env *env);
 
 //do_cd.c
 void	do_cd(t_mini *data, t_env *env);
@@ -143,8 +152,19 @@ void	node_free(t_mini *node);
 char	**cmd_realoc(t_mini *data);
 int		token_counter(t_mini *data);
 
-//process.c
+//redirection_set.c
+void	redirection_set(t_mini *data, t_env *env);
+void	heredoc_right(t_mini *data, int i);
+void	heredoc_left(t_mini *data, t_env *env, int i);
+void	red_left(t_mini *data, int i);
+void	red_right(t_mini *data, int i);
 
+//process.c
+void	child_execve(t_mini *data, t_env *env,int i);
+void	handle_pipe_close(t_params *p, int *cur_pipe);
+void	exec_fork(t_params *p, int *cur_pipe);
+void	exec_cmd(t_mini *data, t_env *env);
+void	parent_set(t_mini *data, int *cur_pipe, int *prev_pipe, int i);
 //heredoc.c
 
 void	file_open(t_mini *data, int i);
@@ -157,7 +177,7 @@ void	set_cmd_null(t_mini *data, int start, int end);
 //redirection_set.c
 int		redirection_ready(t_mini *data);
 void	set_redirection(t_mini *data, int i);
-int		is_redirection(char *str);
+int		is_redirection2(char *str);
 
 //file util
 // int		is_argument(char **command, t_mini *data);
@@ -259,10 +279,6 @@ void	env_free(t_env_node *node);
 //temp
 
 void	heredoc_read(char *limiter, int *fd, t_env *env);
-void	red_left(t_mini *data, t_env *env, int i);
-void	heredoc_left(t_mini *data, t_env *env, int i);
-void	heredoc_right(t_mini *data, t_env *env, int i);
-void	red_right(t_mini *data, t_env *env, int i);
 int		dollar_counter(char *str);
 
 void	ft_wait(int n);

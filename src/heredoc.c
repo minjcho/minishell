@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/16 16:17:33 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/16 16:21:33 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/16 20:23:23 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,6 @@ void	heredoc_read(char *limiter, int *fd, t_env *env)
 			dollor_conver(str, fd, env);
 		else
 		{
-			//set normal
 			write(fd[1], str, ft_strlen(str));
 			write(fd[1], "\n", 1);
 		}
@@ -54,7 +53,7 @@ int	dollar_counter(char *str)
 	return (cnt);
 }
 
-void	dollor_conver(char *str, int *fd, t_env* env)
+void	dollor_conver(char *str, int *fd, t_env *env)
 {
 	int	i;
 
@@ -84,7 +83,7 @@ int	dollar_conver3(int i, char *str, int *fd)
 	while (str[j])
 	{
 		if (str[j] != '$')
-			break;
+			break ;
 		write(fd[1], &str[j], 1);
 		j++;
 	}
@@ -102,7 +101,7 @@ int	dollar_conver2(int i, t_env *env, char *str, int *fd)
 	while (str[j])
 	{
 		if (str[j] == ' ' || !str[j] || str[j] == '$')
-			break;
+			break ;
 		j++;
 	}
 	environ = ft_substr(str, i + 1, j - i - 1);

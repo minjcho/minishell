@@ -85,6 +85,7 @@ SOURCES_NAMES	=	builtin_ready.c \
 					exec_cmd.c \
 					export_utils.c \
 					free.c \
+					cmd.c \
 					heredoc.c \
 					process_utils.c \
 					process.c \

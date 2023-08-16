@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 20:13:22 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/16 14:45:34 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/16 19:38:05 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -85,4 +85,19 @@ void	do_builtin(t_mini *data, t_env *env)
 		do_env(env);
 	else if (builtin_check(data) == 7)
 		do_exit(data);
+}
+
+int	only_builtin(t_mini *data, t_env *env)
+{
+	int	i;
+
+	i = -1;
+	builtin_counter(data);
+	if (data->builtin_cnt == 1 && data->cnt == 1)
+	{
+		redirection_set(data, env);
+		do_builtin(data, env);
+		return (1);
+	}
+	return (0);
 }
