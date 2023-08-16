@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 20:41:21 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/16 18:10:09 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/16 19:00:49 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,7 +69,10 @@ void	redirection_set(t_mini *data, t_env *env) // &data[i];
 		if (data->command[i])
 		{
 			if (is_redirection2(data->command[i]) == 1)
+			{
+				data->is_heredoc = 1;
 				red_left(data, env, i);
+			}
 			else if (is_redirection2(data->command[i]) == 2)
 				red_right(data, env, i);
 			else if (is_redirection2(data->command[i]) == 3)
