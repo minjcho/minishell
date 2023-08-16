@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 20:05:25 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/10 10:57:15 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/16 20:37:27 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,4 +67,18 @@ void	set_cmd_null(t_mini *data, int start, int end)
 		data->delete++;
 		start++;
 	}
+}
+
+int		ft_strcmp(char *s1, char *s2)
+{
+	int	i;
+
+	i = 0;
+	while (s1[i] || s2[i])
+	{
+		if (s1[i] != s2[i])
+			return ((unsigned char)(s1[i] - s2[i]));
+		i++;
+	}
+	return (0);
 }
