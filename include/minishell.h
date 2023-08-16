@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 16:14:11 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/16 14:46:08 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/16 15:28:47 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -97,6 +97,11 @@ void	export_print(t_env *env);
 
 //do_pwd.c
 void	do_pwd(void);
+
+//do_unset.c
+void	do_unset(t_mini *data, t_env *env);
+void	do_unset2(t_mini *data, int i, t_env *env);
+
 
 //start in exec_cmd;
 //void	exec_cmd(t_mini *data);
