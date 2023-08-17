@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 20:41:21 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/16 20:20:32 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/17 14:26:43 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,10 @@ void	exec_cmd(t_mini *data, t_env *env)
 		p.env = env;
 		p.i = i;
 		exec_fork(&p, cur_pipe);
+		close(0);
+		close(1);
+		dup2(data[i].origin_in, 0);
+		dup2(data[i].origin_out, 1);
 	}
 	ft_wait(i);
 }
@@ -87,6 +91,8 @@ void	parent_set(t_mini *data, int *cur_pipe, int *prev_pipe, int i)
 		close(*prev_pipe);
 	if (data[i].cnt > 1)
 		*prev_pipe = cur_pipe[0];
+	else
+		close(cur_pipe[0]);
 }
 
 // void	exec_cmd(t_mini *data, t_env *env)

@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 20:47:56 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/17 10:46:30 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/17 12:07:32 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	echo_write(t_mini *data, int option_idx)
 	int	i;
 
 	i = -1;
-	while (data->command[option_idx][++i])
+	while (data->command[option_idx] && data->command[option_idx][++i])
 	{
 		if (data->command[option_idx][i] == '$' && \
 		data->command[option_idx][i + 1] == '?')
