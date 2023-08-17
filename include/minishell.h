@@ -6,7 +6,7 @@
 /*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 16:14:11 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/07/31 15:05:32 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/08/17 10:05:25 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,14 +15,11 @@
 
 typedef struct s_mini
 {
-	char	**token;
-	int		token_size;
-	int		output_fd;
-	int		origin_in;
-	int		origin_out;
-	int		cnt;
+	char	**command;
+	int		cmd_size;
 } t_mini;
 
+# include "../libft/libft.h"
 # include <errno.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -34,10 +31,8 @@ typedef struct s_mini
 # include <sys/wait.h>
 # include <signal.h>
 # include <stdbool.h>
+# include <string.h>
 
-void	parsing(t_mini **mini, char *line);
-bool	readline_check(char *line);
-char	**ft_split2(char *str, char *charset);
-int		token_size(char *line);
+char **parsing(t_mini **mini, char *line);
 
 #endif

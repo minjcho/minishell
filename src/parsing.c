@@ -6,54 +6,96 @@
 /*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 14:06:50 by minjcho           #+#    #+#             */
-/*   Updated: 2023/07/31 15:11:13 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/08/17 10:11:58 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	pipe_cnt(char *line)
+char is_special(char c)
 {
-	int	cnt;
+	return (c == '<' || c == '>' || c == '|');
+}
 
-	cnt = 0;
-	while (*line)
+char **split_string(const char *input)
+{
+	size_t len = strlen(input);
+	char **result = (char **)malloc((len + 1) * sizeof(char *));
+	int idx = 0;
+	size_t i = 0;
+
+	while (i < len)
 	{
-		if (*line == '|')
-			cnt++;
-		line++;
+		while (i < len && (input[i] == ' ' || input[i] == '\t')) i++;
+		if (i == len)
+			break;
+		size_t start = i;
+		if (input[i] == '\'' || input[i] == '\"') {
+			char quote = input[i++];
+			while (i < len && input[i] != quote) i++;
+			if (i < len) i++;
+		} else if (is_special(input[i])) {
+			while (i < len && input[i] == input[start]) i++;
+		} else {
+			while (i < len && !is_special(input[i]) && input[i] != ' ' && input[i] != '\'' && input[i] != '\"')
+			i++;
+		}
+		result[idx] = (char *)malloc(i - start + 1);
+		strncpy(result[idx], input + start, i - start);
+		result[idx][i - start] = '\0';
+		idx++;
 	}
-	return (cnt);
+	result[idx] = NULL;
+	return (result);
 }
 
-void	split_splited_pipe(char *line)
+void put_struct(t_mini **mini, char **tmp_command)
 {
-	char	**splited;
+	int total_commands = 0;
+	for (int i = 0; tmp_command[i]; i++) {
+		if (strcmp(tmp_command[i], "|") == 0) total_commands++;
+	}
+	total_commands++;
 
-	splited = malloc(sizeof(char *) * token_size(line) + 1);
-	if (!splited)
-		exit(1);
-	// tokenize(splited);
-	tmp[token_size(line)] = 0;
-	return (splited);
+	*mini = (t_mini *)malloc((total_commands + 1) * sizeof(t_mini));
+
+	int cmd_idx = 0;
+	int cmd_count = 0;
+	int start_idx = 0;
+
+	for (int i = 0; tmp_command[i]; i++)
+	{
+		if (strcmp(tmp_command[i], "|") == 0 || tmp_command[i+1] == NULL) {
+			if (tmp_command[i+1] == NULL) cmd_count++;
+
+			(*mini)[cmd_idx].command = (char **)malloc((cmd_count + 1) * sizeof(char *));
+			for (int k = 0; k < cmd_count; k++) {
+				(*mini)[cmd_idx].command[k] = strdup(tmp_command[start_idx + k]);
+			}
+			(*mini)[cmd_idx].command[cmd_count] = NULL;
+
+			(*mini)[cmd_idx].cmd_size = cmd_count;
+
+			cmd_count = 0;
+			cmd_idx++;
+			start_idx = i + 1;
+		} else {
+			cmd_count++;
+		}
+	}
+
+	(*mini)[cmd_idx].command = NULL;
+	(*mini)[cmd_idx].cmd_size = 0;
 }
 
-void	parsing(t_mini **mini, char *line)
+
+char **parsing(t_mini **mini, char *line)
 {
 	int		i;
-	char	**splited_pipe;
+	char	**tmp_command;
 
-	*mini = malloc(sizeof(t_mini) * pipe_cnt(line) + 1);
-	if (!*mini)
-		exit(1);
-	splited_pipe = ft_split2(line, "|");
 	i = 0;
-	while (splited_pipe[i])
-	{
-		()
-		(*mini)[i].token = split_splited_pipe(splited_pipe[i]);
-		free(splited_pipe[i]);
-		i++;
-	}
-	free(splited_pipe);
+	tmp_command = split_string(line);
+	put_struct(mini, tmp_command);
+	return (tmp_command);
 }
