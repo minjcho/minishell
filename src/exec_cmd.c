@@ -54,8 +54,8 @@ int main(int ac, char **av, char ** envp)
 void	readlilne_tester(void)
 {
 	char	*temp;
-	char	**token;
-	char	**to_cmmand;
+	// char	**token;
+	// char	**to_cmmand;
 	int		origin_in;
 	int		origin_out;
 	t_mini	*node;
@@ -94,54 +94,44 @@ void	readlilne_tester(void)
 	while (1)
 	{
 		temp = readline("minishell : ");
-		// if (!temp)
-		// {
-		// 	write(1, "exit\n", 5);
-		// 	global_signal = 0;
-		// 	exit(0);
-		// }
 		if (temp)
 		{
-			token = ft_split(temp, '|');
-			int	i = 0;
-			int	size = 0;
-			while (token[i])
-				i++;
-			size = i;
-			if (size == 0)
-				continue;
-			node = (t_mini *)malloc(sizeof(t_mini) * i);
-			i = -1;
-			while (token[++i])
-			{
-				to_cmmand = ft_split(token[i], ' ');
-				node[i].command = to_cmmand;
-				node[i].cnt = size;
-				node[i].input_fd = 0;
-				node[i].output_fd = 0;
-				node[i].origin_in = origin_in;
-				node[i].origin_out = origin_out;
-				node[i].delete = 0;
-				node[i].doc_cnt = 0;
-				node[i].is_heredoc = 0;
-				int	j = 0;
-				while (to_cmmand[j])
-					j++;
-				node[i].cmd_size = j;
-			}
-			// int	k = -1;
-			// while (++k < node->cnt)
+		// 	token = ft_split(temp, '|');
+		// 	int	i = 0;
+		// 	int	size = 0;
+		// 	while (token[i])
+		// 		i++;
+		// 	size = i;
+		// 	if (size == 0)
+		// 		continue;
+		// 	node = (t_mini *)malloc(sizeof(t_mini) * i);
+		// 	i = -1;
+		// 	while (token[++i])
+		// 	{
+		// 		to_cmmand = ft_split(token[i], ' ');
+		// 		node[i].command = to_cmmand;
+		// 		node[i].cnt = size;
+		// 		node[i].input_fd = 0;
+		// 		node[i].output_fd = 0;
+		// 		node[i].origin_in = origin_in;
+		// 		node[i].origin_out = origin_out;
+		// 		node[i].delete = 0;
+		// 		node[i].doc_cnt = 0;
+		// 		node[i].is_heredoc = 0;
+		// 		int	j = 0;
+		// 		while (to_cmmand[j])
+		// 			j++;
+		// 		node[i].cmd_size = j;
+		// 	}
+			parsing(&node, temp);
+			// for (int i = 0 ; node->command[i] ; i++)
 			// {
-			// 	for (int i = 0 ; i < node[k].cmd_size ; i++)
-			// 	{
-			// 		printf("%s\n", node[k].command[i]);
-			// 	}
-			// 	printf("------------------\n");
+			// 	printf("%s\n", node->command[i]);
 			// }
-			free(temp);
 			exec_cmd(node, &env);
 			node_free(node);
-			command_free(token);
+			free(temp);
+			//command_free(token);
 		}
 		dup2(origin_in, 0);
 		dup2(origin_out, 1);
