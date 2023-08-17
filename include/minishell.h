@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 16:14:11 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/17 14:54:37 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/17 15:58:08 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,6 +48,7 @@ typedef struct  s_params
     int         prev_pipe;
 } t_params;
 
+# include <string.h>
 # include <errno.h>
 # include <stdio.h>
 # include <stdlib.h>
@@ -60,6 +61,7 @@ typedef struct  s_params
 # include <sys/wait.h>
 # include <sys/stat.h>
 # include <signal.h>
+# include <stdbool.h>
 # include "../libft/libft.h"
 
 // jinhyeok exec
@@ -288,3 +290,13 @@ void	childset(t_mini *data, t_env *env, int prev_pipe, int *cur_pipe);
 void	dollor_conver(char *str, int *fd, t_env* env);
 int	dollar_conver2(int i, t_env *env, char *str, int *fd);
 int	dollar_conver3(int i, char *str, int *fd);
+void    env_set(t_env *env, char *envp);
+
+
+
+
+void put_struct(t_mini **mini, char **tmp_command);
+char **split_string(const char *input);
+char **parsing(t_mini **mini, char *line);
+char is_special(char c);
+#endif

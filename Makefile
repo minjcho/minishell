@@ -93,6 +93,7 @@ SOURCES_NAMES	=	builtin_ready.c \
 					free.c \
 					cmd.c \
 					heredoc.c \
+					parsing.c \
 					process_utils.c \
 					process.c \
 					redirection_set.c \
