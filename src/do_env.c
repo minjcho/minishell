@@ -1,34 +1,34 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   do_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/20 21:07:09 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/17 14:51:19 by jinhyeok         ###   ########.fr       */
+/*   Created: 2023/08/07 20:20:28 by jinhyeok          #+#    #+#             */
+/*   Updated: 2023/08/16 14:22:13 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include"libft.h"
+#include "minishell.h"
 
-char	*ft_strdup(const char *src)
+void	do_env(t_env *env)
 {
 	int		i;
-	char	*result;
+	char	*k_temp;
+	char	*v_temp;
 
-	i = 0;
-	while (src[i])
-		i++;
-	result = (char *)malloc(i + 1);
-	if (!result)
-		return (0);
-	i = 0;
-	while (src[i])
+	i = -1;
+	if (env->node)
 	{
-		result[i] = src[i];
-		i++;
+		while (env->node[++i].key)
+		{
+			k_temp = env->node[i].key;
+			v_temp = env->node[i].value;
+			write(1, k_temp, ft_strlen(k_temp));
+			write(1, "=", 1);
+			write(1, v_temp, ft_strlen(v_temp));
+			write(1, "\n", 1);
+		}
 	}
-	result[i] = '\0';
-	return (result);
 }

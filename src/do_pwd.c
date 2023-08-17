@@ -1,34 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdup.c                                        :+:      :+:    :+:   */
+/*   do_pwd.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/01/20 21:07:09 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/17 14:51:19 by jinhyeok         ###   ########.fr       */
+/*   Created: 2023/08/07 20:34:50 by jinhyeok          #+#    #+#             */
+/*   Updated: 2023/08/17 14:51:46 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include"libft.h"
+#include "minishell.h"
 
-char	*ft_strdup(const char *src)
+void	do_pwd(void)
 {
-	int		i;
-	char	*result;
+	char	cur_directory[256];
 
-	i = 0;
-	while (src[i])
-		i++;
-	result = (char *)malloc(i + 1);
-	if (!result)
-		return (0);
-	i = 0;
-	while (src[i])
-	{
-		result[i] = src[i];
-		i++;
-	}
-	result[i] = '\0';
-	return (result);
+	getcwd(cur_directory, sizeof(cur_directory));
+	ft_putstr_fd(cur_directory, 1);
+	ft_putstr_fd("\n", 1);
 }
