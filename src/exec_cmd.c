@@ -17,10 +17,6 @@ void	leaks(void)
 {
 	system("leaks a.out");
 }
-int	origin_in;
-int	origin_out;
-
-extern char **environ;
 
 void	signal_get(int sig_num)
 {
@@ -40,101 +36,38 @@ int main(int ac, char **av, char ** envp)
     // temp.c_cc[VTIME] = 0;
 	// tcsetattr(0, TCSANOW, &temp);
 
-	// signal(SIGQUIT, SIG_IGN);
-	// signal(SIGINT, signal_get);
+	signal(SIGQUIT, SIG_IGN);
+	//signal(SIGINT, signal_get);
 
 	global_signal = 0;
 	(void)ac;
 	(void)av;
-	(void)envp;
-	readlilne_tester();
+	readlilne_tester(envp);
 	// tcsetattr(0, TCSANOW, &origin);
 }
 
-void	readlilne_tester(void)
+void	readlilne_tester(char **envp)
 {
 	char	*temp;
-	// char	**token;
-	// char	**to_cmmand;
-	int		origin_in;
-	int		origin_out;
 	t_mini	*node;
 	t_env	env;
 
-	node = NULL;
-	env.node = (t_env_node *)malloc(sizeof(t_env_node) * 6);
-	env.node[0].key = ft_strdup("PWD");
-	env.node[0].value = ft_strdup(getenv("PWD"));
-	//env.node[0].value = NULL;
-	env.node[1].key = ft_strdup("OLDPWD");
-	env.node[1].value = NULL;
-	env.node[2].key = ft_strdup("HOME");
-	//env.node[2].key = NULL;
-	env.node[2].value = ft_strdup(getenv("HOME"));
-	//env.node[2].value = NULL;
-	env.node[3].key = ft_strdup("PATH");
-	env.node[3].value = ft_strdup(getenv("PATH"));
-	env.node[4].key = ft_strdup("TERM");
-	env.node[4].value = ft_strdup(getenv("TERM"));
-	env.node[5].key = NULL;
-	origin_in = dup(0);
-	origin_out = dup(1);
-	env.export = (t_env_node *)malloc(sizeof(t_env_node) * 6);
-	env.export[0].key = ft_strdup("PWD");
-	env.export[0].value = ft_strdup(getenv("PWD"));
-	env.export[1].key = ft_strdup("A");
-	env.export[1].value = NULL;
-	env.export[2].key = ft_strdup("BBbb");
-	env.export[2].value = NULL;
-	env.export[3].key = ft_strdup("a");
-	env.export[3].value = NULL;
-	env.export[4].key = ft_strdup("AAA");
-	env.export[4].value = NULL;
-	env.export[5].key = NULL;
+	env_init(&env, envp);
 	while (1)
 	{
 		temp = readline("minishell : ");
 		if (temp)
 		{
-		// 	token = ft_split(temp, '|');
-		// 	int	i = 0;
-		// 	int	size = 0;
-		// 	while (token[i])
-		// 		i++;
-		// 	size = i;
-		// 	if (size == 0)
-		// 		continue;
-		// 	node = (t_mini *)malloc(sizeof(t_mini) * i);
-		// 	i = -1;
-		// 	while (token[++i])
-		// 	{
-		// 		to_cmmand = ft_split(token[i], ' ');
-		// 		node[i].command = to_cmmand;
-		// 		node[i].cnt = size;
-		// 		node[i].input_fd = 0;
-		// 		node[i].output_fd = 0;
-		// 		node[i].origin_in = origin_in;
-		// 		node[i].origin_out = origin_out;
-		// 		node[i].delete = 0;
-		// 		node[i].doc_cnt = 0;
-		// 		node[i].is_heredoc = 0;
-		// 		int	j = 0;
-		// 		while (to_cmmand[j])
-		// 			j++;
-		// 		node[i].cmd_size = j;
-		// 	}
 			parsing(&node, temp);
-			// for (int i = 0 ; node->command[i] ; i++)
-			// {
-			// 	printf("%s\n", node->command[i]);
-			// }
 			exec_cmd(node, &env);
 			node_free(node);
 			free(temp);
 			//command_free(token);
 		}
-		dup2(origin_in, 0);
-		dup2(origin_out, 1);
+		close(0);
+		close(1);
+		dup2(node->origin_in, 0);
+		dup2(node->origin_out, 1);
 	}
 }
 

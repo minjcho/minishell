@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 20:00:55 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/16 19:45:39 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/17 19:38:27 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -106,7 +106,6 @@ void	red_left(t_mini *data, int i)
 		error_file(data->command[i + 1]);
 	data->input_fd = fd;
 	set_cmd_null(data, i, i + 1);
-	if (dup2(fd, 0) == -1)
-		exit(0);
+	dup2(fd, 0);
 	close(fd);
 }

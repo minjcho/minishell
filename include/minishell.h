@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 16:14:11 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/17 15:39:19 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/17 17:56:51 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,7 +67,7 @@ typedef struct  s_params
 // jinhyeok exec
 // test driver;
 unsigned char	global_signal;
-void	readlilne_tester(void);
+void	readlilne_tester(char **envp);
 
 //builtin_ready.c
 void	builtin_counter(t_mini *data);
@@ -290,7 +290,10 @@ void	childset(t_mini *data, t_env *env, int prev_pipe, int *cur_pipe);
 void	dollor_conver(char *str, int *fd, t_env* env);
 int	dollar_conver2(int i, t_env *env, char *str, int *fd);
 int	dollar_conver3(int i, char *str, int *fd);
-void    env_set(t_env *env, char *envp);
+void    env_init(t_env *env, char **envp);
+void	envp_split(t_env *env, char **envp);
+int		envp_size(char **envp);
+void	env_substr(t_env *env, char **envp, int i, int j);
 
 
 
