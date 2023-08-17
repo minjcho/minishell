@@ -63,12 +63,6 @@ READLINE_FLAG	=  -lreadline -L${HOME}/.brew/opt/readline/lib
 READLINE_INC	= -I${HOME}/.brew/opt/readline/include
 # READLINE_FLAG	= -lreadline -L/opt/homebrew/opt/readline/lib	# minjcho
 # READLINE_INC	= -I/opt/homebrew/opt/readline/include			# minjcho
-LIBLIBS			= -Llibft -lft
-CFLAGS			= -Iinclude #-Wall -Wextra -Werror 추가 해야함
-# READLINE_FLAG	= -lreadline -L${HOME}/.brew/opt/readline/lib
-# READLINE_INC	= -I${HOME}/.brew/opt/readline/include
-READLINE_FLAG	= -lreadline -L/opt/homebrew/opt/readline/lib	# minjcho
-READLINE_INC	= -I/opt/homebrew/opt/readline/include			# minjcho
 
 
 SRC_DIR	= src
@@ -98,7 +92,6 @@ SOURCES_NAMES	=	builtin_ready.c \
 					process.c \
 					redirection_set.c \
 					redirection_util.c
-					parsing.c \
 
 SOURCES = $(addprefix $(SRC_DIR)/, $(SOURCES_NAMES))
 OBJECTS = $(SOURCES_NAMES:%.c=$(OBJ_DIR)/%.o)
