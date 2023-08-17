@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 20:41:21 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/17 14:26:43 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/17 19:44:08 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,8 @@ void	exec_cmd(t_mini *data, t_env *env)
 	while (++i < data->cnt)
 	{
 		redirection_set(&data[i], env);
+		if(data[i].input_fd == -1)
+			continue;
 		pipe(cur_pipe);
 		p.data = data;
 		p.env = env;
