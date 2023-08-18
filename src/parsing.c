@@ -6,7 +6,7 @@
 /*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 14:06:50 by minjcho           #+#    #+#             */
-/*   Updated: 2023/08/18 12:17:02 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/08/18 14:37:54 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -250,33 +250,75 @@ bool	check_pipe(t_mini *mini)
 	return (false);
 }
 
-void	replace_env_in_double_quote(char *str, t_env *env)
+void	env_replace(char **str, char *tmp, t_env *env)
 {
-	int	idx;
-	int	jdx;
-	int	len;
-	char	*tmp;
+	char	*env_value;
+	char	*new_str;
+	char	*start_ptr;
+	char	*var_with_dollar;
 
-	idx = 0;
-	len = strlen(str);
-	tmp = (char *)malloc(sizeof(char) * (len + 1));
-	while (str[idx])
+	// $와 변수 이름을 연결해서 var_with_dollar에 저장
+	var_with_dollar = (char *)malloc(strlen(tmp) + 2); 
+	var_with_dollar[0] = '$';
+	var_with_dollar[1] = '\0';
+	strcat(var_with_dollar, tmp);
+
+	// 환경 변수 값을 가져옴
+	env_value = ft_getenv(tmp, env);
+	if (!env_value)
+		env_value = "";  // 환경 변수 값이 없을 경우 빈 문자열로 처리
+
+	// 원본 문자열에서 변수 부분을 찾음
+	start_ptr = strstr(*str, var_with_dollar);
+	if (start_ptr)
 	{
-		if (str[idx] == '$')
-		{
-			jdx = idx + 1;
-			while (str[jdx] != ' ' || str[jdx] != '\0' || str[jdx] != '\"' || str[jdx] != '\t')
-				jdx++;
-			
-		}
-		idx++;
+		// 새 문자열 생성 및 복사
+		new_str = (char *)malloc(strlen(*str) - strlen(var_with_dollar) + strlen(env_value) + 1);
+		strncpy(new_str, *str, start_ptr - *str); // 변수 앞 부분 복사
+		strcpy(new_str + (start_ptr - *str), env_value); // 환경 변수 값 복사
+		strcat(new_str, start_ptr + strlen(var_with_dollar)); // 변수 뒷 부분 복사
+		
+		// 원본 문자열 메모리 해제 및 새로운 문자열로 업데이트
+		free(*str);
+		*str = new_str;
 	}
+	free(var_with_dollar);
+}
+
+void replace_env_in_double_quote(char **str, t_env *env)
+{
+    int idx;
+    int jdx;
+    int len;
+    char *tmp;
+
+    idx = 0;
+    len = strlen(*str);
+    tmp = (char *)malloc(sizeof(char) * (len + 1));
+    while ((*str)[idx])
+    {
+        if ((*str)[idx] == '$' && (*str)[idx + 1] && (*str)[idx + 1] != ' ' && (*str)[idx + 1] != '\"' && (*str)[idx + 1] != '\t')
+        {
+            jdx = 0;
+            while ((*str)[idx + jdx + 1] && (*str)[idx + jdx + 1] != ' ' && (*str)[idx + jdx + 1] != '\"' && (*str)[idx + jdx + 1] != '\t' && (*str)[idx + jdx + 1] != '$')
+            {
+                tmp[jdx] = (*str)[idx + jdx + 1];
+                jdx++;
+            }
+            tmp[jdx] = '\0';
+            env_replace(str, tmp, env);
+        }
+        idx++;
+    }
+
+    free(tmp);
 }
 
 void	remove_quotation(t_mini *mini, t_env *env)
 {
 	int	idx;
 	int	jdx;
+	int	len;
 
 	idx = 0;
 	while (mini[idx].command)
@@ -284,10 +326,18 @@ void	remove_quotation(t_mini *mini, t_env *env)
 		jdx = 0;
 		while (jdx < mini[idx].cmd_size)
 		{
-			if (mini[idx].command[jdx][0] == '\"' && mini[idx].command[jdx][-1] == '\"')
+			len = strlen(mini[idx].command[jdx]);
+			if (mini[idx].command[jdx][0] == '\"' && mini[idx].command[jdx][len - 1] == '\"' && len > 2)
 			{
-				replace_env_in_double_quote(mini[idx].command[jdx], env);
+				replace_env_in_double_quote(&(mini[idx].command[jdx]), env);
+				mini[idx].command[jdx] = ft_strtrim(mini[idx].command[jdx], "\"");
 			}
+			else if (mini[idx].command[jdx][0] == '\'' && mini[idx].command[jdx][len - 1] == '\'' && len > 2)
+				mini[idx].command[jdx] = ft_strtrim(mini[idx].command[jdx], "\'");
+			else if (mini[idx].command[jdx][0] == '\"' && mini[idx].command[jdx][len - 1] == '\"' && len == 2)
+				mini[idx].command[jdx] = ft_strdup("");
+			else if (mini[idx].command[jdx][0] == '\'' && mini[idx].command[jdx][len - 1] == '\'' && len == 2)
+				mini[idx].command[jdx] = ft_strdup("");
 			jdx++;
 		}
 		idx++;

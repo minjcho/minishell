@@ -130,7 +130,7 @@ void	readlilne_tester(void)
 			// }
 			if (check_struct(node, &env) == false)
 				exec_cmd(node, &env);
-			node_free(node);
+			// node_free(node);
 			add_history(temp);
 			free(temp);
 			//command_free(token);
