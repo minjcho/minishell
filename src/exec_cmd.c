@@ -25,25 +25,74 @@ void	signal_get(int sig_num)
 	}
 }
 
+struct termios org_term;
+struct termios new_term;
+
+// void	save_input_mode(void)
+// {
+// 	tcgetattr(STDIN_FILENO, &org_term); //STDIN으로부터 터미널 속성을 받아온다.
+// }
+
+// void	set_input_mode(void)
+// {
+// 	tcgetattr(STDIN_FILENO, &new_term); //STDIN으로부터 터미널 속성을 받아온다.
+// 	new_term.c_lflag &= ~(ICANON | ECHO); //ICANON, ECHO 속성을 off
+// 	new_term.c_cc[VMIN] = 1;
+// 	new_term.c_cc[VTIME] = 0;
+// 	tcsetattr(STDIN_FILENO, TCSANOW, &new_term);	
+// }
+
+// void	reset_input_mode(void)
+// {
+// 	tcsetattr(STDIN_FILENO, TCSANOW, &org_term);
+// }
+void signal_handler(int signal_num) {
+	(void)signal_num;
+	ft_putstr_fd("in", 2);
+}
+
+void modify_terminal_settings() {
+
+    struct termios old_term, new_term;
+    tcgetattr(STDIN_FILENO, &old_term);
+    new_term = old_term;
+    //new_term.c_lflag |= (ISIG);      // 시그널을 활성화
+    new_term.c_lflag &= ~(ECHOCTL | ICANON | ECHO);  // 시그널 문자 출력을 비활성화
+	new_term.c_cc[VMIN] = 1;
+	new_term.c_cc[VTIME] = 0;
+    tcsetattr(STDIN_FILENO, TCSAFLUSH, &new_term);
+}
+
+void	sigint_handler(int signal)
+{
+	(void)signal;
+	global_signal = 1;
+	rl_replace_line("", 0);
+	write(1, "\n",1);
+	rl_on_new_line();
+	rl_redisplay();
+}
+
 int main(int ac, char **av, char ** envp)
 {
-	// struct termios origin;
-	// struct termios temp;
-	// tcgetattr(0, &origin);
-	// tcgetattr(0, &temp);
-	// temp.c_lflag &= ~(ICANON | ECHO);
-	// temp.c_cc[VMIN] = 1;
-    // temp.c_cc[VTIME] = 0;
-	// tcsetattr(0, TCSANOW, &temp);
 
-	signal(SIGQUIT, SIG_IGN);
-	//signal(SIGINT, signal_get);
 
 	global_signal = 0;
 	(void)ac;
 	(void)av;
+	// struct sigaction	new_act;
+	// new_act.sa_flags = 0;
+	// sigemptyset(&new_act.sa_mask);
+	// new_act.__sigaction_u.__sa_handler = SIG_IGN;
+	// sigaction(SIGQUIT, &new_act, NULL);
+    signal(SIGQUIT, SIG_IGN);
+    signal(SIGINT, sigint_handler);
+	// save_input_mode(); //터미널 세팅 저장
+	// set_input_mode();
+	modify_terminal_settings();
 	readlilne_tester(envp);
-	// tcsetattr(0, TCSANOW, &origin);
+	// save_input_mode(); //터미널 세팅 저장
+	// reset_input_mode();
 }
 
 void	readlilne_tester(char **envp)
@@ -53,21 +102,35 @@ void	readlilne_tester(char **envp)
 	t_env	env;
 
 	env_init(&env, envp);
+	//modify_terminal_settings();
 	while (1)
 	{
 		temp = readline("minishell : ");
-		if (temp)
+		if  (!temp)
+		{
+			ft_putstr_fd("is d", 2);
+			break;
+		}
+		if (*temp)
 		{
 			parsing(&node, temp);
 			exec_cmd(node, &env);
 			node_free(node);
-			free(temp);
+			//free(temp);
 			//command_free(token);
 		}
+		else
+		{
+			printf("press enter\n");
+			continue;
+		}
+		free(temp);
+    	signal(SIGQUIT, SIG_IGN);
+    	signal(SIGINT, sigint_handler);
 		close(0);
 		close(1);
-		dup2(node->origin_in, 0);
-		dup2(node->origin_out, 1);
+		// dup2(node->origin_in, 0);
+		// dup2(node->origin_out, 1);
 	}
 }
 
