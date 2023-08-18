@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
+/*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 16:14:11 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/17 15:58:08 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/17 17:59:21 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -154,7 +154,7 @@ void	node_free(t_mini *node);
 char	**cmd_realoc(t_mini *data);
 int		token_counter(t_mini *data);
 
-//redirection_set.c
+//redirectioxn_set.c
 void	redirection_set(t_mini *data, t_env *env);
 void	heredoc_right(t_mini *data, int i);
 void	heredoc_left(t_mini *data, t_env *env, int i);
@@ -299,4 +299,6 @@ void put_struct(t_mini **mini, char **tmp_command);
 char **split_string(const char *input);
 char **parsing(t_mini **mini, char *line);
 char is_special(char c);
+bool	check_struct(t_mini	*mini, t_env *env);
+
 #endif

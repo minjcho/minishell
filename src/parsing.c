@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
+/*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 14:06:50 by minjcho           #+#    #+#             */
-/*   Updated: 2023/08/17 15:58:27 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/18 12:17:02 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,6 +139,62 @@ char	**parsing(t_mini **mini, char *line)
 	return (tmp_command);
 }
 
+bool	consecutive_redirection(t_mini *mini)
+{
+	int	idx;
+	int	jdx;
+
+	idx = 0;
+	while (mini[idx].command)
+	{
+		jdx = 0;
+		while (jdx < mini[idx].cmd_size)
+		{
+			if (mini[idx].command[jdx][0] == '<' && mini[idx].command[jdx + 1] && (mini[idx].command[jdx + 1][0] == '<' || mini[idx].command[jdx + 1][0] == '>'))
+			{
+				printf("Error: consecutive '<'\n");
+				return (true);
+			}
+			if (mini[idx].command[jdx][0] == '>' && mini[idx].command[jdx + 1] && (mini[idx].command[jdx + 1][0] == '>' || mini[idx].command[jdx + 1][0] == '<'))
+			{
+				printf("Error: consecutive '>'\n");
+				return (true);
+			}
+			jdx++;
+		}
+		idx++;
+	}
+	return (false);
+}
+
+bool	check_empty_redirection(t_mini *mini)
+{
+	int	idx;
+	int	jdx;
+
+	idx = 0;
+	while (mini[idx].command)
+	{
+		jdx = 0;
+		while (jdx < mini[idx].cmd_size)
+		{
+			if (mini[idx].command[jdx][0] == '<' && !mini[idx].command[jdx + 1])
+			{
+				printf("Error: empty '<'\n");
+				return (true);
+			}
+			if (mini[idx].command[jdx][0] == '>' && !mini[idx].command[jdx + 1])
+			{
+				printf("Error: empty '>'\n");
+				return (true);
+			}
+			jdx++;
+		}
+		idx++;
+	}
+	return (false);
+}
+
 bool	check_redirection(t_mini *mini)
 {
 	int	idx;
@@ -164,10 +220,104 @@ bool	check_redirection(t_mini *mini)
 		}
 		idx++;
 	}
+	if (consecutive_redirection(mini))
+		return (true);
+	if (check_empty_redirection(mini))
+		return (true);
 	return (false);	
 }
 
-bool	check_struct(t_mini	*mini)
+bool	check_pipe(t_mini *mini)
+{
+	int	idx;
+	int	jdx;
+
+	idx = 0;
+	while (mini[idx].command)
+	{
+		jdx = 0;
+		while (jdx < mini[idx].cmd_size)
+		{
+			if (mini[idx].command[jdx][0] == '|' && strlen(mini[idx].command[jdx]) > 1)
+			{
+				printf("Error: more than one '|'\n");
+				return (true);
+			}
+			jdx++;
+		}
+		idx++;
+	}
+	return (false);
+}
+
+void	replace_env_in_double_quote(char *str, t_env *env)
+{
+	int	idx;
+	int	jdx;
+	int	len;
+	char	*tmp;
+
+	idx = 0;
+	len = strlen(str);
+	tmp = (char *)malloc(sizeof(char) * (len + 1));
+	while (str[idx])
+	{
+		if (str[idx] == '$')
+		{
+			jdx = idx + 1;
+			while (str[jdx] != ' ' || str[jdx] != '\0' || str[jdx] != '\"' || str[jdx] != '\t')
+				jdx++;
+			
+		}
+		idx++;
+	}
+}
+
+void	remove_quotation(t_mini *mini, t_env *env)
+{
+	int	idx;
+	int	jdx;
+
+	idx = 0;
+	while (mini[idx].command)
+	{
+		jdx = 0;
+		while (jdx < mini[idx].cmd_size)
+		{
+			if (mini[idx].command[jdx][0] == '\"' && mini[idx].command[jdx][-1] == '\"')
+			{
+				replace_env_in_double_quote(mini[idx].command[jdx], env);
+			}
+			jdx++;
+		}
+		idx++;
+	}
+}
+
+void	replace_env(t_mini *mini, t_env *env)
+{
+	int	idx;
+	int	jdx;
+
+	idx = 0;
+	while (mini[idx].command)
+	{
+		jdx = 0;
+		while (jdx < mini[idx].cmd_size)
+		{
+			if (mini[idx].command[jdx][0] == '$')
+			{
+				mini[idx].command[jdx] = ft_getenv(mini[idx].command[jdx] + 1, env);
+				// printf("mini[idx].command[jdx]: %s\n", mini[idx].command[jdx]);
+			}
+			jdx++;
+		}
+		idx++;
+	}
+	remove_quotation(mini, env);
+}
+
+bool	check_struct(t_mini	*mini, t_env *env)
 {
 	int	idx;
 	int	struct_size;
@@ -187,5 +337,8 @@ bool	check_struct(t_mini	*mini)
 	}
 	if (check_redirection(mini))
 		return (true);
+	if (check_pipe(mini))
+		return (true);
+	replace_env(mini, env);
 	return (false);
 }

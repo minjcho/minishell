@@ -128,8 +128,10 @@ void	readlilne_tester(void)
 			// {
 			// 	printf("%s\n", node->command[i]);
 			// }
-			exec_cmd(node, &env);
+			if (check_struct(node, &env) == false)
+				exec_cmd(node, &env);
 			node_free(node);
+			add_history(temp);
 			free(temp);
 			//command_free(token);
 		}
