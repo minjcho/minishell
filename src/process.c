@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 20:41:21 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/18 14:10:01 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/18 16:47:07 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -95,8 +95,8 @@ void	parent_set(t_mini *data, int *cur_pipe, int *prev_pipe, int i)
 		*prev_pipe = cur_pipe[0];
 	else
 		close(cur_pipe[0]);
-	signal(SIGINT, SIG_IGN);
-	signal(SIGQUIT, SIG_IGN);
+	// signal(SIGQUIT, SIG_IGN);
+	// signal(SIGINT, SIG_IGN);
 }
 
 // void	exec_cmd(t_mini *data, t_env *env)
