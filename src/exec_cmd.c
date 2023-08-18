@@ -51,6 +51,23 @@ int main(int ac, char **av, char ** envp)
 	// tcsetattr(0, TCSANOW, &origin);
 }
 
+// void	print_struct(t_mini *node)
+// {
+// 	int	i;
+// 	int	j;
+
+// 	printf("print_struct\n");
+// 	i = -1;
+// 	while (node[++i].command)
+// 	{
+// 		j = -1;
+// 		while (node[i].command[++j])
+// 		{
+// 			printf("%s\n", node[i].command[j]);
+// 		}
+// 	}
+// }
+
 void	readlilne_tester(void)
 {
 	char	*temp;
@@ -130,6 +147,7 @@ void	readlilne_tester(void)
 			// }
 			if (check_struct(node, &env) == false)
 				exec_cmd(node, &env);
+			// print_struct(node);
 			// node_free(node);
 			add_history(temp);
 			free(temp);

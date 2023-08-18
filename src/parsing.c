@@ -6,7 +6,7 @@
 /*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 14:06:50 by minjcho           #+#    #+#             */
-/*   Updated: 2023/08/18 14:37:54 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/08/18 17:58:40 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -297,7 +297,7 @@ void replace_env_in_double_quote(char **str, t_env *env)
     tmp = (char *)malloc(sizeof(char) * (len + 1));
     while ((*str)[idx])
     {
-        if ((*str)[idx] == '$' && (*str)[idx + 1] && (*str)[idx + 1] != ' ' && (*str)[idx + 1] != '\"' && (*str)[idx + 1] != '\t')
+        if ((*str)[idx] == '$' && (*str)[idx + 1] != '?' && (*str)[idx + 1] && (*str)[idx + 1] != ' ' && (*str)[idx + 1] != '\"' && (*str)[idx + 1] != '\t')
         {
             jdx = 0;
             while ((*str)[idx + jdx + 1] && (*str)[idx + jdx + 1] != ' ' && (*str)[idx + jdx + 1] != '\"' && (*str)[idx + jdx + 1] != '\t' && (*str)[idx + jdx + 1] != '$')
@@ -314,7 +314,7 @@ void replace_env_in_double_quote(char **str, t_env *env)
     free(tmp);
 }
 
-void	remove_quotation(t_mini *mini, t_env *env)
+void	remove_double_quotation(t_mini *mini, t_env *env)
 {
 	int	idx;
 	int	jdx;
@@ -332,16 +332,88 @@ void	remove_quotation(t_mini *mini, t_env *env)
 				replace_env_in_double_quote(&(mini[idx].command[jdx]), env);
 				mini[idx].command[jdx] = ft_strtrim(mini[idx].command[jdx], "\"");
 			}
-			else if (mini[idx].command[jdx][0] == '\'' && mini[idx].command[jdx][len - 1] == '\'' && len > 2)
-				mini[idx].command[jdx] = ft_strtrim(mini[idx].command[jdx], "\'");
 			else if (mini[idx].command[jdx][0] == '\"' && mini[idx].command[jdx][len - 1] == '\"' && len == 2)
 				mini[idx].command[jdx] = ft_strdup("");
+			jdx++;
+		}
+		idx++;
+	}
+}
+
+void	put_global_siganl(char **str)
+{
+	char	*tmp;
+	char	*new_str;
+	char	*start_ptr;
+
+	tmp = ft_itoa(global_signal);
+	start_ptr = strstr(*str, "$?");
+	if (start_ptr)
+	{
+		new_str = (char *)malloc(strlen(*str) - strlen("$?") + strlen(tmp) + 1);
+		strncpy(new_str, *str, start_ptr - *str);
+		strcpy(new_str + (start_ptr - *str), tmp);
+		strcat(new_str, start_ptr + strlen("$?"));
+		free(*str);
+		*str = new_str;
+	}
+}
+
+bool	replace_dollar_question(t_mini **mini)
+{
+	int	i;
+	int	j;
+	int	k;
+	bool	did_replace;
+
+	i = 0;
+	while ((*mini)[i].command)
+	{
+		j = 0;
+		while ((*mini)[i].command[j])
+		{
+			k = 0;
+			while ((*mini)[i].command[j][k])
+			{
+				if ((*mini)[i].command[j][k] == '$' && (*mini)[i].command[j][k + 1] && (*mini)[i].command[j][k + 1] == '?' && (*mini)[i].command[j][0] != '\'')
+				{
+					did_replace = true;
+					put_global_siganl(&(*mini)[i].command[j]);
+				}
+				k++;
+			}
+			j++;
+		}
+		i++;
+	}
+	return (did_replace);
+}
+
+void	remove_single_quotation(t_mini *mini)
+{
+	int	idx;
+	int	jdx;
+	int	len;
+	bool	did_replace;
+
+	did_replace = replace_dollar_question(&mini);
+	idx = 0;
+	while (mini[idx].command)
+	{
+		jdx = 0;
+		while (jdx < mini[idx].cmd_size)
+		{
+			len = strlen(mini[idx].command[jdx]);
+			if (mini[idx].command[jdx][0] == '\'' && mini[idx].command[jdx][len - 1] == '\'' && len > 2)
+				mini[idx].command[jdx] = ft_strtrim(mini[idx].command[jdx], "\'");
 			else if (mini[idx].command[jdx][0] == '\'' && mini[idx].command[jdx][len - 1] == '\'' && len == 2)
 				mini[idx].command[jdx] = ft_strdup("");
 			jdx++;
 		}
 		idx++;
 	}
+	if (did_replace)
+		global_signal = 0;
 }
 
 void	replace_env(t_mini *mini, t_env *env)
@@ -355,7 +427,7 @@ void	replace_env(t_mini *mini, t_env *env)
 		jdx = 0;
 		while (jdx < mini[idx].cmd_size)
 		{
-			if (mini[idx].command[jdx][0] == '$')
+			if (mini[idx].command[jdx][0] == '$' && mini[idx].command[jdx][1] != '?')
 			{
 				mini[idx].command[jdx] = ft_getenv(mini[idx].command[jdx] + 1, env);
 				// printf("mini[idx].command[jdx]: %s\n", mini[idx].command[jdx]);
@@ -364,7 +436,8 @@ void	replace_env(t_mini *mini, t_env *env)
 		}
 		idx++;
 	}
-	remove_quotation(mini, env);
+	remove_double_quotation(mini, env);
+	remove_single_quotation(mini);
 }
 
 bool	check_struct(t_mini	*mini, t_env *env)
