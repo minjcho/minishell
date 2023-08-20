@@ -6,7 +6,7 @@
 /*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 14:06:50 by minjcho           #+#    #+#             */
-/*   Updated: 2023/08/20 15:25:06 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/08/20 15:35:36 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -364,6 +364,7 @@ void	put_global_siganl(char **str)
 		free(*str);
 		*str = new_str;
 	}
+	free(tmp);
 }
 
 bool	replace_dollar_question(t_mini **mini)
