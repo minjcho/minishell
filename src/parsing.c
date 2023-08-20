@@ -6,7 +6,7 @@
 /*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 14:06:50 by minjcho           #+#    #+#             */
-/*   Updated: 2023/08/18 17:58:40 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/08/20 15:25:06 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -319,6 +319,7 @@ void	remove_double_quotation(t_mini *mini, t_env *env)
 	int	idx;
 	int	jdx;
 	int	len;
+	char	*trimmed_str;
 
 	idx = 0;
 	while (mini[idx].command)
@@ -330,10 +331,16 @@ void	remove_double_quotation(t_mini *mini, t_env *env)
 			if (mini[idx].command[jdx][0] == '\"' && mini[idx].command[jdx][len - 1] == '\"' && len > 2)
 			{
 				replace_env_in_double_quote(&(mini[idx].command[jdx]), env);
-				mini[idx].command[jdx] = ft_strtrim(mini[idx].command[jdx], "\"");
+				trimmed_str = ft_strtrim(mini[idx].command[jdx], "\"");
+				free(mini[idx].command[jdx]);
+				mini[idx].command[jdx] = trimmed_str;
+				// mini[idx].command[jdx] = ft_strtrim(mini[idx].command[jdx], "\"");
 			}
 			else if (mini[idx].command[jdx][0] == '\"' && mini[idx].command[jdx][len - 1] == '\"' && len == 2)
+			{
+				free(mini[idx].command[jdx]);
 				mini[idx].command[jdx] = ft_strdup("");
+			}
 			jdx++;
 		}
 		idx++;
@@ -394,6 +401,7 @@ void	remove_single_quotation(t_mini *mini)
 	int	idx;
 	int	jdx;
 	int	len;
+	char	*trimmed_str;
 	bool	did_replace;
 
 	did_replace = replace_dollar_question(&mini);
@@ -405,9 +413,17 @@ void	remove_single_quotation(t_mini *mini)
 		{
 			len = strlen(mini[idx].command[jdx]);
 			if (mini[idx].command[jdx][0] == '\'' && mini[idx].command[jdx][len - 1] == '\'' && len > 2)
-				mini[idx].command[jdx] = ft_strtrim(mini[idx].command[jdx], "\'");
+			{
+				trimmed_str = ft_strtrim(mini[idx].command[jdx], "\'");
+				free(mini[idx].command[jdx]);
+				mini[idx].command[jdx] = trimmed_str;
+				// mini[idx].command[jdx] = ft_strtrim(mini[idx].command[jdx], "\'");
+			}
 			else if (mini[idx].command[jdx][0] == '\'' && mini[idx].command[jdx][len - 1] == '\'' && len == 2)
+			{
+				free(mini[idx].command[jdx]);
 				mini[idx].command[jdx] = ft_strdup("");
+			}
 			jdx++;
 		}
 		idx++;
@@ -420,6 +436,7 @@ void	replace_env(t_mini *mini, t_env *env)
 {
 	int	idx;
 	int	jdx;
+	char	*env_value;
 
 	idx = 0;
 	while (mini[idx].command)
@@ -427,9 +444,20 @@ void	replace_env(t_mini *mini, t_env *env)
 		jdx = 0;
 		while (jdx < mini[idx].cmd_size)
 		{
-			if (mini[idx].command[jdx][0] == '$' && mini[idx].command[jdx][1] != '?')
+			if (mini[idx].command[jdx][0] == '$' && mini[idx].command[jdx][1] != '?' && mini[idx].command[jdx][1])
 			{
-				mini[idx].command[jdx] = ft_getenv(mini[idx].command[jdx] + 1, env);
+				env_value = ft_getenv(mini[idx].command[jdx] + 1, env);
+				if (env_value)
+				{
+					free(mini[idx].command[jdx]);
+					mini[idx].command[jdx] = ft_strdup(env_value);
+				}
+				else
+				{
+					free(mini[idx].command[jdx]);
+					mini[idx].command[jdx] = ft_strdup("");
+				}
+				// mini[idx].command[jdx] = ft_getenv(mini[idx].command[jdx] + 1, env);
 				// printf("mini[idx].command[jdx]: %s\n", mini[idx].command[jdx]);
 			}
 			jdx++;

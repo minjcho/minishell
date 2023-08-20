@@ -77,6 +77,7 @@ void	readlilne_tester(void)
 	int		origin_out;
 	t_mini	*node;
 	t_env	env;
+	char	**splited_readline;
 
 	node = NULL;
 	env.node = (t_env_node *)malloc(sizeof(t_env_node) * 6);
@@ -140,7 +141,7 @@ void	readlilne_tester(void)
 		// 			j++;
 		// 		node[i].cmd_size = j;
 		// 	}
-			parsing(&node, temp);
+			splited_readline = parsing(&node, temp);
 			// for (int i = 0 ; node->command[i] ; i++)
 			// {
 			// 	printf("%s\n", node->command[i]);
@@ -148,10 +149,14 @@ void	readlilne_tester(void)
 			if (check_struct(node, &env) == false)
 				exec_cmd(node, &env);
 			// print_struct(node);
-			// node_free(node);
+			node_free(node);
 			add_history(temp);
+			int i = -1;
+			while (splited_readline[++i])
+				free(splited_readline[i]);
+			free(splited_readline);
 			free(temp);
-			//command_free(token);
+			// command_free(token);
 		}
 		dup2(origin_in, 0);
 		dup2(origin_out, 1);
