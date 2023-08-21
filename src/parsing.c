@@ -6,17 +6,11 @@
 /*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 14:06:50 by minjcho           #+#    #+#             */
-/*   Updated: 2023/08/21 15:00:13 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/08/21 17:22:25 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-/*
-		strncpy(new_str, *str, start_ptr - *str); // 변수 앞 부분 복사
-		strcpy(new_str + (start_ptr - *str), env_value); // 환경 변수 값 복사
-		strcat(new_str, start_ptr + ft_strlen(var_with_dollar)); // 변수 뒷 부분 복사
-*/
 
 void	ft_strncpy(char *dest, char *src, int n)
 {
@@ -88,32 +82,37 @@ char	is_special(char c)
 
 char	**split_string(char *input)
 {
-	size_t	len = ft_strlen(input);
-	char	**result = (char **)malloc((len + 1) * sizeof(char *));
-	int		idx = 0;
-	size_t	i = 0;
+	const size_t	len = ft_strlen(input);
+	char			**result;
+	int				idx;
+	size_t			i;
+	size_t			start;
+	char			quote;
 
+	result = (char **)malloc((len + 1) * sizeof(char *));
+	idx = 0;
+	i = 0;
 	while (i < len)
 	{
-		while (i < len && (input[i] == ' ' || input[i] == '\t')) i++;
+		while (i < len && (input[i] == ' ' || input[i] == '\t'))
+			i++;
 		if (i == len)
-			break;
-		size_t start = i;
+			break ;
+		start = i;
 		if (input[i] == '\'' || input[i] == '\"')
 		{
-			char quote = input[i++];
-			while (i < len && input[i] != quote) i++;
-			if (i < len) i++;
+			quote = input[i++];
+			while (i < len && input[i] != quote)
+				i++;
+			if (i < len)
+				i++;
 		}
 		else if (is_special(input[i]))
-		{
-			while (i < len && input[i] == input[start]) i++;
-		}
+			while (i < len && input[i] == input[start])
+				i++;
 		else
-		{
 			while (i < len && !is_special(input[i]) && input[i] != ' ' && input[i] != '\'' && input[i] != '\"')
-			i++;
-		}
+				i++;
 		result[idx] = (char *)malloc(i - start + 1);
 		ft_strncpy(result[idx], input + start, i - start);
 		result[idx][i - start] = '\0';
@@ -123,53 +122,65 @@ char	**split_string(char *input)
 	return (result);
 }
 
-void put_struct(t_mini **mini, char **tmp_command)
+void	put_struct(t_mini **mini, char **tmp_command)
 {
-    int total_commands = 0;
-    for (int i = 0; tmp_command[i]; i++) {
-        if (ft_strcmp(tmp_command[i], "|") == 0) total_commands++;
-    }
-    total_commands++;
-    *mini = (t_mini *)malloc((total_commands + 1) * sizeof(t_mini));
+	int	total_commands;
+	int cmd_idx;
+	int cmd_count;
+	int start_idx;
 
-    int cmd_idx = 0;
-    int cmd_count = 0;
-    int start_idx = 0;
-
-    for (int i = 0; tmp_command[i]; i++)
-    {
-        if (ft_strcmp(tmp_command[i], "|") == 0 || tmp_command[i+1] == NULL) {
-            if (tmp_command[i+1] == NULL && ft_strcmp(tmp_command[i], "|") == 0) {
-                (*mini)[cmd_idx].command = (char **)malloc((cmd_count + 1) * sizeof(char *));
-                for (int k = 0; k < cmd_count; k++) {
-                    (*mini)[cmd_idx].command[k] = ft_strdup(tmp_command[start_idx + k]);
-                }
-                (*mini)[cmd_idx].command[cmd_count] = NULL;
-                (*mini)[cmd_idx].cmd_size = cmd_count;
-                cmd_idx++;
-                cmd_count = 0;
-                (*mini)[cmd_idx].command = (char **)malloc(1 * sizeof(char *));
-                (*mini)[cmd_idx].command[0] = NULL;
-                (*mini)[cmd_idx].cmd_size = 0;
-            } else {
-                if (tmp_command[i+1] == NULL) cmd_count++;
-                (*mini)[cmd_idx].command = (char **)malloc((cmd_count + 1) * sizeof(char *));
-                for (int k = 0; k < cmd_count; k++) {
-                    (*mini)[cmd_idx].command[k] = ft_strdup(tmp_command[start_idx + k]);
-                }
-                (*mini)[cmd_idx].command[cmd_count] = NULL;
-                (*mini)[cmd_idx].cmd_size = cmd_count;
-                cmd_count = 0;
-            }
-            cmd_idx++;
-            start_idx = i + 1;
-        } else {
-            cmd_count++;
-        }
-    }
-
-    (*mini)[cmd_idx].command = NULL;
-    (*mini)[cmd_idx].cmd_size = 0;
+	total_commands = 0;
+	for (int i = 0; tmp_command[i]; i++)
+	{
+		if (ft_strcmp(tmp_command[i], "|") == 0)
+			total_commands++;
+	}
+	total_commands++;
+	*mini = (t_mini *)malloc((total_commands + 1) * sizeof(t_mini));
+	cmd_idx = 0;
+	cmd_count = 0;
+	start_idx = 0;
+	for (int i = 0; tmp_command[i]; i++)
+	{
+		if (ft_strcmp(tmp_command[i], "|") == 0 || tmp_command[i+1] == NULL)
+		{
+			if (tmp_command[i+1] == NULL && ft_strcmp(tmp_command[i], "|") == 0)
+			{
+				(*mini)[cmd_idx].command = (char **)malloc((cmd_count + 1) * sizeof(char *));
+				for (int k = 0; k < cmd_count; k++)
+				{
+					(*mini)[cmd_idx].command[k] = ft_strdup(tmp_command[start_idx + k]);
+				}
+				(*mini)[cmd_idx].command[cmd_count] = NULL;
+				(*mini)[cmd_idx].cmd_size = cmd_count;
+				cmd_idx++;
+				cmd_count = 0;
+				(*mini)[cmd_idx].command = (char **)malloc(1 * sizeof(char *));
+				(*mini)[cmd_idx].command[0] = NULL;
+				(*mini)[cmd_idx].cmd_size = 0;
+			}
+			else
+			{
+				if (tmp_command[i+1] == NULL) cmd_count++;
+				(*mini)[cmd_idx].command = (char **)malloc((cmd_count + 1) * sizeof(char *));
+				for (int k = 0; k < cmd_count; k++)
+				{
+					(*mini)[cmd_idx].command[k] = ft_strdup(tmp_command[start_idx + k]);
+				}
+				(*mini)[cmd_idx].command[cmd_count] = NULL;
+				(*mini)[cmd_idx].cmd_size = cmd_count;
+				cmd_count = 0;
+			}
+			cmd_idx++;
+			start_idx = i + 1;
+		}
+		else
+		{
+			cmd_count++;
+		}
+	}
+	(*mini)[cmd_idx].command = NULL;
+	(*mini)[cmd_idx].cmd_size = 0;
 }
 
 void	fill_rest_struct(t_mini **mini)
@@ -326,28 +337,20 @@ void	env_replace(char **str, char *tmp, t_env *env)
 	char	*start_ptr;
 	char	*var_with_dollar;
 
-	// $와 변수 이름을 연결해서 var_with_dollar에 저장
 	var_with_dollar = (char *)malloc(ft_strlen(tmp) + 2); 
 	var_with_dollar[0] = '$';
 	var_with_dollar[1] = '\0';
 	ft_strcat(var_with_dollar, tmp);
-
-	// 환경 변수 값을 가져옴
 	env_value = ft_getenv(tmp, env);
 	if (!env_value)
-		env_value = "";  // 환경 변수 값이 없을 경우 빈 문자열로 처리
-
-	// 원본 문자열에서 변수 부분을 찾음
+		env_value = "";
 	start_ptr = ft_strstr(*str, var_with_dollar);
 	if (start_ptr)
 	{
-		// 새 문자열 생성 및 복사
 		new_str = (char *)malloc(ft_strlen(*str) - ft_strlen(var_with_dollar) + ft_strlen(env_value) + 1);
-		ft_strncpy(new_str, *str, start_ptr - *str); // 변수 앞 부분 복사
-		ft_strcpy(new_str + (start_ptr - *str), env_value); // 환경 변수 값 복사
-		ft_strcat(new_str, start_ptr + ft_strlen(var_with_dollar)); // 변수 뒷 부분 복사
-		
-		// 원본 문자열 메모리 해제 및 새로운 문자열로 업데이트
+		ft_strncpy(new_str, *str, start_ptr - *str);
+		ft_strcpy(new_str + (start_ptr - *str), env_value);
+		ft_strcat(new_str, start_ptr + ft_strlen(var_with_dollar));
 		free(*str);
 		*str = new_str;
 	}
@@ -403,7 +406,6 @@ void	remove_double_quotation(t_mini *mini, t_env *env)
 				trimmed_str = ft_strtrim(mini[idx].command[jdx], "\"");
 				free(mini[idx].command[jdx]);
 				mini[idx].command[jdx] = trimmed_str;
-				// mini[idx].command[jdx] = ft_strtrim(mini[idx].command[jdx], "\"");
 			}
 			else if (mini[idx].command[jdx][0] == '\"' && mini[idx].command[jdx][len - 1] == '\"' && len == 2)
 			{
@@ -487,7 +489,6 @@ void	remove_single_quotation(t_mini *mini)
 				trimmed_str = ft_strtrim(mini[idx].command[jdx], "\'");
 				free(mini[idx].command[jdx]);
 				mini[idx].command[jdx] = trimmed_str;
-				// mini[idx].command[jdx] = ft_strtrim(mini[idx].command[jdx], "\'");
 			}
 			else if (mini[idx].command[jdx][0] == '\'' && mini[idx].command[jdx][len - 1] == '\'' && len == 2)
 			{
@@ -527,8 +528,6 @@ void	replace_env(t_mini *mini, t_env *env)
 					free(mini[idx].command[jdx]);
 					mini[idx].command[jdx] = ft_strdup("");
 				}
-				// mini[idx].command[jdx] = ft_getenv(mini[idx].command[jdx] + 1, env);
-				// printf("mini[idx].command[jdx]: %s\n", mini[idx].command[jdx]);
 			}
 			jdx++;
 		}
