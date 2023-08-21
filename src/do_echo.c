@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 20:47:56 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/21 15:33:55 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/21 18:06:26 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,7 +53,7 @@ void	echo_write(t_mini *data, int option_idx)
 		// 	global_signal = 0;
 		// }
 		// else
-			write(1, &data->command[option_idx][i], 1);
+		write(1, &data->command[option_idx][i], 1);
 	}
 	if (option_idx != data->cmd_size - 1)
 		write(1, " ", 1);

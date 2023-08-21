@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 16:14:11 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/21 16:18:36 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/21 18:05:28 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -158,7 +158,7 @@ int		is_redirection2(char *str);
 void	ft_wait(int n);
 void	origin_dup(t_mini *data, int i);
 
-//redirection_set.c
+//redirectioxn_set.c
 void	redirection_set(t_mini *data, t_env *env);
 void	heredoc_right(t_mini *data, int i);
 void	heredoc_left(t_mini *data, t_env *env, int i);

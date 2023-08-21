@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/16 16:17:33 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/21 10:09:02 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/21 18:10:09 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,6 +64,12 @@ void	dollor_conver(char *str, int *fd, t_env *env)
 		{
 			if (str[i + 1] == ' ' || str[i + 1] == '\0')
 				write(fd[1], &str[i], 1);
+			else if (str[i + 1] == '?')
+			{
+				write(fd[1], ft_itoa(global_signal), \
+						ft_strlen(ft_itoa(global_signal)));
+				i++;
+			}
 			else if (str[i + 1] == '$')
 				i += dollar_conver3(i, str, fd);
 			else if (str[i + 1])
