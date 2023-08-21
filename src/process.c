@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 20:41:21 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/21 14:31:01 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/21 15:21:16 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,17 +64,16 @@ void	exec_cmd(t_mini *data, t_env *env)
 	while (++i < data->cnt)
 	{
 		redirection_set(&data[i], env);
-		if(data[i].input_fd == -1 || data[i].is_signal)
-			continue;
+		if (data[i].input_fd == -1)
+			continue ;
+		else if (data[i].is_signal)
+			break ;
 		pipe(cur_pipe);
 		p.data = data;
 		p.env = env;
 		p.i = i;
 		exec_fork(&p, cur_pipe);
-		close(0);
-		close(1);
-		dup2(data[i].origin_in, 0);
-		dup2(data[i].origin_out, 1);
+		origin_dup(data, i);
 	}
 	ft_wait(i);
 }

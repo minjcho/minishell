@@ -6,15 +6,15 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/17 15:20:49 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/17 17:58:12 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/21 15:04:16 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void    env_init(t_env *env, char **envp)
+void	env_init(t_env *env, char **envp)
 {
-	int size;
+	int	size;
 
 	size = envp_size(envp);
 	env->node = malloc(sizeof(t_env_node) * (size + 1));
@@ -40,7 +40,7 @@ void	envp_split(t_env *env, char **envp)
 			if (envp[i][j] == '=')
 			{
 				env_substr(env, envp, i, j);
-				break;
+				break ;
 			}
 		}
 	}
@@ -66,10 +66,10 @@ void	env_substr(t_env *env, char **envp, int i, int j)
 	}
 }
 
-int envp_size(char **envp)
+int	envp_size(char **envp)
 {
-	int i;
-	int len;
+	int	i;
+	int	len;
 
 	i = -1;
 	len = 0;

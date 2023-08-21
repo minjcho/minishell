@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 20:45:27 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/21 13:39:06 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/21 15:20:37 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -92,4 +92,12 @@ void	ft_wait(int n)
 			global_signal = 128 + SIGINT;
 		}
 	}
+}
+
+void	origin_dup(t_mini *data, int i)
+{	
+	close(0);
+	close(1);
+	dup2(data[i].origin_in, 0);
+	dup2(data[i].origin_out, 1);
 }

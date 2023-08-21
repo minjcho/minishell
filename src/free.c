@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 20:29:20 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/21 10:56:35by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/21 15:10:47 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,11 +55,9 @@ void	node_free(t_mini *node)
 	t_mini	*temp;
 
 	i = -1;
-	
 	if (node)
 	{
 		temp = node;
-		
 		while (++i < node->cnt)
 		{
 			if (&node[i])
@@ -76,11 +74,9 @@ void	node_free2(t_mini *node)
 	t_mini	*temp;
 
 	i = -1;
-	
 	if (node)
 	{
 		temp = node;
-		
 		while (++i < node->cnt)
 		{
 			if (&node[i])

@@ -300,6 +300,8 @@ void	sigint_heredoc(int signal);
 void	sigint_child(int signal);
 void	sigint_heredoc1(int signal);
 void	sigint_handler(int signal);
+void	signal_main(void);
+void	origin_dup(t_mini *data, int i);
 
 void    signal_heredoc(t_mini *data, int status);
 void    heredoc_signal_red(pid_t id, int *fd, t_mini *data);

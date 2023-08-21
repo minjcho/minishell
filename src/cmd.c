@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/16 19:34:33 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/21 10:44:05 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/21 14:58:17 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,9 +46,7 @@ void	cmd_start(t_mini *data, char **split_path, t_env *env)
 				slash_join = ft_strjoin(split_path[i], "/");
 				cmd = ft_strjoin(slash_join, data->command[j]);
 				if (!access(cmd, X_OK))
-				{
 					execve(cmd, cmd_realoc(data), env_tochar(env->node));
-				}
 				free(cmd);
 				cmd = NULL;
 				free(slash_join);
@@ -58,35 +56,6 @@ void	cmd_start(t_mini *data, char **split_path, t_env *env)
 	}
 	error_cmdnotfound(data->command[0]);
 }
-
-// void	cmd_start(t_mini *data, char **split_path, t_env *env)
-// {
-// 	char	*slash_join;
-// 	char	*cmd;
-// 	int		i;
-// 	int		j;
-
-// 	i = -1;
-// 	while (split_path && split_path[++i])
-// 	{
-// 		slash_join = ft_strjoin(split_path[i], "/");
-// 		j = -1;
-// 		while (++j < data->cmd_size)
-// 		{
-// 			if (data->command[j] != NULL)
-// 			{
-// 				cmd = ft_strjoin(slash_join, data->command[j]);
-// 				if (access(cmd, X_OK) != 0)
-// 					continue ;
-// 				execve(cmd, cmd_realoc(data), env_tochar(env->node));
-// 				free(cmd);
-// 				cmd = NULL;
-// 			}
-// 		}
-// 		free(slash_join);
-// 	}
-// 	error_cmdnotfound(data->command[0]);
-// }
 
 void	cmd_find(t_mini *data, t_env *env)
 {

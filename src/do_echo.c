@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 20:47:56 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/17 12:07:32 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/21 14:59:00 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,21 +37,6 @@ void	do_echo(t_mini *data)
 		write(1, "\n", 1);
 	}
 }
-
-// void	echo_write(t_mini *data, int option_idx)
-// {
-// 	if (data->command[option_idx] && \
-// 	ft_strcmp("$?", data->command[option_idx]) == 0)
-// 	{
-// 		ft_putnbr_fd(global_signal, 1);
-// 		global_signal = 0;
-// 		write(1, " ", 1);
-// 		option_idx++;
-// 	}
-// 	write(1, data->command[option_idx], \
-// 	ft_strlen(data->command[option_idx]));
-// 	write(1, " ", 1);
-// }
 
 void	echo_write(t_mini *data, int option_idx)
 {
