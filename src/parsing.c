@@ -6,7 +6,7 @@
 /*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 14:06:50 by minjcho           #+#    #+#             */
-/*   Updated: 2023/08/20 15:54:34 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/08/20 15:58:41 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,7 +86,7 @@ char	is_special(char c)
 	return (c == '<' || c == '>' || c == '|');
 }
 
-char	**split_string(const char *input)
+char	**split_string(char *input)
 {
 	size_t	len = ft_strlen(input);
 	char	**result = (char **)malloc((len + 1) * sizeof(char *));

@@ -6,7 +6,7 @@
 /*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/16 16:17:33 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/19 11:25:21 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/08/21 09:40:19 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,11 @@ void	dollor_conver(char *str, int *fd, t_env *env)
 				write(fd[1], &str[i], 1);
 			else if (str[i + 1] == '$')
 				i += dollar_conver3(i, str, fd);
+			// else if (str[i + 1] == '?')
+			// {
+			// 	write(fd[1], ft_itoa(global_signal), ft_strlen(ft_itoa(global_signal)));
+			// 	i++;
+			// }
 			else if (str[i + 1])
 				i += dollar_conver2(i, env, str, fd);
 		}

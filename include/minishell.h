@@ -6,7 +6,7 @@
 /*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 16:14:11 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/17 17:59:21 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/08/20 19:01:06 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -292,13 +292,7 @@ int	dollar_conver2(int i, t_env *env, char *str, int *fd);
 int	dollar_conver3(int i, char *str, int *fd);
 void    env_set(t_env *env, char *envp);
 
-
-
-
-void put_struct(t_mini **mini, char **tmp_command);
-char **split_string(const char *input);
-char **parsing(t_mini **mini, char *line);
-char is_special(char c);
+char	**parsing(t_mini **mini, char *line);
 bool	check_struct(t_mini	*mini, t_env *env);
 
 #endif
