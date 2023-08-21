@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 14:14:16 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/21 18:08:34 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/21 18:51:10 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,8 @@ void	readlilne_tester(char **envp)
 		if (*temp)
 		{
 			parsing(&node, temp);
-			exec_cmd(node, &env);
+			if (check_struct(node, &env) == false)
+				exec_cmd(node, &env);
 			node_free2(node);
 		}
 		else

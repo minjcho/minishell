@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 16:14:11 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/21 18:15:03 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/21 18:50:16 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -263,4 +263,6 @@ void 	put_struct(t_mini **mini, char **tmp_command);
 char 	**split_string(char *input);
 void	parsing(t_mini **mini, char *line);
 char 	is_special(char c);
+bool	check_struct(t_mini	*mini, t_env *env);
+
 #endif
