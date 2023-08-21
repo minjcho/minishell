@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 20:45:27 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/16 19:34:02 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/18 21:02:14 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,11 @@ void	ft_wait(int n)
 	int	i;
 
 	i = -1;
+	// signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, SIG_IGN);
 	while (++i < n)
 		waitpid(-1, &status, 0);
 	global_signal = WEXITSTATUS(status);
+    signal(SIGQUIT, SIG_IGN);
+    signal(SIGINT, sigint_handler);
 }

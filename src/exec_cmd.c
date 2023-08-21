@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 14:14:16 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/18 16:50:11 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/21 10:19:32 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,12 +39,23 @@ void	leaks(void)
 
 void	sigint_handler(int signal)
 {
-	(void)signal;
-	global_signal = 1;
+  	struct termios new_term;
+    struct termios temp;
+
+    (void)signal;
+    global_signal = 1;
+    tcgetattr(STDIN_FILENO, &new_term);
+    tcgetattr(STDIN_FILENO, &temp);
+    new_term.c_lflag &= ~(ICANON | ECHO | ECHOCTL);
+    new_term.c_cc[VMIN] = 1;
+    new_term.c_cc[VTIME] = 0;
+    tcsetattr(STDIN_FILENO, TCSANOW, &new_term);
+
+    write(1, "\n", 1);
+    rl_on_new_line();
 	rl_replace_line("", 0);
-	write(1, "\n",1);
-	rl_on_new_line();
-	rl_redisplay();
+    rl_redisplay();
+    tcsetattr(STDIN_FILENO, TCSANOW, &temp);
 }
 
 void	sigint_heredoc(int signal)
@@ -72,8 +83,8 @@ void	sigint_child(int signal)
 {
 	(void)signal;
 	global_signal = 1;
+	// rl_redisplay();
 	write(1, "^C\n", 3);
-	rl_replace_line("", 0);
 	rl_redisplay();
 }
 
@@ -96,6 +107,8 @@ void	readlilne_tester(char **envp)
 	env_init(&env, envp);
 	while (1)
 	{
+		signal(SIGQUIT, SIG_IGN);
+    	signal(SIGINT, sigint_handler);
 		temp = readline("minishell : ");
 		if  (!temp)
 			exit(0);
@@ -104,7 +117,7 @@ void	readlilne_tester(char **envp)
 			parsing(&node, temp);
 			exec_cmd(node, &env);
 			node_free(node);
-			//free(temp);
+			// free(temp);
 			//command_free(token);
 		}
 		else

@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 14:06:50 by minjcho           #+#    #+#             */
-/*   Updated: 2023/08/17 15:43:50 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/21 10:29:47 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -127,7 +127,7 @@ void	fill_rest_struct(t_mini **mini)
 	}
 }
 
-char	**parsing(t_mini **mini, char *line)
+void	parsing(t_mini **mini, char *line)
 {
 	int		i;
 	char	**tmp_command;
@@ -136,7 +136,7 @@ char	**parsing(t_mini **mini, char *line)
 	tmp_command = split_string(line);
 	put_struct(mini, tmp_command);
 	fill_rest_struct(mini);
-	return (tmp_command);
+	command_free(tmp_command);
 }
 
 bool	check_redirection(t_mini *mini)

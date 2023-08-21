@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 16:14:11 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/18 16:17:43 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/21 10:30:06 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -298,11 +298,12 @@ void	env_substr(t_env *env, char **envp, int i, int j);
 void	sigint_heredoc(int signal);
 void	sigint_child(int signal);
 void	sigint_heredoc1(int signal);
+void	sigint_handler(int signal);
 
 
 
 void put_struct(t_mini **mini, char **tmp_command);
 char **split_string(const char *input);
-char **parsing(t_mini **mini, char *line);
+void	parsing(t_mini **mini, char *line);
 char is_special(char c);
 #endif
