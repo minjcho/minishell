@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 20:00:55 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/18 16:42:01 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/21 14:50:15 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,26 +58,22 @@ void	heredoc_left(t_mini *data, t_env *env, int i)
 {
 	char	*limiter;
 	int		fd[2];
-	int		status;
 	pid_t	id;
 
-	status = 0;
 	limiter = ft_strdup(data->command[i + 1]);
 	set_cmd_null(data, i, i + 1);
 	pipe(fd);
 	id = fork();
 	if (id == 0)
 	{
+		signal(SIGINT, SIG_DFL);
 		close(fd[0]);
 		heredoc_read(limiter, fd, env);
 	}
 	else if (id > 0)
 	{
-		close(fd[1]);
-		dup2(fd[0], 0);
-		close(fd[0]);
+		heredoc_signal_red(id, fd, data);
 		free(limiter);
-		waitpid(id, NULL, 0);
 	}
 	else
 		error_fork();

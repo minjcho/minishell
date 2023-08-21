@@ -38,6 +38,7 @@ typedef struct s_mini
 	int		cnt;
 	int		is_heredoc;
 	int		builtin_cnt;
+	int		is_signal;
 } t_mini; 
 
 typedef struct  s_params
@@ -300,6 +301,8 @@ void	sigint_child(int signal);
 void	sigint_heredoc1(int signal);
 void	sigint_handler(int signal);
 
+void    signal_heredoc(t_mini *data, int status);
+void    heredoc_signal_red(pid_t id, int *fd, t_mini *data);
 
 void	command_free2(char **command, int size);
 void	node_free2(t_mini *node);

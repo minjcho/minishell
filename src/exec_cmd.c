@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 14:14:16 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/21 11:09:08 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/21 14:51:24 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,83 +18,11 @@ void	leaks(void)
 	system("leaks a.out");
 }
 
-// void	save_input_mode(void)
-// {
-// 	tcgetattr(STDIN_FILENO, &org_term); //STDIN으로부터 터미널 속성을 받아온다.
-// }
-
-// void	set_input_mode(void)
-// {
-// 	tcgetattr(STDIN_FILENO, &new_term); //STDIN으로부터 터미널 속성을 받아온다.
-// 	new_term.c_lflag &= ~(ICANON | ECHO); //ICANON, ECHO 속성을 off
-// 	new_term.c_cc[VMIN] = 1;
-// 	new_term.c_cc[VTIME] = 0;
-// 	tcsetattr(STDIN_FILENO, TCSANOW, &new_term);	
-// }
-
-// void	reset_input_mode(void)
-// {
-// 	tcsetattr(STDIN_FILENO, TCSANOW, &org_term);
-// }
-
-void	sigint_handler(int signal)
-{
-  	struct termios new_term;
-    struct termios temp;
-
-    (void)signal;
-    global_signal = 1;
-    tcgetattr(STDIN_FILENO, &new_term);
-    tcgetattr(STDIN_FILENO, &temp);
-    new_term.c_lflag &= ~(ICANON | ECHO | ECHOCTL);
-    new_term.c_cc[VMIN] = 1;
-    new_term.c_cc[VTIME] = 0;
-    tcsetattr(STDIN_FILENO, TCSANOW, &new_term);
-
-    write(1, "\n", 1);
-    rl_on_new_line();
-	rl_replace_line("", 0);
-    rl_redisplay();
-    tcsetattr(STDIN_FILENO, TCSANOW, &temp);
-}
-
-void	sigint_heredoc(int signal)
-{
-	(void)signal;
-	global_signal = 1;
-	//rl_replace_line("", 0);
-	//write(1, "\n",1);
-	// rl_on_new_line();
-	rl_redisplay();
-	exit(1);
-}
-
-void	sigint_heredoc1(int signal)
-{
-	(void)signal;
-	global_signal = 1;
-	rl_replace_line("", 0);
-	rl_redisplay();
-	// write(1, "\n",1);
-	// rl_on_new_line();
-}
-
-void	sigint_child(int signal)
-{
-	(void)signal;
-	global_signal = 1;
-	// rl_redisplay();
-	write(1, "^C\n", 3);
-	rl_redisplay();
-}
-
 int main(int ac, char **av, char ** envp)
 {
 	global_signal = 0;
 	(void)ac;
 	(void)av;
-    // signal(SIGQUIT, SIG_IGN);
-    // signal(SIGINT, sigint_handler);
 	readlilne_tester(envp);
 }
 
@@ -124,8 +52,6 @@ void	readlilne_tester(char **envp)
 		else
 			continue;
 		free(temp);
-    	// signal(SIGQUIT, SIG_IGN);
-    	// signal(SIGINT, sigint_handler);
 		close(0);
 		close(1);
 		dup2(node->origin_in, 0);

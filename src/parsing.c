@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 14:06:50 by minjcho           #+#    #+#             */
-/*   Updated: 2023/08/21 10:38:53 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/21 14:28:39 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,6 +123,7 @@ void	fill_rest_struct(t_mini **mini)
 		(*mini)[i].origin_out = dup(1);
 		(*mini)[i].is_heredoc = 0;
 		(*mini)[i].builtin_cnt = 0;
+		(*mini)[i].is_signal = 0;
 		i++;
 	}
 }

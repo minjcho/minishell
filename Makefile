@@ -91,6 +91,7 @@ SOURCES_NAMES	=	builtin_ready.c \
 					parsing.c \
 					process_utils.c \
 					process.c \
+					signal.c \
 					redirection_set.c \
 					redirection_util.c
 

@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 20:41:21 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/18 20:56:44 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/21 14:31:01 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,10 +38,10 @@ void	exec_fork(t_params *p, int *cur_pipe)
 	pid_t	id1;
 
 	id1 = fork();
-	signal(SIGINT, sigint_child);
 	if (id1 == 0)
 	{
-
+		signal(SIGQUIT, SIG_DFL);
+		signal(SIGINT, SIG_DFL);
 		handle_pipe_close(p, cur_pipe);
 		child_execve(p->data, p->env, p->i);
 	}
@@ -64,7 +64,7 @@ void	exec_cmd(t_mini *data, t_env *env)
 	while (++i < data->cnt)
 	{
 		redirection_set(&data[i], env);
-		if(data[i].input_fd == -1)
+		if(data[i].input_fd == -1 || data[i].is_signal)
 			continue;
 		pipe(cur_pipe);
 		p.data = data;
@@ -97,6 +97,8 @@ void	parent_set(t_mini *data, int *cur_pipe, int *prev_pipe, int i)
 		*prev_pipe = cur_pipe[0];
 	else
 		close(cur_pipe[0]);
+	signal(SIGQUIT, SIG_IGN);
+	signal(SIGINT, SIG_IGN);
 }
 
 // void	exec_cmd(t_mini *data, t_env *env)
