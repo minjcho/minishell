@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 20:47:56 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/21 14:59:00 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/21 15:33:55 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,14 +45,14 @@ void	echo_write(t_mini *data, int option_idx)
 	i = -1;
 	while (data->command[option_idx] && data->command[option_idx][++i])
 	{
-		if (data->command[option_idx][i] == '$' && \
-		data->command[option_idx][i + 1] == '?')
-		{
-			i++;
-			ft_putnbr_fd(global_signal, 1);
-			global_signal = 0;
-		}
-		else
+		// if (data->command[option_idx][i] == '$' && \
+		// data->command[option_idx][i + 1] == '?')
+		// {
+		// 	i++;
+		// 	ft_putnbr_fd(global_signal, 1);
+		// 	global_signal = 0;
+		// }
+		// else
 			write(1, &data->command[option_idx][i], 1);
 	}
 	if (option_idx != data->cmd_size - 1)

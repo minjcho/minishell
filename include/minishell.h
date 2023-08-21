@@ -154,6 +154,9 @@ void	node_free(t_mini *node);
 //process_utils.c
 char	**cmd_realoc(t_mini *data);
 int		token_counter(t_mini *data);
+int		is_redirection2(char *str);
+void	ft_wait(int n);
+void	origin_dup(t_mini *data, int i);
 
 //redirection_set.c
 void	redirection_set(t_mini *data, t_env *env);
@@ -168,96 +171,60 @@ void	handle_pipe_close(t_params *p, int *cur_pipe);
 void	exec_fork(t_params *p, int *cur_pipe);
 void	exec_cmd(t_mini *data, t_env *env);
 void	parent_set(t_mini *data, int *cur_pipe, int *prev_pipe, int i);
-//heredoc.c
-
-void	file_open(t_mini *data, int i);
 
 //redirection_util.c
-void	file_create(t_mini *data, int i, int flag);
-void	file_open(t_mini *data, int i);
+int		ft_strcmp(char *s1, char *s2);
 void	set_cmd_null(t_mini *data, int start, int end);
 
-//redirection_set.c
-int		redirection_ready(t_mini *data);
-void	set_redirection(t_mini *data, int i);
-int		is_redirection2(char *str);
-
-//file util
-// int		is_argument(char **command, t_mini *data);
-
-//process
-void	node_free(t_mini *node);
-//void	process_start2(t_mini *data);
-// void	process_start2(t_mini *data, t_env *env);
-//void	exec_cmd(t_mini *data);
+//cmd.c
+void	first_excute(t_mini *data, t_env *env);
 void	cmd_find(t_mini *data, t_env *env);
 void	cmd_start(t_mini *data, char **split_path, t_env *env);
-char	**cmd_realoc(t_mini *data);
 
 //free
 void	command_free(char **command);
 void	node_free(t_mini *node);
-// t_env	*env_cpy(void);
+void	command_free2(char **command, int size);
+void	node_free2(t_mini *node);
+void	env_free(t_env_node *node);
 
-char	*ft_getenv(char *key, t_env *env);
-char	*ft_getexport(char *key, t_env *env);
-void	ft_setexport(char *key,char *value, t_env *env);
-void	ft_setenv(char *key, char *value, t_env *env);
-char	**env_tochar(t_env_node *env);
-
+//do_cd.c
 void	goto_directory(char *target, t_env *env);
+void	do_cd(t_mini *data, t_env *env);
 void	home_directory(t_env *env);
 void	back_directory(t_env *env);
-int		ft_strcmp(char *s1, char *s2);
 
 // builtin
 void	builtin_counter(t_mini *data);
 int		builtin_check(t_mini *data);
-void	do_builtin(t_mini *data, t_env *env);// seperate input &data[i];
-int	is_dollar(char *str);
-
-// builtin cd
-void	do_cd(t_mini *data, t_env *env);
-// void	do_cd2(char *to_directory, t_mini *data, t_env *env);
-// int		to_back_directory(char *to_directory);
-// int		to_home_directory(char *to_directory);
+void	do_builtin(t_mini *data, t_env *env);
 
 // builtin echo
 void	echo_write(t_mini *data, int option_idx);
 void	do_echo(t_mini *data);
 int		is_echo_option(t_mini *data);
-//void	builtin_counter2(t_mini *data);
-//void	echo_option_checker(t_mini *data);
 
-// builtin pwd
-//void	do_pwd(t_mini *data, t_env *env);
+// do_env.c
 void	do_env(t_env *env);
+
+// builtin exit
 void	do_exit(t_mini *data);
 void	do_exit2(char * str);
 void	do_exit3(int temp);
+int		str_digit(char *str);
 
-// builtin unset
-void	do_unset(t_mini *data, t_env *env);
-//builtin export
+//builtin export , export2
 void	do_export(t_mini *data, t_env *env);
 void	export_sorting(t_env *env);
 void	export_print(t_env *env);
-void	export_val(t_mini *data, t_env *env);
 void	export_val2(t_mini *data, t_env *env);
 int		export_valid_check(char *key);
 int		export_valid_check2(char *str);
 void	set_export_env(char *key, char *value, t_env *env);
+int		equal_checker(char *str);
+int		is_equal(char *str);
 
-int	equal_checker(char *str);
-int	is_equal(char *str);
-//here_doc
-// char	*set_temp_file(t_mini *data, int k);
-// void	do_heredoc(t_mini *data, char **limmiter, char **temp_files);
-// void	heredoc_ready(t_mini *data, t_env *env);
-int		heredoc_counter(t_mini *data);
-// void	temp_deleter(t_mini *data);
-
-int			ft_envlen(t_env_node *node);
+//env_uitls2.c
 void		ft_setexport(char *key, char *value, t_env *env);
 t_env_node	*realloc_evnode(char *key, char *value, t_env_node *node, int flag);
 void		ft_nodecpy(t_env_node *new_node, t_env_node *old, char *delete);
@@ -265,52 +232,35 @@ void		ft_nodecpy(t_env_node *new_node, t_env_node *old, char *delete);
 //error_msg
 //error.c error2.c
 void	error_export_valid(char *key);
-// void	error_oldpath_not_set(void);
 void	error_malloc(void);
 void	error_pipe(void);
 void	error_fork(void);
 void    error_file(char *file);
 void	error_exit(char *str);
 void	error_exit2(void);
-void	error_execve(void);
-//void	error_cmdnotfound(char *str, t_mini *data);
-void	first_excute(t_mini *data, t_env *env);
-int		str_digit(char *str);
 
-//free
-void	env_free(t_env_node *node);
-//temp
-
-void	heredoc_read(char *limiter, int *fd, t_env *env);
+//heredoc.c
 int		dollar_counter(char *str);
-
-void	ft_wait(int n);
-void	parentset(t_mini *data, int *cur_pipe, int *prev_pipe, int i);
-void	childset(t_mini *data, t_env *env, int prev_pipe, int *cur_pipe);
-
+void	heredoc_read(char *limiter, int *fd, t_env *env);
 void	dollor_conver(char *str, int *fd, t_env* env);
-int	dollar_conver2(int i, t_env *env, char *str, int *fd);
-int	dollar_conver3(int i, char *str, int *fd);
+int		dollar_conver2(int i, t_env *env, char *str, int *fd);
+int		dollar_conver3(int i, char *str, int *fd);
+
+//env_set.c
 void    env_init(t_env *env, char **envp);
 void	envp_split(t_env *env, char **envp);
 int		envp_size(char **envp);
 void	env_substr(t_env *env, char **envp, int i, int j);
 
-void	sigint_heredoc(int signal);
-void	sigint_child(int signal);
-void	sigint_heredoc1(int signal);
+//signal
 void	sigint_handler(int signal);
 void	signal_main(void);
-void	origin_dup(t_mini *data, int i);
-
 void    signal_heredoc(t_mini *data, int status);
 void    heredoc_signal_red(pid_t id, int *fd, t_mini *data);
 
-void	command_free2(char **command, int size);
-void	node_free2(t_mini *node);
-
-void put_struct(t_mini **mini, char **tmp_command);
-char **split_string(const char *input);
+//minjcho
+void 	put_struct(t_mini **mini, char **tmp_command);
+char 	**split_string(const char *input);
 void	parsing(t_mini **mini, char *line);
-char is_special(char c);
+char 	is_special(char c);
 #endif
