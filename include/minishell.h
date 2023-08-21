@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 16:14:11 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/21 10:37:57 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/18 17:27:37jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -301,6 +301,8 @@ void	sigint_heredoc1(int signal);
 void	sigint_handler(int signal);
 
 
+void	command_free2(char **command, int size);
+void	node_free2(t_mini *node);
 
 void put_struct(t_mini **mini, char **tmp_command);
 char **split_string(const char *input);

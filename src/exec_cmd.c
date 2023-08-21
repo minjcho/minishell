@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 14:14:16 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/21 10:19:32 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/21 11:09:08 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,7 +116,8 @@ void	readlilne_tester(char **envp)
 		{
 			parsing(&node, temp);
 			exec_cmd(node, &env);
-			node_free(node);
+			//node_free(node);
+			node_free2(node);
 			// free(temp);
 			//command_free(token);
 		}
