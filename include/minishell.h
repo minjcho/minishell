@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 16:14:11 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/21 18:05:28 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/21 18:15:03 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -260,7 +260,7 @@ void    heredoc_signal_red(pid_t id, int *fd, t_mini *data);
 
 //minjcho
 void 	put_struct(t_mini **mini, char **tmp_command);
-char 	**split_string(const char *input);
+char 	**split_string(char *input);
 void	parsing(t_mini **mini, char *line);
 char 	is_special(char c);
 #endif
