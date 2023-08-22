@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
+/*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 14:06:50 by minjcho           #+#    #+#             */
-/*   Updated: 2023/08/21 18:13:03 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/22 16:43:17 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -208,15 +208,26 @@ void	fill_rest_struct(t_mini **mini)
 	}
 }
 
+// char	**parsing(t_mini **mini, char *line)
+// {
+// 	int		i;
+// 	char	**tmp_command;
+
+// 	i = 0;
+// 	tmp_command = split_string(line);
+// 	put_struct(mini, tmp_command);
+// 	fill_rest_struct(mini);
+// 	return (tmp_command);
+// }
+
 void	parsing(t_mini **mini, char *line)
 {
-	int		i;
 	char	**tmp_command;
 
-	i = 0;
 	tmp_command = split_string(line);
 	put_struct(mini, tmp_command);
 	fill_rest_struct(mini);
+	command_free(tmp_command);
 }
 
 bool	consecutive_redirection(t_mini *mini)
@@ -548,7 +559,7 @@ bool	check_struct(t_mini	*mini, t_env *env)
 		struct_size++;
 	while (mini[idx].command)
 	{
-		if (mini[idx].cmd_size == 0 && idx != struct_size - 1)
+		if (mini[idx].cmd_size == 0 && idx != struct_size)
 		{
 			printf("Error: Empty command\n");
 			return (true);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   do_echo.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
+/*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 20:47:56 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/21 18:06:26 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/22 16:34:19 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,9 +15,7 @@
 void	do_echo(t_mini *data)
 {
 	int		option_idx;
-	int		i;
 
-	i = 0;
 	option_idx = is_echo_option(data);
 	if (option_idx > 1)
 	{
