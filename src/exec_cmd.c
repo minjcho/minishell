@@ -6,7 +6,7 @@
 /*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 14:14:16 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/23 15:12:08 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/08/23 19:27:45 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,10 +65,18 @@ void	readlilne_tester(char **envp)
 
 	while (1)
 	{
-		temp = get_user_input();
-		
+		signal_main();
+		temp = readline("minishell : ");
+		if (!temp)
+			exit(0);
 		if (*temp)
-			process_input(temp, &node, &env);
+		{
+			add_history(temp);
+			parsing(&node, temp);
+			if (check_struct(node, &env) == false)
+				exec_cmd(node, &env);
+			node_free2(node);
+		}
 		else
 		{
 			free(temp);

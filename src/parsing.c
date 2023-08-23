@@ -6,7 +6,7 @@
 /*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 14:06:50 by minjcho           #+#    #+#             */
-/*   Updated: 2023/08/23 19:11:13 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/08/23 19:29:14 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,8 +63,10 @@ void	fill_rest_struct(t_mini **mini)
 
 void	parsing(t_mini **mini, char *line)
 {
+	int		i;
 	char	**tmp_command;
 
+	i = 0;
 	tmp_command = split_string(line);
 	put_struct(mini, tmp_command);
 	fill_rest_struct(mini);
@@ -84,7 +86,11 @@ bool	check_pipe(t_mini *mini)
 		{
 			if (mini[idx].command[jdx][0] == '|' \
 				&& ft_strlen(mini[idx].command[jdx]) > 1)
+			if (mini[idx].command[jdx][0] == '|' \
+				&& ft_strlen(mini[idx].command[jdx]) > 1)
 			{
+				ft_putstr_fd("Error: syntax error near \
+								unexpected token `|'\n", 2);
 				ft_putstr_fd("Error: syntax error near \
 								unexpected token `|'\n", 2);
 				return (true);
@@ -158,6 +164,7 @@ bool	check_struct(t_mini	*mini, t_env *env)
 	{
 		if (mini[idx].cmd_size == 0 && idx != struct_size)
 		{
+			ft_putstr_fd("Error: syntax error near unexpected token `|'\n", 2);
 			ft_putstr_fd("Error: syntax error near unexpected token `|'\n", 2);
 			return (true);
 		}

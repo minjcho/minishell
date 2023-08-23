@@ -5,13 +5,30 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/07/27 16:14:11 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/23 17:47:50 by minjcho          ###   ########.fr       */
+/*   Created: Invalid date        by                   #+#    #+#             */
+/*   Updated: 2023/08/23 19:25:44 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+
 #ifndef MINISHELL_H
 # define MINISHELL_H
+
+# include <string.h>
+# include <errno.h>
+# include <stdio.h>
+# include <stdlib.h>
+# include <unistd.h>
+# include <fcntl.h>
+# include <readline/readline.h>
+# include <readline/history.h>
+# include <termios.h>
+# include <sys/types.h>
+# include <sys/wait.h>
+# include <sys/stat.h>
+# include <signal.h>
+# include <stdbool.h>
+# include "../libft/libft.h"
 
 # include <string.h>
 # include <errno.h>
@@ -34,11 +51,13 @@ typedef struct s_env_node
 	char	*key;
 	char	*value;
 }	t_env_node;
+}	t_env_node;
 
 typedef struct s_env
 {
 	t_env_node	*node;
 	t_env_node	*export;
+}	t_env;
 }	t_env;
 
 typedef struct s_mini
@@ -56,15 +75,26 @@ typedef struct s_mini
 	int		builtin_cnt;
 	int		is_signal;
 }	t_mini;
+}	t_mini;
 
 typedef struct  s_params
 {
+    t_mini		*data;
     t_mini		*data;
     t_env       *env;
     int         i;
     int         prev_pipe;
 }	t_params;
+}	t_params;
 
+typedef struct	s_state
+{
+	char	**result;
+	int		idx;
+	size_t	i;
+	size_t	start;
+	char	quote;
+}	t_state;
 typedef struct	s_state
 {
 	char	**result;
