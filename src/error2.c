@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 19:59:44 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/16 15:47:50 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/23 20:15:03 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@ void	error_cmdnotfound(char *cmd)
 {
 	char	*str;
 
+	
 	str = ": command not found\n";
 	write(2, cmd, ft_strlen(cmd));
 	write(2, str, ft_strlen(str));

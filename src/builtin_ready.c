@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 20:13:22 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/23 13:42:28 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/23 20:19:17 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,7 +48,6 @@ int	builtin_check(t_mini *data)
 {
 	char	*temp;
 
-	ft_putnbr_fd(data->cmd_size, 2);
 	if (data->command[0])
 	{
 		temp = data->command[0];
