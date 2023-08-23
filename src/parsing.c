@@ -6,35 +6,35 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 14:06:50 by minjcho           #+#    #+#             */
-/*   Updated: 2023/08/23 13:34:56 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/23 20:12:38 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char	**split_string(char *input)
-{
-	const size_t	len = ft_strlen(input);
-	t_state			state;
+// char	**split_string(char *input)
+// {
+// 	const size_t	len = ft_strlen(input);
+// 	t_state			state;
 
-	state.result = (char **)malloc((len + 1) * sizeof(char *));
-	state.idx = 0;
-	state.i = 0;
-	while (state.i < len)
-	{
-		state.i = skip_spaces(input, len, state.i);
-		if (state.i == len)
-			break ;
-		state.start = state.i;
-		if (input[state.i] == '\'' || input[state.i] == '\"')
-			state.quote = input[state.i];
-		else
-			state.quote = 0;
-		split_segment(&state, input, len);
-	}
-	state.result[state.idx] = NULL;
-	return (state.result);
-}
+// 	state.result = (char **)malloc((len + 1) * sizeof(char *));
+// 	state.idx = 0;
+// 	state.i = 0;
+// 	while (state.i < len)
+// 	{
+// 		state.i = skip_spaces(input, len, state.i);
+// 		if (state.i == len)
+// 			break ;
+// 		state.start = state.i;
+// 		if (input[state.i] == '\'' || input[state.i] == '\"')
+// 			state.quote = input[state.i];
+// 		else
+// 			state.quote = 0;
+// 		split_segment(&state, input, len);
+// 	}
+// 	state.result[state.idx] = NULL;
+// 	return (state.result);
+// }
 
 void	fill_rest_struct(t_mini **mini)
 {
@@ -84,10 +84,63 @@ bool	check_pipe(t_mini *mini)
 		{
 			if (mini[idx].command[jdx][0] == '|' \
 				&& ft_strlen(mini[idx].command[jdx]) > 1)
+			if (mini[idx].command[jdx][0] == '|' \
+				&& ft_strlen(mini[idx].command[jdx]) > 1)
 			{
 				ft_putstr_fd("Error: syntax error near \
 								unexpected token `|'\n", 2);
+				ft_putstr_fd("Error: syntax error near \
+								unexpected token `|'\n", 2);
 				return (true);
+			}
+			jdx++;
+		}
+		idx++;
+	}
+	return (false);
+}
+
+int	skip_quotes(char *command, int idx)
+{
+	char	quote;
+
+	quote = command[idx];
+	idx++;
+	while (command[idx] && command[idx] != quote)
+		idx++;
+
+	if (command[idx] == quote)
+		return (idx + 1);
+	else 
+	{
+		ft_putstr_fd("Error: unclosed quote\n", 2);
+		return (-2);
+	}
+}
+
+bool	is_open(t_mini *mini)
+{
+	int	idx;
+	int	jdx;
+	int	kdx;
+
+	idx = 0;
+	while (mini[idx].command)
+	{
+		jdx = 0;
+		while (jdx < mini[idx].cmd_size)
+		{
+			kdx = 0;
+			while (mini[idx].command[jdx][kdx])
+			{
+				if (mini[idx].command[jdx][kdx] == '\'' || mini[idx].command[jdx][kdx] == '\"')
+				{
+					kdx = skip_quotes(mini[idx].command[jdx], kdx);
+					if (kdx == -2)
+						return (true);
+				}
+				else
+					kdx++;
 			}
 			jdx++;
 		}
@@ -110,10 +163,13 @@ bool	check_struct(t_mini	*mini, t_env *env)
 		if (mini[idx].cmd_size == 0 && idx != struct_size)
 		{
 			ft_putstr_fd("Error: syntax error near unexpected token `|'\n", 2);
+			ft_putstr_fd("Error: syntax error near unexpected token `|'\n", 2);
 			return (true);
 		}
 		idx++;
 	}
+	if (is_open(mini))
+		return (true);
 	if (check_redirection(mini))
 		return (true);
 	if (check_pipe(mini))
