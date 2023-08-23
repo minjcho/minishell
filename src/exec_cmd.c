@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
+/*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 14:14:16 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/22 16:32:31 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/23 13:24:38 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,10 +31,11 @@ void	readlilne_tester(char **envp)
 	{
 		signal_main();
 		temp = readline("minishell : ");
-		if (!temp)
-			exit(0);
+		// if (!temp)
+		// 	exit(0);
 		if (*temp)
 		{
+			add_history(temp);
 			parsing(&node, temp);
 			if (check_struct(node, &env) == false)
 				exec_cmd(node, &env);

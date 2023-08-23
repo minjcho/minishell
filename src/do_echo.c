@@ -6,7 +6,7 @@
 /*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 20:47:56 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/22 16:34:19 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/08/23 11:10:30 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,9 @@
 void	do_echo(t_mini *data)
 {
 	int		option_idx;
+	int		i;
 
+	i = 0;
 	option_idx = is_echo_option(data);
 	if (option_idx > 1)
 	{
@@ -43,14 +45,6 @@ void	echo_write(t_mini *data, int option_idx)
 	i = -1;
 	while (data->command[option_idx] && data->command[option_idx][++i])
 	{
-		// if (data->command[option_idx][i] == '$' && \
-		// data->command[option_idx][i + 1] == '?')
-		// {
-		// 	i++;
-		// 	ft_putnbr_fd(global_signal, 1);
-		// 	global_signal = 0;
-		// }
-		// else
 		write(1, &data->command[option_idx][i], 1);
 	}
 	if (option_idx != data->cmd_size - 1)
