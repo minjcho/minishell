@@ -36,13 +36,6 @@ SOURCES_NAMES	=	builtin_ready.c \
 					parsing_env.c \
 					parsing_env_utils.c \
 					parsing_env_utils1.c \
-					parsing_utils.c \
-					parsing_split_utils.c \
-					parsing_put.c \
-					parsing_check_utils.c \
-					parsing_env.c \
-					parsing_env_utils.c \
-					parsing_env_utils1.c \
 					process_utils.c \
 					process.c \
 					signal.c \
