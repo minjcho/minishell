@@ -6,7 +6,7 @@
 /*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 13:00:37 by minjcho           #+#    #+#             */
-/*   Updated: 2023/08/23 13:02:01 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/08/23 16:08:04 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,27 +42,18 @@ void	allocate_and_set_command(t_mini *mini, char **tmp_command, \
 	mini->cmd_size = cmd_count;
 }
 
-int	get_command_count(char **tmp_command)
+int	get_command_count(char **tmp_command, int start_idx, int i)
 {
-	int	i;
 	int	count;
+	int	j;
 
-	i = 0;
+	j = start_idx;
 	count = 0;
-	while (tmp_command[i])
+	while (j <= i)
 	{
-		if (ft_strcmp(tmp_command[i], "|") == 0 || \
-			tmp_command[i + 1] == NULL)
-		{
-			if (tmp_command[i + 1] == NULL && \
-				ft_strcmp(tmp_command[i], "|") != 0)
-				count++;
-			else
-				count = 0;
-		}
-		else
+		if (ft_strcmp(tmp_command[j], "|") != 0)
 			count++;
-		i++;
+		j++;
 	}
 	return (count);
 }
@@ -93,7 +84,7 @@ void	put_struct(t_mini **mini, char **tmp_command)
 	{
 		if (ft_strcmp(tmp_command[i], "|") == 0 || tmp_command[i + 1] == NULL)
 		{
-			cmd_count = get_command_count(tmp_command);
+			cmd_count = get_command_count(tmp_command, start_idx, i);
 			allocate_and_set_command(&(*mini)[cmd_idx], tmp_command, \
 									cmd_count, start_idx);
 			update_indices_and_count(&cmd_count, &cmd_idx, &start_idx, i);

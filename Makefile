@@ -1,7 +1,7 @@
 NAME			= minishell
 CC				= cc
 LIB_FLAG		= -Llibft -lft
-CFLAGS			= -Iinclude -g -Wall -Wextra -Werror
+CFLAGS			= -Iinclude -g
 READLINE_FLAG	= -lreadline -L${HOME}/.brew/opt/readline/lib
 READLINE_INC	= -I${HOME}/.brew/opt/readline/include
 

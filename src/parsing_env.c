@@ -6,7 +6,7 @@
 /*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 13:05:13 by minjcho           #+#    #+#             */
-/*   Updated: 2023/08/23 13:05:21 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/08/23 19:13:38 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,24 +77,25 @@ void	replace_env_in_double_quote(char **str, t_env *env)
 	}
 }
 
-void	process_double_quoted_str(char **str, t_env *env)
+char	*process_double_quoted_str(char *str, t_env *env)
 {
 	int		len;
 	char	*trimmed_str;
 
-	len = ft_strlen(*str);
+	len = ft_strlen(str);
 	if (len > 2)
 	{
-		replace_env_in_double_quote(str, env);
-		trimmed_str = ft_strtrim(*str, "\"");
-		free(*str);
-		*str = trimmed_str;
+		replace_env_in_double_quote(&str, env);
+		trimmed_str = ft_strtrim(str, "\"");
+		free(str);
+		return (trimmed_str);
 	}
 	else if (len == 2)
 	{
-		free(*str);
-		*str = ft_strdup("");
+		free(str);
+		return (ft_strdup(""));
 	}
+	return (str);
 }
 
 void	remove_double_quotation(t_mini *mini, t_env *env)
@@ -103,16 +104,17 @@ void	remove_double_quotation(t_mini *mini, t_env *env)
 	int		jdx;
 
 	idx = 0;
-	jdx = 0;
 	while (mini[idx].command)
 	{
+		jdx = 0;
 		while (jdx < mini[idx].cmd_size)
 		{
 			if (mini[idx].command[jdx][0] == '\"' && \
 				mini[idx].command[jdx][ft_strlen(mini[idx].command[jdx]) \
 										- 1] == '\"')
 			{
-				process_double_quoted_str(&(mini[idx].command[jdx]), env);
+				mini[idx].command[jdx] = \
+					process_double_quoted_str((mini[idx].command[jdx]), env);
 			}
 			jdx++;
 		}

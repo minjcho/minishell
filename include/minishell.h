@@ -6,7 +6,7 @@
 /*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 16:14:11 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/23 13:12:21 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/08/23 17:47:50 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -279,17 +279,17 @@ char	*ft_strstr(char *str, char *to_find);
 char 	is_special(char c);
 
 //parsing_split_utils
-size_t	skip_spaces(char *input, size_t len, size_t i);
-size_t	split_by_quote(char *input, size_t len, size_t i, char quote);
-size_t	split_by_special(char *input, size_t len, size_t i);
-size_t	split_by_char(char *input, size_t len, size_t i);
-void	split_segment(t_state *state, char *input, size_t len);
+// size_t	skip_spaces(char *input, size_t len, size_t i);
+// size_t	split_by_quote(char *input, size_t len, size_t i, char quote);
+// size_t	split_by_special(char *input, size_t len, size_t i);
+// size_t	split_by_char(char *input, size_t len, size_t i);
+// void	split_segment(t_state *state, char *input, size_t len);
 
 //parsing_put
 int		count_pipes(char **tmp_command);
 void	allocate_and_set_command(t_mini *mini, char **tmp_command, \
 									int cmd_count, int start_idx);
-int		get_command_count(char **tmp_command);
+// int		get_command_count(char **tmp_command);
 void	update_indices_and_count(int *cmd_count, int *cmd_idx, \
 									int *start_idx, int i);
 void	put_struct(t_mini **mini, char **tmp_command);
@@ -301,11 +301,13 @@ bool	check_empty_redirection(t_mini *mini);
 bool	has_invalid_redirection(char *token);
 bool	check_redirection(t_mini *mini);
 
+char **split_string(char *input);
+
 //parsing_env
 void	env_replace(char **str, char *tmp, t_env *env);
 char	*find_env_variable(char *str);
 void	replace_env_in_double_quote(char **str, t_env *env);
-void	process_double_quoted_str(char **str, t_env *env);
+// void	process_double_quoted_str(char **str, t_env *env);
 void	remove_double_quotation(t_mini *mini, t_env *env);
 void	put_global_signal(char **str);
 bool	replace_dollar_question(t_mini **mini);
