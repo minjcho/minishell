@@ -58,7 +58,7 @@
 NAME			= minishell
 CC				= cc
 LIB_FLAG		= -Llibft -lft
-CFLAGS			= -Iinclude -g -Wall -Wextra -Werror  #추가 해야함
+CFLAGS			= -Iinclude -Wall -Wextra -Werror  #추가 해야함
 READLINE_FLAG	= -lreadline -L/Users/jinhyeok/.brew/opt/readline/lib
 READLINE_INC	= -I/Users/jinhyeok/.brew/opt/readline/include
 # READLINE_FLAG	= -lreadline -L/opt/homebrew/opt/readline/lib	# minjcho

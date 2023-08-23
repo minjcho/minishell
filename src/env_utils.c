@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 20:35:31 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/16 15:39:15 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/22 16:38:10 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,11 +68,9 @@ int	ft_envlen(t_env_node *node)
 
 char	**env_tochar(t_env_node *env)
 {
-	int		i;
 	int		size;
 	char	**ret;
 
-	i = -1;
 	ret = NULL;
 	size = 0;
 	if (env)

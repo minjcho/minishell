@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 20:13:22 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/17 15:45:22 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/22 16:37:38 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -89,9 +89,6 @@ void	do_builtin(t_mini *data, t_env *env)
 
 int	only_builtin(t_mini *data, t_env *env)
 {
-	int	i;
-
-	i = -1;
 	builtin_counter(data);
 	if (data->builtin_cnt == 1 && data->cnt == 1)
 	{
