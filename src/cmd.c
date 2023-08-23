@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/16 19:34:33 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/21 14:58:17 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/23 14:12:27 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,6 +45,15 @@ void	cmd_start(t_mini *data, char **split_path, t_env *env)
 			{
 				slash_join = ft_strjoin(split_path[i], "/");
 				cmd = ft_strjoin(slash_join, data->command[j]);
+				char **test;
+				test = cmd_realoc(data);
+				for (int i = 0 ; test[i]; i++)
+				{
+					ft_putstr_fd(test[i], 2);
+					ft_putnbr_fd(i, 2);
+					ft_putstr_fd("\n", 2);
+				}
+				exit(1);
 				if (!access(cmd, X_OK))
 					execve(cmd, cmd_realoc(data), env_tochar(env->node));
 				free(cmd);

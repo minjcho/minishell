@@ -6,48 +6,12 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 16:14:11 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/22 16:32:35 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/23 13:34:08 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef MINISHELL_H
 # define MINISHELL_H
-
-typedef struct s_env_node
-{
-	char	*key;
-	char	*value;
-} t_env_node;
-
-typedef struct s_env
-{
-	t_env_node	*node;
-	t_env_node	*export;
-} t_env;
-
-typedef struct s_mini
-{
-	char	**command;
-	int		doc_cnt;
-	int		cmd_size;
-	int		delete;
-	int		output_fd;
-	int		input_fd;
-	int		origin_in;
-	int		origin_out;
-	int		cnt;
-	int		is_heredoc;
-	int		builtin_cnt;
-	int		is_signal;
-} t_mini; 
-
-typedef struct  s_params
-{
-    t_mini      *data;
-    t_env       *env;
-    int         i;
-    int         prev_pipe;
-} t_params;
 
 # include <string.h>
 # include <errno.h>
@@ -64,6 +28,51 @@ typedef struct  s_params
 # include <signal.h>
 # include <stdbool.h>
 # include "../libft/libft.h"
+
+typedef struct s_env_node
+{
+	char	*key;
+	char	*value;
+}	t_env_node;
+
+typedef struct s_env
+{
+	t_env_node	*node;
+	t_env_node	*export;
+}	t_env;
+
+typedef struct s_mini
+{
+	char	**command;
+	int		doc_cnt;
+	int		cmd_size;
+	int		delete;
+	int		output_fd;
+	int		input_fd;
+	int		origin_in;
+	int		origin_out;
+	int		cnt;
+	int		is_heredoc;
+	int		builtin_cnt;
+	int		is_signal;
+}	t_mini;
+
+typedef struct  s_params
+{
+    t_mini		*data;
+    t_env       *env;
+    int         i;
+    int         prev_pipe;
+}	t_params;
+
+typedef struct	s_state
+{
+	char	**result;
+	int		idx;
+	size_t	i;
+	size_t	start;
+	char	quote;
+}	t_state;
 
 // jinhyeok exec
 // test driver;
@@ -259,10 +268,51 @@ void    signal_heredoc(t_mini *data, int status);
 void    heredoc_signal_red(pid_t id, int *fd, t_mini *data);
 
 //minjcho
-void 	put_struct(t_mini **mini, char **tmp_command);
-char 	**split_string(char *input);
 void	parsing(t_mini **mini, char *line);
-char 	is_special(char c);
 bool	check_struct(t_mini	*mini, t_env *env);
+
+//parsing_utils
+void	ft_strncpy(char *dest, char *src, int n);
+void	ft_strcpy(char *dest, char *src);
+void	ft_strcat(char *dest, char *src);
+char	*ft_strstr(char *str, char *to_find);
+char 	is_special(char c);
+
+//parsing_split_utils
+size_t	skip_spaces(char *input, size_t len, size_t i);
+size_t	split_by_quote(char *input, size_t len, size_t i, char quote);
+size_t	split_by_special(char *input, size_t len, size_t i);
+size_t	split_by_char(char *input, size_t len, size_t i);
+void	split_segment(t_state *state, char *input, size_t len);
+
+//parsing_put
+int		count_pipes(char **tmp_command);
+void	allocate_and_set_command(t_mini *mini, char **tmp_command, \
+									int cmd_count, int start_idx);
+int		get_command_count(char **tmp_command);
+void	update_indices_and_count(int *cmd_count, int *cmd_idx, \
+									int *start_idx, int i);
+void	put_struct(t_mini **mini, char **tmp_command);
+
+//parsing_check_utils
+bool	check_and_print_error(char *current, char *next);
+bool	consecutive_redirection(t_mini *mini);
+bool	check_empty_redirection(t_mini *mini);
+bool	has_invalid_redirection(char *token);
+bool	check_redirection(t_mini *mini);
+
+//parsing_env
+void	env_replace(char **str, char *tmp, t_env *env);
+char	*find_env_variable(char *str);
+void	replace_env_in_double_quote(char **str, t_env *env);
+void	process_double_quoted_str(char **str, t_env *env);
+void	remove_double_quotation(t_mini *mini, t_env *env);
+void	put_global_signal(char **str);
+bool	replace_dollar_question(t_mini **mini);
+char	*remove_quotation_from_str(char *str);
+void	remove_single_quotation_from_mini(t_mini *mini);
+void	remove_single_quotation(t_mini *mini);
+void	replace_single_env(char **command, t_env *env);
+void	replace_env(t_mini *mini, t_env *env);
 
 #endif
