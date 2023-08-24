@@ -6,7 +6,7 @@
 /*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 12:58:58 by minjcho           #+#    #+#             */
-/*   Updated: 2023/08/24 16:28:22 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/08/24 16:45:58 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ char is_special_t(char c) //
 
 size_t skip_spaces(char *input, size_t len, size_t i) //
 {
-	while (i < len && input[i] == ' ')
+	while (i < len && (input[i] == ' ' || input[i] == '\t'))
 		i++;
 	return (i);
 }
