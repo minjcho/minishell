@@ -5,6 +5,7 @@ CFLAGS			= -Iinclude -g
 READLINE_FLAG	= -lreadline -L${HOME}/.brew/opt/readline/lib
 READLINE_INC	= -I${HOME}/.brew/opt/readline/include
 
+
 SRC_DIR	= src
 OBJ_DIR	= obj
 INC_DIR	= include

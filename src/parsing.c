@@ -6,13 +6,13 @@
 /*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 14:06:50 by minjcho           #+#    #+#             */
-/*   Updated: 2023/08/24 16:45:15 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/08/24 21:15:37 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	fill_rest_struct(t_mini **mini) //
+void	fill_rest_struct(t_mini **mini)
 {
 	int	i;
 	int	command_size;
@@ -37,7 +37,7 @@ void	fill_rest_struct(t_mini **mini) //
 	}
 }
 
-bool	check_command_pipe(char **str) //
+bool	check_command_pipe(char **str)
 {
 	int	idx;
 
@@ -57,7 +57,7 @@ bool	check_command_pipe(char **str) //
 	return (true);
 }
 
-bool	parsing(t_mini **mini, char *line) //
+bool	parsing(t_mini **mini, char *line)
 {
 	char	**tmp_command;
 	bool	is_ok;
@@ -71,7 +71,7 @@ bool	parsing(t_mini **mini, char *line) //
 	return (is_ok);
 }
 
-bool	check_pipe(t_mini *mini) //
+bool	check_pipe(t_mini *mini)
 {
 	int	idx;
 	int	jdx;
@@ -82,8 +82,6 @@ bool	check_pipe(t_mini *mini) //
 		jdx = 0;
 		while (jdx < mini[idx].cmd_size)
 		{
-			if (mini[idx].command[jdx][0] == '|' \
-				&& ft_strlen(mini[idx].command[jdx]) > 1)
 			if (mini[idx].command[jdx][0] == '|' \
 				&& ft_strlen(mini[idx].command[jdx]) > 1)
 			{
@@ -100,7 +98,7 @@ bool	check_pipe(t_mini *mini) //
 	return (false);
 }
 
-int	skip_quotes(char *command, int idx) //
+int	skip_quotes(char *command, int idx)
 {
 	char	quote;
 
@@ -108,48 +106,81 @@ int	skip_quotes(char *command, int idx) //
 	idx++;
 	while (command[idx] && command[idx] != quote)
 		idx++;
-
 	if (command[idx] == quote)
 		return (idx + 1);
-	else 
+	else
 	{
 		ft_putstr_fd("Error: unclosed quote\n", 2);
 		return (-2);
 	}
 }
 
-bool	is_open(t_mini *mini) //
-{
-	int	idx;
-	int	jdx;
-	int	kdx;
+// bool	is_open(t_mini *mini)
+// {
+// 	int	idx;
+// 	int	jdx;
+// 	int	kdx;
 
-	idx = 0;
-	while (mini[idx].command)
+// 	idx = -1;
+// 	while (mini[++idx].command)
+// 	{
+// 		jdx = -1;
+// 		while (++jdx < mini[idx].cmd_size)
+// 		{
+// 			kdx = 0;
+// 			while (mini[idx].command[jdx][kdx])
+// 			{
+// 				if (mini[idx].command[jdx][kdx] == '\'' || mini[idx].command[jdx][kdx] == '\"')
+// 				{
+// 					kdx = skip_quotes(mini[idx].command[jdx], kdx);
+// 					if (kdx == -2)
+// 						return (true);
+// 				}
+// 				else
+// 					kdx++;
+// 			}
+// 		}
+// 	}
+// 	return (false);
+// }
+
+bool	is_open_in_command(char **command, int cmd_size)
+{
+	int jdx, kdx;
+
+	jdx = -1;
+	while (++jdx < cmd_size)
 	{
-		jdx = 0;
-		while (jdx < mini[idx].cmd_size)
+		kdx = 0;
+		while (command[jdx][kdx])
 		{
-			kdx = 0;
-			while (mini[idx].command[jdx][kdx])
+			if (command[jdx][kdx] == '\'' || command[jdx][kdx] == '\"')
 			{
-				if (mini[idx].command[jdx][kdx] == '\'' || mini[idx].command[jdx][kdx] == '\"')
-				{
-					kdx = skip_quotes(mini[idx].command[jdx], kdx);
-					if (kdx == -2)
-						return (true);
-				}
-				else
-					kdx++;
+				kdx = skip_quotes(command[jdx], kdx);
+				if (kdx == -2)
+					return (true);
 			}
-			jdx++;
+			else
+				kdx++;
 		}
-		idx++;
 	}
 	return (false);
 }
 
-bool	check_struct(t_mini	*mini, t_env *env) //
+bool	is_open(t_mini *mini)
+{
+	int idx;
+
+	idx = -1;
+	while (mini[++idx].command)
+	{
+		if (is_open_in_command(mini[idx].command, mini[idx].cmd_size))
+			return (true);
+	}
+	return (false);
+}
+
+bool	check_struct(t_mini	*mini, t_env *env)
 {
 	int	idx;
 	int	struct_size;

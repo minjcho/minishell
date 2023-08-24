@@ -6,13 +6,13 @@
 /*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 13:00:37 by minjcho           #+#    #+#             */
-/*   Updated: 2023/08/24 16:23:42 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/08/24 20:34:29 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int	count_pipes(char **tmp_command) //
+int	count_pipes(char **tmp_command)
 {
 	int	i;
 	int	total_commands;
@@ -28,7 +28,7 @@ int	count_pipes(char **tmp_command) //
 }
 
 void	allocate_and_set_command(t_mini *mini, char **tmp_command, \
-									int cmd_count, int start_idx) //
+									int cmd_count, int start_idx)
 {
 	int	k;
 
@@ -42,7 +42,7 @@ void	allocate_and_set_command(t_mini *mini, char **tmp_command, \
 	mini->cmd_size = cmd_count;
 }
 
-int	get_command_count(char **tmp_command, int start_idx, int i) //
+int	get_command_count(char **tmp_command, int start_idx, int i)
 {
 	int	count;
 	int	j;
@@ -59,14 +59,14 @@ int	get_command_count(char **tmp_command, int start_idx, int i) //
 }
 
 void	update_indices_and_count(int *cmd_count, int *cmd_idx, \
-									int *start_idx, int i) //
+									int *start_idx, int i)
 {
 	*cmd_count = 0;
 	(*cmd_idx)++;
 	*start_idx = i + 1;
 }
 
-void	put_struct(t_mini **mini, char **tmp_command) //
+void	put_struct(t_mini **mini, char **tmp_command)
 {
 	int	total_commands;
 	int	cmd_idx;

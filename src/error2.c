@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
+/*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 19:59:44 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/24 10:51:37 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/24 20:44:17 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	error_cmd2(char *cmd, int i)
 
 	if ((i > 0 && cmd[i - 1] == '.') && lstat(cmd, &file_stat) == 0)
 	{
-		if(S_ISDIR(file_stat.st_mode))
+		if (S_ISDIR(file_stat.st_mode))
 			str = ": is a directory\n";
 		else
 			str = ": Permission denied\n";

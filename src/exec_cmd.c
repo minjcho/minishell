@@ -6,7 +6,7 @@
 /*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 14:14:16 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/24 16:48:24 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/08/24 21:01:43 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,8 +30,7 @@ char	*get_user_input(void)
 		exit(0);
 	if (*temp)
 		add_history(temp);
-
-	return temp;
+	return (temp);
 }
 
 void	process_input(char *temp, t_mini *node, t_env *env)
@@ -44,7 +43,7 @@ void	process_input(char *temp, t_mini *node, t_env *env)
 	{
 		node_free2(node);
 		free(temp);
-		return;
+		return ;
 	}
 	if (check_struct(node, env) == false && is_ok == true)
 		exec_cmd(node, env);
@@ -67,7 +66,6 @@ void	readlilne_tester(char **envp)
 	while (1)
 	{
 		temp = get_user_input();
-		
 		if (*temp)
 			process_input(temp, node, &env);
 		else

@@ -6,13 +6,13 @@
 /*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 13:06:49 by minjcho           #+#    #+#             */
-/*   Updated: 2023/08/24 16:48:24 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/08/24 20:37:13 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	put_g_signal(char **str, int start_idx) //
+void	put_g_signal(char **str, int start_idx)
 {
 	char	*tmp;
 	char	*new_str;
@@ -32,4 +32,3 @@ void	put_g_signal(char **str, int start_idx) //
 	}
 	free(tmp);
 }
-

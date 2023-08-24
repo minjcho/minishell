@@ -6,24 +6,28 @@
 /*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 13:08:52 by minjcho           #+#    #+#             */
-/*   Updated: 2023/08/24 16:48:24 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/08/24 20:36:45 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void remove_quotation_str(char *str) //
+void	remove_quotation_str(char *str)
 {
-	int read_pos = 0;
-	int write_pos = 0;
-	char current_quote = 0;
+	int		read_pos;
+	int		write_pos;
+	char	current_quote;
 
+	read_pos = 0;
+	write_pos = 0;
+	current_quote = 0;
 	while (str[read_pos])
 	{
-		if ((str[read_pos] == '"' || str[read_pos] == '\'') && !current_quote)
+		if ((str[read_pos] == '\"' || str[read_pos] == '\'') && !current_quote)
 		{
 			current_quote = str[read_pos];
-		} else if (str[read_pos] == current_quote)
+		}
+		else if (str[read_pos] == current_quote)
 		{
 			current_quote = 0;
 		}
@@ -36,7 +40,7 @@ void remove_quotation_str(char *str) //
 	str[write_pos] = '\0';
 }
 
-void	remove_quotation_mini(t_mini *mini) // 
+void	remove_quotation_mini(t_mini *mini)
 {
 	int		idx;
 	int		jdx;
@@ -52,7 +56,7 @@ void	remove_quotation_mini(t_mini *mini) //
 	}
 }
 
-void	replace_env(t_mini *mini, t_env *env) //
+void	replace_env(t_mini *mini, t_env *env)
 {
 	int		idx;
 	int		jdx;
@@ -65,7 +69,8 @@ void	replace_env(t_mini *mini, t_env *env) //
 		jdx = -1;
 		while (++jdx < mini[idx].cmd_size)
 		{
-			did_replace = replace_env_in_double_quote(&mini[idx].command[jdx], env);
+			did_replace = \
+					replace_env_in_double_quote(&mini[idx].command[jdx], env);
 		}
 	}
 	remove_quotation_mini(mini);

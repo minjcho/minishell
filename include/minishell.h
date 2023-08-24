@@ -6,7 +6,7 @@
 /*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 16:14:11 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/24 17:08:09 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/08/24 20:41:17 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,15 +57,15 @@ typedef struct s_mini
 	int		is_signal;
 }	t_mini;
 
-typedef struct  s_params
+typedef struct s_params
 {
 	t_mini		*data;
-	t_env       *env;
-	int         i;
-	int         prev_pipe;
+	t_env		*env;
+	int			i;
+	int			prev_pipe;
 }	t_params;
 
-typedef struct	s_state
+typedef struct s_state
 {
 	char	**result;
 	int		idx;
@@ -124,7 +124,8 @@ char			**env_tochar(t_env_node *env);
 char			**env_tochar_join(int size, t_env_node *env);
 
 //env_utils2.c
-t_env_node		*realloc_evnode(char *key, char *value, t_env_node *node, int flag);
+t_env_node		*realloc_evnode(char *key, char *value, \
+									t_env_node *node, int flag);
 void			ft_nodecpy(t_env_node *new_node, t_env_node *old, char *delete);
 
 //error.c
@@ -166,7 +167,7 @@ void			red_left(t_mini *data, int i);
 void			red_right(t_mini *data, int i);
 
 //process.c
-void			child_execve(t_mini *data, t_env *env,int i);
+void			child_execve(t_mini *data, t_env *env, int i);
 void			handle_pipe_close(t_params *p, int *cur_pipe);
 void			exec_fork(t_params *p, int *cur_pipe);
 void			exec_cmd(t_mini *data, t_env *env);
@@ -210,7 +211,7 @@ void			do_env(t_env *env);
 
 // builtin exit
 void			do_exit(t_mini *data);
-void			do_exit2(char * str);
+void			do_exit2(char *str);
 void			do_exit3(int temp);
 int				str_digit(char *str);
 
@@ -227,7 +228,8 @@ int				is_equal(char *str);
 
 //env_uitls2.c
 void			ft_setexport(char *key, char *value, t_env *env);
-t_env_node		*realloc_evnode(char *key, char *value, t_env_node *node, int flag);
+t_env_node		*realloc_evnode(char *key, char *value, \
+								t_env_node *node, int flag);
 void			ft_nodecpy(t_env_node *new_node, t_env_node *old, char *delete);
 
 //error_msg
@@ -244,7 +246,7 @@ void			error_exit2(void);
 //heredoc.c
 int				dollar_counter(char *str);
 void			heredoc_read(char *limiter, int *fd, t_env *env);
-void			dollor_conver(char *str, int *fd, t_env* env);
+void			dollor_conver(char *str, int *fd, t_env *env);
 int				dollar_conver2(int i, t_env *env, char *str, int *fd);
 int				dollar_conver3(int i, char *str, int *fd);
 
