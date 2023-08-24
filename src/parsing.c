@@ -6,37 +6,13 @@
 /*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 14:06:50 by minjcho           #+#    #+#             */
-/*   Updated: 2023/08/24 16:15:06 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/08/24 16:27:07 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-// char	**split_string(char *input)
-// {
-// 	const size_t	len = ft_strlen(input);
-// 	t_state			state;
-
-// 	state.result = (char **)malloc((len + 1) * sizeof(char *));
-// 	state.idx = 0;
-// 	state.i = 0;
-// 	while (state.i < len)
-// 	{
-// 		state.i = skip_spaces(input, len, state.i);
-// 		if (state.i == len)
-// 			break ;
-// 		state.start = state.i;
-// 		if (input[state.i] == '\'' || input[state.i] == '\"')
-// 			state.quote = input[state.i];
-// 		else
-// 			state.quote = 0;
-// 		split_segment(&state, input, len);
-// 	}
-// 	state.result[state.idx] = NULL;
-// 	return (state.result);
-// }
-
-void	fill_rest_struct(t_mini **mini)
+void	fill_rest_struct(t_mini **mini) //
 {
 	int	i;
 	int	command_size;
@@ -61,7 +37,7 @@ void	fill_rest_struct(t_mini **mini)
 	}
 }
 
-bool	check_command_pipe(char **str)
+bool	check_command_pipe(char **str) //
 {
 	int	idx;
 
@@ -79,7 +55,7 @@ bool	check_command_pipe(char **str)
 	return (true);
 }
 
-bool	parsing(t_mini **mini, char *line)
+bool	parsing(t_mini **mini, char *line) //
 {
 	char	**tmp_command;
 	bool	is_ok;
@@ -93,7 +69,7 @@ bool	parsing(t_mini **mini, char *line)
 	return (is_ok);
 }
 
-bool	check_pipe(t_mini *mini)
+bool	check_pipe(t_mini *mini) //
 {
 	int	idx;
 	int	jdx;
@@ -122,7 +98,7 @@ bool	check_pipe(t_mini *mini)
 	return (false);
 }
 
-int	skip_quotes(char *command, int idx)
+int	skip_quotes(char *command, int idx) //
 {
 	char	quote;
 
@@ -140,7 +116,7 @@ int	skip_quotes(char *command, int idx)
 	}
 }
 
-bool	is_open(t_mini *mini)
+bool	is_open(t_mini *mini) //
 {
 	int	idx;
 	int	jdx;
@@ -171,7 +147,7 @@ bool	is_open(t_mini *mini)
 	return (false);
 }
 
-bool	check_struct(t_mini	*mini, t_env *env)
+bool	check_struct(t_mini	*mini, t_env *env) //
 {
 	int	idx;
 	int	struct_size;

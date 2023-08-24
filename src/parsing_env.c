@@ -6,13 +6,13 @@
 /*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 13:05:13 by minjcho           #+#    #+#             */
-/*   Updated: 2023/08/24 15:54:03 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/08/24 16:33:25 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	env_replace(char **str, char *tmp, t_env *env)
+void	env_replace(char **str, char *tmp, t_env *env) //
 {
 	char	*env_value;
 	char	*new_str;
@@ -40,22 +40,20 @@ void	env_replace(char **str, char *tmp, t_env *env)
 	free(var_with_dollar);
 }
 
-int	is_alpha_num(char c)
+int	is_alpha_num(char c) //
 {
 	if (ft_isalnum(c) || c == '_')
 		return (1);
 	return (0);
 }
 
-char	*find_env_variable(char *str)
+char	*find_env_variable(char *str) //
 {
 	int		jdx;
 	char	*tmp;
 
 	jdx = 0;
 	tmp = (char *)malloc(sizeof(char) * (ft_strlen(str) + 1));
-	// while (str[jdx] && str[jdx] != ' ' && str[jdx] != '\"' && \
-	// 		str[jdx] != '\t' && str[jdx] != '$' && str[jdx] != '\'')
 	while (str[jdx] && is_alpha_num(str[jdx]))
 	{
 		tmp[jdx] = str[jdx];
@@ -65,13 +63,14 @@ char	*find_env_variable(char *str)
 	return (tmp);
 }
 
-void	replace_env_in_double_quote(char **str, t_env *env)
+bool	replace_env_in_double_quote(char **str, t_env *env) //
 {
 	int		idx;
 	char	*tmp;
 	bool	in_single_quote;
 	bool	in_double_quote;
 	char	*start_ptr;
+	bool	did_replace;
 
 	idx = 0;
 	in_single_quote = false;
@@ -93,6 +92,7 @@ void	replace_env_in_double_quote(char **str, t_env *env)
 		else if ((*str)[idx] == '$' && (*str)[idx + 1] && (*str)[idx + 1] == '?' && in_single_quote == false)
 		{
 			put_global_signal(&(*str), idx);
+			did_replace = true;
 		}
 		else if ((*str)[idx] == '$' && is_alpha_num((*str)[idx + 1]) \
 				&& in_single_quote == false)
@@ -103,50 +103,5 @@ void	replace_env_in_double_quote(char **str, t_env *env)
 		}
 		idx++;
 	}
+	return (did_replace);
 }
-
-// char	*process_double_quoted_str(char *str, t_env *env)
-// {
-// 	int		len;
-// 	char	*trimmed_str;
-
-// 	len = ft_strlen(str);
-// 	if (len > 2)
-// 	{
-// 		replace_env_in_double_quote(&str, env);
-// 		trimmed_str = ft_strtrim(str, "\"");
-// 		free(str);
-// 		return (trimmed_str);
-// 	}
-// 	else if (len == 2)
-// 	{
-// 		free(str);
-// 		return (ft_strdup(""));
-// 	}
-// 	return (str);
-// }
-
-// void	remove_double_quotation(t_mini *mini, t_env *env)
-// {
-// 	int		idx;
-// 	int		jdx;
-
-// 	idx = 0;
-// 	while (mini[idx].command)
-// 	{
-// 		jdx = 0;
-// 		while (jdx < mini[idx].cmd_size)
-// 		{
-// 			if (mini[idx].command[jdx][0] == '\"' && \
-// 				mini[idx].command[jdx][ft_strlen(mini[idx].command[jdx]) \
-// 										- 1] == '\"')
-// 			{
-// 				mini[idx].command[jdx] = \
-// 					process_double_quoted_str((mini[idx].command[jdx]), env);
-// 			}
-// 			jdx++;
-// 		}
-// 		idx++;
-// 	}
-// }
-

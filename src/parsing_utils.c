@@ -6,13 +6,13 @@
 /*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 12:55:33 by minjcho           #+#    #+#             */
-/*   Updated: 2023/08/23 12:56:23 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/08/24 16:27:57 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	ft_strncpy(char *dest, char *src, int n)
+void	ft_strncpy(char *dest, char *src, int n) //
 {
 	int	i;
 
@@ -27,7 +27,7 @@ void	ft_strncpy(char *dest, char *src, int n)
 	}
 }
 
-void	ft_strcpy(char *dest, char *src)
+void	ft_strcpy(char *dest, char *src) //
 {
 	int	i;
 
@@ -40,7 +40,7 @@ void	ft_strcpy(char *dest, char *src)
 	dest[i] = '\0';
 }
 
-void	ft_strcat(char *dest, char *src)
+void	ft_strcat(char *dest, char *src) //
 {
 	int	i;
 	int	dest_len;
@@ -55,7 +55,7 @@ void	ft_strcat(char *dest, char *src)
 	dest[dest_len + i] = '\0';
 }
 
-char	*ft_strstr(char *str, char *to_find)
+char	*ft_strstr(char *str, char *to_find) //
 {
 	int	i;
 	int	j;
@@ -73,9 +73,4 @@ char	*ft_strstr(char *str, char *to_find)
 		i++;
 	}
 	return (0);
-}
-
-char	is_special(char c)
-{
-	return (c == '<' || c == '>' || c == '|');
 }

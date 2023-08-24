@@ -6,13 +6,13 @@
 /*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 13:02:55 by minjcho           #+#    #+#             */
-/*   Updated: 2023/08/23 13:09:33 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/08/24 16:25:38 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-bool	check_and_print_error(char *current, char *next)
+bool	check_and_print_error(char *current, char *next) //
 {
 	if (current[0] == '<' && next && (next[0] == '<' || next[0] == '>'))
 	{
@@ -27,7 +27,7 @@ bool	check_and_print_error(char *current, char *next)
 	return (false);
 }
 
-bool	consecutive_redirection(t_mini *mini)
+bool	consecutive_redirection(t_mini *mini) //
 {
 	int	idx;
 	int	jdx;
@@ -48,7 +48,7 @@ bool	consecutive_redirection(t_mini *mini)
 	return (false);
 }
 
-bool	check_empty_redirection(t_mini *mini)
+bool	check_empty_redirection(t_mini *mini) //
 {
 	int	idx;
 	int	jdx;
@@ -76,7 +76,7 @@ bool	check_empty_redirection(t_mini *mini)
 	return (false);
 }
 
-bool	has_invalid_redirection(char *token)
+bool	has_invalid_redirection(char *token) //
 {
 	if (token[0] == '<' && ft_strlen(token) > 2)
 	{
@@ -91,7 +91,7 @@ bool	has_invalid_redirection(char *token)
 	return (false);
 }
 
-bool	check_redirection(t_mini *mini)
+bool	check_redirection(t_mini *mini) //
 {
 	int	idx;
 	int	jdx;
