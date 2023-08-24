@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
+/*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/21 14:13:21 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/21 15:15:27 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/24 16:48:24 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	signal_heredoc(t_mini *data, int status)
 			dup2(pi[0], 0);
 			close(pi[0]);
 			ft_putstr_fd("\n", 2);
-			global_signal = 1;
+			g_signal = 1;
 			data->is_signal = 1;
 		}
 	}
@@ -52,7 +52,7 @@ void	sigint_handler(int signal)
 	struct termios	temp;
 
 	(void)signal;
-	global_signal = 1;
+	g_signal = 1;
 	tcgetattr(STDIN_FILENO, &new_term);
 	tcgetattr(STDIN_FILENO, &temp);
 	new_term.c_lflag &= ~(ICANON | ECHO | ECHOCTL);

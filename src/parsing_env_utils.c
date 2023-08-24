@@ -6,19 +6,19 @@
 /*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 13:06:49 by minjcho           #+#    #+#             */
-/*   Updated: 2023/08/24 16:31:20 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/08/24 16:48:24 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	put_global_signal(char **str, int start_idx) //
+void	put_g_signal(char **str, int start_idx) //
 {
 	char	*tmp;
 	char	*new_str;
 	char	*start_ptr;
 
-	tmp = ft_itoa(global_signal);
+	tmp = ft_itoa(g_signal);
 	start_ptr = ft_strstr(*str + start_idx, "$?");
 	if (start_ptr)
 	{

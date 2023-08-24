@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
+/*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 20:45:27 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/21 15:20:37 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/24 16:48:24 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -78,18 +78,18 @@ void	ft_wait(int n)
 	i = -1;
 	while (++i < n)
 		waitpid(-1, &status, 0);
-	global_signal = WEXITSTATUS(status);
+	g_signal = WEXITSTATUS(status);
 	if (WIFSIGNALED(status))
 	{
 		if (WTERMSIG(status) == SIGQUIT)
 		{
 			ft_putstr_fd("^\\Quit: 3\n", 2);
-			global_signal = 128 + SIGQUIT;
+			g_signal = 128 + SIGQUIT;
 		}
 		if (WTERMSIG(status) == SIGINT)
 		{
 			ft_putstr_fd("^C\n", 2);
-			global_signal = 128 + SIGINT;
+			g_signal = 128 + SIGINT;
 		}
 	}
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   do_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
+/*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 20:52:49 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/16 14:24:33 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/24 16:48:24 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ void	do_exit(t_mini *data)
 
 void	do_exit3(int temp)
 {
-	global_signal = temp;
+	g_signal = temp;
 	ft_putstr_fd("exit\n", 2);
 	exit(temp);
 }
@@ -61,7 +61,7 @@ int	str_digit(char *str)
 
 void	do_exit2(char *str)
 {
-	global_signal = 255;
+	g_signal = 255;
 	error_exit(str);
 	exit(255);
 }

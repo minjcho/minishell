@@ -6,7 +6,7 @@
 /*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 13:05:13 by minjcho           #+#    #+#             */
-/*   Updated: 2023/08/24 16:33:25 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/08/24 16:48:24 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,7 +91,7 @@ bool	replace_env_in_double_quote(char **str, t_env *env) //
 			in_single_quote = false;
 		else if ((*str)[idx] == '$' && (*str)[idx + 1] && (*str)[idx + 1] == '?' && in_single_quote == false)
 		{
-			put_global_signal(&(*str), idx);
+			put_g_signal(&(*str), idx);
 			did_replace = true;
 		}
 		else if ((*str)[idx] == '$' && is_alpha_num((*str)[idx + 1]) \

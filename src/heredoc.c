@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   heredoc.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
+/*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/16 16:17:33 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/21 18:10:09 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/24 16:58:42 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,8 +66,8 @@ void	dollor_conver(char *str, int *fd, t_env *env)
 				write(fd[1], &str[i], 1);
 			else if (str[i + 1] == '?')
 			{
-				write(fd[1], ft_itoa(global_signal), \
-						ft_strlen(ft_itoa(global_signal)));
+				write(fd[1], ft_itoa(g_signal), \
+						ft_strlen(ft_itoa(g_signal)));
 				i++;
 			}
 			else if (str[i + 1] == '$')
@@ -106,7 +106,7 @@ int	dollar_conver2(int i, t_env *env, char *str, int *fd)
 	env_val = NULL;
 	while (str[j])
 	{
-		if (str[j] == ' ' || !str[j] || str[j] == '$')
+		if (str[j] == ' ' || !str[j] || str[j] == '$' || str[j] == '\"' || str[i] == '\'')
 			break ;
 		j++;
 	}

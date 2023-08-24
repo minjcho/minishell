@@ -6,7 +6,7 @@
 /*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 13:08:52 by minjcho           #+#    #+#             */
-/*   Updated: 2023/08/24 16:34:50 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/08/24 16:48:24 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,5 +70,5 @@ void	replace_env(t_mini *mini, t_env *env) //
 	}
 	remove_quotation_mini(mini);
 	if (did_replace == true)
-		global_signal = 0;
+		g_signal = 0;
 }

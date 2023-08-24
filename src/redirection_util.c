@@ -6,7 +6,7 @@
 /*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 20:05:25 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/24 16:22:48 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/08/24 16:51:32 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ void	set_cmd_null(t_mini *data, int start, int end)
 	}
 }
 
-int	ft_strcmp(char *s1, char *s2) // 
+int	ft_strcmp(char *s1, char *s2)
 {
 	int	i;
 
