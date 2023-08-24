@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 16:14:11 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/23 20:12:47 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/24 12:17:05 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,6 +188,7 @@ void	set_cmd_null(t_mini *data, int start, int end);
 void	first_excute(t_mini *data, t_env *env);
 void	cmd_find(t_mini *data, t_env *env);
 void	cmd_start(t_mini *data, char **split_path, t_env *env);
+int		is_slash(char *str);
 
 //free
 void	command_free(char **command);
@@ -239,6 +240,7 @@ void		ft_nodecpy(t_env_node *new_node, t_env_node *old, char *delete);
 
 //error_msg
 //error.c error2.c
+void	error_cmd2(char *cmd, int i);
 void	error_export_valid(char *key);
 void	error_malloc(void);
 void	error_pipe(void);

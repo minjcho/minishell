@@ -6,24 +6,44 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/16 19:34:33 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/23 20:22:38 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/23 21:22:23 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
+int		is_slash(char *str)
+{
+	int	i;
+
+	i = -1;
+	while (str[++i])
+	{
+		if (str[i] == '/')
+			return (1);
+	}
+	return (0);
+}
+
 void	first_excute(t_mini *data, t_env *env)
 {
 	int		i;
+	int		flag;
 
 	i = -1;
+	flag = 0;
 	while (++i < data->cmd_size)
 	{
 		if (data->command[i] != NULL)
 		{
+			flag = is_slash(data->command[i]);
 			if (execve(data->command[i], cmd_realoc(data), \
 			env_tochar(env->node)) == -1)
+			{
+				if (flag)
+					error_cmdnotfound(data->command[i]);
 				break ;
+			}
 		}
 	}
 }
