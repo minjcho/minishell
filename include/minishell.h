@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   minishell.h                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
+/*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 16:14:11 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/24 12:17:05 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/24 13:44:00 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -309,7 +309,7 @@ void	env_replace(char **str, char *tmp, t_env *env);
 char	*find_env_variable(char *str);
 void	replace_env_in_double_quote(char **str, t_env *env);
 // void	process_double_quoted_str(char **str, t_env *env);
-void	remove_double_quotation(t_mini *mini, t_env *env);
+void	remove_double_quotation(t_mini *mini);
 void	put_global_signal(char **str);
 bool	replace_dollar_question(t_mini **mini);
 char	*remove_quotation_from_str(char *str);

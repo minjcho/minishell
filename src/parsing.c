@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
+/*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 14:06:50 by minjcho           #+#    #+#             */
-/*   Updated: 2023/08/23 20:12:38 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/24 13:20:48 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,7 +162,6 @@ bool	check_struct(t_mini	*mini, t_env *env)
 	{
 		if (mini[idx].cmd_size == 0 && idx != struct_size)
 		{
-			ft_putstr_fd("Error: syntax error near unexpected token `|'\n", 2);
 			ft_putstr_fd("Error: syntax error near unexpected token `|'\n", 2);
 			return (true);
 		}
