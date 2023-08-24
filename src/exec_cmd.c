@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
+/*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 14:14:16 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/23 20:12:04 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/24 13:14:50 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@ int	main(int ac, char **av, char **envp)
 	(void)av;
 	readlilne_tester(envp);
 }
+
 char	*get_user_input(void)
 {
 	char	*temp;
@@ -33,59 +34,44 @@ char	*get_user_input(void)
 	return temp;
 }
 
-void	process_input(char *temp, t_mini **node, t_env *env)
+void	process_input(char *temp, t_mini *node, t_env *env)
 {
-	parsing(node, temp);
-	if ((*node)->cmd_size == 0)
+	parsing(&node, temp);
+	if (node->cmd_size == 0)
 	{
-		node_free2(*node);
+		node_free2(node);
 		free(temp);
 		return;
 	}
-	if (check_struct(*node, env) == false)
-	{
-		exec_cmd(*node, env);
-	}
-	node_free2(*node);
+	if (check_struct(node, env) == false)
+		exec_cmd(node, env);
+	node_free2(node);
 	free(temp);
 	temp = NULL;
 	close(0);
 	close(1);
-	dup2((*node)->origin_in, 0);
-	dup2((*node)->origin_out, 1);
+	dup2(node->origin_in, 0);
+	dup2(node->origin_out, 1);
 }
 
 void	readlilne_tester(char **envp)
 {
 	char	*temp;
-	t_mini	*node = NULL;
+	t_mini	*node;
 	t_env	env;
 
 	env_init(&env, envp);
 
 	while (1)
 	{
-		signal_main();
-		temp = readline("minishell : ");
-		if (!temp)
-			exit(0);
+		temp = get_user_input();
+		
 		if (*temp)
-		{
-			add_history(temp);
-			parsing(&node, temp);
-			if (check_struct(node, &env) == false)
-				exec_cmd(node, &env);
-			node_free2(node);
-		}
+			process_input(temp, node, &env);
 		else
 		{
 			free(temp);
 			continue ;
 		}
-		free(temp);
-		close(0);
-		close(1);
-		dup2(node->origin_in, 0);
-		dup2(node->origin_out, 1);
 	}
 }
