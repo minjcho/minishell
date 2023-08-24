@@ -6,20 +6,41 @@
 /*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 13:06:49 by minjcho           #+#    #+#             */
-/*   Updated: 2023/08/23 13:07:00 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/08/24 15:54:45 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	put_global_signal(char **str)
+// void	put_global_signal(char **str)
+// {
+// 	char	*tmp;
+// 	char	*new_str;
+// 	char	*start_ptr;
+
+// 	tmp = ft_itoa(global_signal);
+// 	start_ptr = ft_strstr(*str, "$?");
+// 	if (start_ptr)
+// 	{
+// 		new_str = (char *)malloc(ft_strlen(*str) - \
+// 								ft_strlen("$?") + ft_strlen(tmp) + 1);
+// 		ft_strncpy(new_str, *str, start_ptr - *str);
+// 		ft_strcpy(new_str + (start_ptr - *str), tmp);
+// 		ft_strcat(new_str, start_ptr + ft_strlen("$?"));
+// 		free(*str);
+// 		*str = new_str;
+// 	}
+// 	free(tmp);
+// }
+
+void	put_global_signal(char **str, int start_idx)
 {
 	char	*tmp;
 	char	*new_str;
 	char	*start_ptr;
 
 	tmp = ft_itoa(global_signal);
-	start_ptr = ft_strstr(*str, "$?");
+	start_ptr = ft_strstr(*str + start_idx, "$?");
 	if (start_ptr)
 	{
 		new_str = (char *)malloc(ft_strlen(*str) - \
@@ -54,7 +75,7 @@ bool	replace_dollar_question(t_mini **mini)
 					(*mini)[i].command[j][0] != '\'')
 				{
 					did_replace = true;
-					put_global_signal(&(*mini)[i].command[j]);
+					put_global_signal(&(*mini)[i].command[j], k);
 				}
 			}
 		}

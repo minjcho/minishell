@@ -6,7 +6,7 @@
 /*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 16:14:11 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/24 13:44:00 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/08/24 15:53:08 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -310,7 +310,8 @@ char	*find_env_variable(char *str);
 void	replace_env_in_double_quote(char **str, t_env *env);
 // void	process_double_quoted_str(char **str, t_env *env);
 void	remove_double_quotation(t_mini *mini);
-void	put_global_signal(char **str);
+// void	put_global_signal(char **str);
+void	put_global_signal(char **str, int start_idx);
 bool	replace_dollar_question(t_mini **mini);
 char	*remove_quotation_from_str(char *str);
 void	remove_single_quotation_from_mini(t_mini *mini);
