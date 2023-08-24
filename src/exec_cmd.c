@@ -6,7 +6,7 @@
 /*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 14:14:16 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/24 21:26:48 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/08/24 21:50:36 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ void	process_input(char *temp, t_mini *node, t_env *env)
 		free(temp);
 		return ;
 	}
-	if (check_struct(node, env) == false && is_ok == true)
+	if (is_ok == true && check_struct(node, env) == false)
 		exec_cmd(node, env);
 	node_free2(node);
 	free(temp);
