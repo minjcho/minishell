@@ -6,7 +6,7 @@
 /*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 14:14:16 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/24 21:01:43 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/08/24 21:26:48 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ void	readlilne_tester(char **envp)
 	t_mini	*node;
 	t_env	env;
 
+	node = NULL;
 	env_init(&env, envp);
 	while (1)
 	{

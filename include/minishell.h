@@ -6,7 +6,7 @@
 /*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 16:14:11 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/24 20:41:17 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/08/24 21:35:16 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -286,5 +286,7 @@ char			*find_env_variable(char *str);
 bool			replace_env_in_double_quote(char **str, t_env *env);
 void			put_g_signal(char **str, int start_idx);
 void			replace_env(t_mini *mini, t_env *env);
+char			is_special_t(char c);
+int				is_alpha_num(char c);
 
 #endif

@@ -6,7 +6,7 @@
 /*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/16 16:17:33 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/24 20:43:58 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/08/24 21:20:56 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -107,7 +107,7 @@ int	dollar_conver2(int i, t_env *env, char *str, int *fd)
 	while (str[j])
 	{
 		if (str[j] == ' ' || !str[j] || str[j] == '$' \
-			|| str[j] == '\"' || str[i] == '\'')
+			|| str[j] == '\"' || str[j] == '\'')
 			break ;
 		j++;
 	}

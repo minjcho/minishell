@@ -6,7 +6,7 @@
 /*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 19:59:44 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/24 20:44:17 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/08/24 21:26:11 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ void	error_cmd2(char *cmd, int i)
 	struct stat	file_stat;
 	int			exitcode;
 
+	exitcode = 0;
 	if ((i > 0 && cmd[i - 1] == '.') && lstat(cmd, &file_stat) == 0)
 	{
 		if (S_ISDIR(file_stat.st_mode))

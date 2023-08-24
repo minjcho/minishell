@@ -6,16 +6,11 @@
 /*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 12:58:58 by minjcho           #+#    #+#             */
-/*   Updated: 2023/08/24 20:34:08 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/08/24 21:34:11 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-char	is_special_t(char c)
-{
-	return (c == '<' || c == '>' || c == '|' || c == ',' || c == '\t');
-}
 
 size_t	skip_spaces(char *input, size_t len, size_t i)
 {

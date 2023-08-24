@@ -1,7 +1,7 @@
 NAME			= minishell
 CC				= cc
 LIB_FLAG		= -Llibft -lft
-CFLAGS			= -Iinclude -g
+CFLAGS			= -Iinclude -g -Wall -Wextra -Werror
 READLINE_FLAG	= -lreadline -L${HOME}/.brew/opt/readline/lib
 READLINE_INC	= -I${HOME}/.brew/opt/readline/include
 
@@ -37,7 +37,9 @@ SOURCES_NAMES	=	builtin_ready.c \
 					parsing_env.c \
 					parsing_env_utils.c \
 					parsing_env_utils1.c \
+					parsing_check_struct.c \
 					process_utils.c \
+					parsing_everything.c \
 					process.c \
 					signal.c \
 					redirection_set.c \
