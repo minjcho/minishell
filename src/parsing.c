@@ -6,7 +6,7 @@
 /*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 14:06:50 by minjcho           #+#    #+#             */
-/*   Updated: 2023/08/24 13:20:48 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/08/24 16:15:06 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,14 +61,36 @@ void	fill_rest_struct(t_mini **mini)
 	}
 }
 
-void	parsing(t_mini **mini, char *line)
+bool	check_command_pipe(char **str)
+{
+	int	idx;
+
+	idx = 0;
+	while (str[idx])
+	{
+		idx++;
+	}
+	idx--;
+	if (str[idx][0] == '|')
+	{
+		ft_putstr_fd("Error: syntax error near unexpected token `|'\n", 2);
+		return (false);
+	}
+	return (true);
+}
+
+bool	parsing(t_mini **mini, char *line)
 {
 	char	**tmp_command;
+	bool	is_ok;
 
+	is_ok = true;
 	tmp_command = split_string(line);
 	put_struct(mini, tmp_command);
 	fill_rest_struct(mini);
+	is_ok = check_command_pipe(tmp_command);
 	command_free(tmp_command);
+	return (is_ok);
 }
 
 bool	check_pipe(t_mini *mini)

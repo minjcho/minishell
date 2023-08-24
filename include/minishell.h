@@ -6,7 +6,7 @@
 /*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 16:14:11 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/24 15:53:08 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/08/24 16:00:26 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -269,7 +269,7 @@ void    signal_heredoc(t_mini *data, int status);
 void    heredoc_signal_red(pid_t id, int *fd, t_mini *data);
 
 //minjcho
-void	parsing(t_mini **mini, char *line);
+bool	parsing(t_mini **mini, char *line);
 bool	check_struct(t_mini	*mini, t_env *env);
 
 //parsing_utils
