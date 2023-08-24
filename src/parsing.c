@@ -6,7 +6,7 @@
 /*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 14:06:50 by minjcho           #+#    #+#             */
-/*   Updated: 2023/08/24 16:27:07 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/08/24 16:43:14 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,8 @@ bool	check_command_pipe(char **str) //
 {
 	int	idx;
 
+	if (!(*str))
+		return (false);
 	idx = 0;
 	while (str[idx])
 	{
