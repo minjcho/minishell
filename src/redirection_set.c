@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 20:00:55 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/25 13:39:30 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/25 16:35:23 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,7 +83,9 @@ void	red_right(t_mini *data, int i)
 {
 	int	fd;
 
-	fd = open(data->command[i + 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
+	fd = 0;
+	if (data->input_fd != -1)
+		fd = open(data->command[i + 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
 	if (fd == -1 && data->echo_fail == 0)
 		error_file(data->command[i + 1]);
 	data->output_fd = fd;

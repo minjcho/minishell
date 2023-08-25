@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 13:05:13 by minjcho           #+#    #+#             */
-/*   Updated: 2023/08/25 15:34:19 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/25 15:47:04 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,15 +44,14 @@ bool	handle_dollar_question(char **str, int idx, bool in_single_quote)
 	return (false);
 }
 
-void	replace_variable(char **str, int idx, bool in_single_quote, \
-							bool in_double_qoute, t_env *env)
+void	replace_variable(char **str, int idx, t_env *env, bool in_double_quote)
 {
 	char	*tmp;
 
-	if ((*str)[idx] == '$' && is_alpha_num((*str)[idx + 1]) && !in_single_quote)
+	if ((*str)[idx] == '$' && is_alpha_num((*str)[idx + 1]))
 	{
 		tmp = find_env_variable(&(*str)[idx + 1]);
-		env_replace(str, tmp, env, in_double_qoute);
+		env_replace(str, tmp, env, in_double_quote);
 		free(tmp);
 	}
 }
@@ -74,9 +73,9 @@ bool	replace_env_in_double_quote(char **str, t_env *env)
 		{
 			if (handle_dollar_question(str, idx, in_single_quote))
 				did_replace = true;
-			else
-				replace_variable(str, idx, in_single_quote, \
-								in_double_quote, env);
+			else if (!in_single_quote && (*str)[idx] == '$' && \
+					is_alpha_num((*str)[idx + 1]))
+				replace_variable(str, idx, env, in_double_quote);
 		}
 		idx++;
 	}

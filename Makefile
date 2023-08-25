@@ -4,9 +4,6 @@ LIB_FLAG		= -Llibft -lft
 CFLAGS			= -Iinclude -g -Wall -Wextra -Werror
 READLINE_FLAG	= -lreadline -L${HOME}/.brew/opt/readline/lib
 READLINE_INC	= -I${HOME}/.brew/opt/readline/include
-# READLINE_FLAG	= -lreadline -L/opt/homebrew/opt/readline/lib	# minjcho
-# READLINE_INC	= -I/opt/homebrew/opt/readline/include			# minjcho
-
 
 SRC_DIR	= src
 OBJ_DIR	= obj
@@ -24,6 +21,7 @@ SOURCES_NAMES	=	builtin_ready.c \
 					env_utils.c \
 					env_utils2.c \
 					error.c \
+					process2.c \
 					error2.c \
 					exec_cmd.c \
 					export_utils.c \

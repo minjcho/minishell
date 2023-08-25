@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 20:15:49 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/21 10:59:02 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/25 15:50:47 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,40 +19,6 @@ void	do_export(t_mini *data, t_env *env)
 	else if ((data->cmd_size - data->delete) > 1)
 		export_val2(data, env);
 }
-
-// void	export_val(t_mini *data, t_env *env)
-// {
-// 	int		i;
-// 	char	*key;
-// 	char	*value;
-// 	char	**temp;
-// 	char	**cmd;
-
-// 	i = 0;
-// 	key = NULL;
-// 	value = NULL;
-// 	cmd = cmd_realoc(data);
-// 	while (cmd[++i])
-// 	{
-// 		temp = ft_split(cmd[i], '=');
-// 		key = temp[0];
-// 		value = temp[1];
-// 		if (!export_valid_check2(cmd[i]) || !export_valid_check(key))
-// 		{
-// 			command_free(temp);
-// 			continue;
-// 		}
-// 		if (!value)
-// 			ft_setexport(key, value, env);
-// 		else
-// 		{
-// 			ft_setexport(key, value, env);
-// 			ft_setenv(key, value, env);
-// 		}
-// 		command_free(temp);
-// 	}
-// 	command_free(cmd);
-// }
 
 void	export_val2(t_mini *data, t_env *env)
 {

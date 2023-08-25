@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/16 14:33:02 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/16 14:33:34 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/25 17:23:30 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,8 @@ int	export_valid_check(char *key)
 		}
 		while (key[++i])
 		{
+			if (key[i] == '=')
+				break ;
 			if (key[i] <= 47 || key[i] >= 123 || (key[i] >= 58 && \
 			key[i] <= 60) || \
 			(key[i] >= 91 && key[i] <= 94) || key[i] == 96 \

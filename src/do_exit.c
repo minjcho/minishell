@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   do_exit.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 20:52:49 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/24 16:48:24 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/08/25 16:54:22 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,13 +36,14 @@ void	do_exit(t_mini *data)
 			break ;
 		}
 	}
-	do_exit3(temp);
+	do_exit3(temp, data->cnt);
 }
 
-void	do_exit3(int temp)
+void	do_exit3(int temp, int cnt)
 {
 	g_signal = temp;
-	ft_putstr_fd("exit\n", 2);
+	if (cnt == 1)
+		ft_putstr_fd("exit\n", 2);
 	exit(temp);
 }
 
@@ -61,7 +62,7 @@ int	str_digit(char *str)
 
 void	do_exit2(char *str)
 {
-	g_signal = 255;
+	g_signal = 2;
 	error_exit(str);
-	exit(255);
+	exit(2);
 }

@@ -1,36 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   error.c                                            :+:      :+:    :+:   */
+/*   process2.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/08/07 19:58:00 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/25 15:51:13 by jinhyeok         ###   ########.fr       */
+/*   Created: 2023/08/25 17:55:04 by jinhyeok          #+#    #+#             */
+/*   Updated: 2023/08/25 17:56:59 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-void	error_file(char *file)
+int	set_re_and_pipe(t_mini *data, t_env *env, int *cur_pipe, int i)
 {
-	perror(file);
+	redirection_set(&data[i], env);
+	if (data[i].input_fd == -1)
+	{
+		control_pipe(cur_pipe);
+		return (1);
+	}
+	return (0);
 }
 
-void	error_fork(void)
+void	control_pipe(int *cur_pipe)
 {
-	perror("fork");
-	exit(1);
-}
-
-void	error_pipe(void)
-{
-	perror("pipe");
-	exit(1);
-}
-
-void	error_malloc(void)
-{
-	perror("malloc");
-	exit(1);
+	pipe(cur_pipe);
+	close(cur_pipe[1]);
+	dup2(cur_pipe[0], 0);
+	close(cur_pipe[0]);
 }

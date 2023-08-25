@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 14:14:16 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/25 10:06:48 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/25 16:30:19 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,6 @@ void	process_input(char *temp, t_mini *node, t_env *env)
 {
 	bool	is_ok;
 
-	is_ok = false;
 	is_ok = parsing(&node, temp);
 	if (node->cmd_size == 0)
 	{
