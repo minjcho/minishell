@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/16 19:34:33 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/25 13:01:26 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/25 15:32:10 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	cmd_start(t_mini *data, char **split_path, t_env *env)
 	j = -1;
 	while (++j < data->cmd_size)
 	{
-		if (data->command[j] != NULL && (*data->command[j]) != 0)
+		if (data->command[j] != NULL)
 		{
 			i = -1;
 			while (split_path && split_path[++i])

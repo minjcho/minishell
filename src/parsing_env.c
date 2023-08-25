@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 13:05:13 by minjcho           #+#    #+#             */
-/*   Updated: 2023/08/25 11:21:34 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/25 15:34:19 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,14 +44,15 @@ bool	handle_dollar_question(char **str, int idx, bool in_single_quote)
 	return (false);
 }
 
-void	replace_variable(char **str, int idx, bool in_single_quote, t_env *env)
+void	replace_variable(char **str, int idx, bool in_single_quote, \
+							bool in_double_qoute, t_env *env)
 {
 	char	*tmp;
 
 	if ((*str)[idx] == '$' && is_alpha_num((*str)[idx + 1]) && !in_single_quote)
 	{
 		tmp = find_env_variable(&(*str)[idx + 1]);
-		env_replace(str, tmp, env);
+		env_replace(str, tmp, env, in_double_qoute);
 		free(tmp);
 	}
 }
@@ -67,14 +68,15 @@ bool	replace_env_in_double_quote(char **str, t_env *env)
 	in_single_quote = false;
 	in_double_quote = false;
 	did_replace = false;
-	while ((*str)[idx])
+	while ((*str) && (*str)[idx])
 	{
 		if (!is_in_quotes((*str)[idx], &in_single_quote, &in_double_quote))
 		{
 			if (handle_dollar_question(str, idx, in_single_quote))
 				did_replace = true;
 			else
-				replace_variable(str, idx, in_single_quote, env);
+				replace_variable(str, idx, in_single_quote, \
+								in_double_quote, env);
 		}
 		idx++;
 	}

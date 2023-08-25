@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_env_utils1.c                               :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 13:08:52 by minjcho           #+#    #+#             */
-/*   Updated: 2023/08/24 20:36:45 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/08/25 15:35:02 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,23 +21,20 @@ void	remove_quotation_str(char *str)
 	read_pos = 0;
 	write_pos = 0;
 	current_quote = 0;
-	while (str[read_pos])
+	while (str && str[read_pos])
 	{
 		if ((str[read_pos] == '\"' || str[read_pos] == '\'') && !current_quote)
 		{
 			current_quote = str[read_pos];
 		}
 		else if (str[read_pos] == current_quote)
-		{
 			current_quote = 0;
-		}
 		else
-		{
 			str[write_pos++] = str[read_pos];
-		}
 		read_pos++;
 	}
-	str[write_pos] = '\0';
+	if (str)
+		str[write_pos] = '\0';
 }
 
 void	remove_quotation_mini(t_mini *mini)

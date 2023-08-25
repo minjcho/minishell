@@ -2,10 +2,10 @@ NAME			= minishell
 CC				= cc
 LIB_FLAG		= -Llibft -lft
 CFLAGS			= -Iinclude -g -Wall -Wextra -Werror
-# READLINE_FLAG	= -lreadline -L${HOME}/.brew/opt/readline/lib
-# READLINE_INC	= -I${HOME}/.brew/opt/readline/include
-READLINE_FLAG	= -lreadline -L/opt/homebrew/opt/readline/lib	# minjcho
-READLINE_INC	= -I/opt/homebrew/opt/readline/include			# minjcho
+READLINE_FLAG	= -lreadline -L${HOME}/.brew/opt/readline/lib
+READLINE_INC	= -I${HOME}/.brew/opt/readline/include
+# READLINE_FLAG	= -lreadline -L/opt/homebrew/opt/readline/lib	# minjcho
+# READLINE_INC	= -I/opt/homebrew/opt/readline/include			# minjcho
 
 
 SRC_DIR	= src

@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/27 16:14:11 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/25 13:39:34 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/25 15:32:59 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -282,7 +282,8 @@ bool			check_empty_redirection(t_mini *mini);
 bool			has_invalid_redirection(char *token);
 bool			check_redirection(t_mini *mini);
 char			**split_string(char *input);
-void			env_replace(char **str, char *tmp, t_env *env);
+void			env_replace(char **str, char *tmp, t_env *env, \
+								bool in_double_quote);
 char			*find_env_variable(char *str);
 bool			replace_env_in_double_quote(char **str, t_env *env);
 void			put_g_signal(char **str, int start_idx);
