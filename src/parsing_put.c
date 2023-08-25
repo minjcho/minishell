@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_put.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
+/*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 13:00:37 by minjcho           #+#    #+#             */
-/*   Updated: 2023/08/25 13:42:00 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/25 13:52:02 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -68,18 +68,23 @@ void	update_indices_and_count(int *cmd_count, int *cmd_idx, \
 	*start_idx = i + 1;
 }
 
-void	put_struct(t_mini **mini, char **tmp_command)
+void	allocate_and_initialize_struct(t_mini **mini, char **tmp_command)
 {
 	int	total_commands;
-	int	cmd_idx;
-	int	cmd_count;
-	int	start_idx;
-	int	i;
 
 	total_commands = count_pipes(tmp_command);
 	*mini = (t_mini *)malloc((total_commands + 1) * sizeof(t_mini));
 	if (!(*mini))
 		error_malloc();
+}
+
+void	fill_struct_with_commands(t_mini **mini, char **tmp_command)
+{
+	int	cmd_idx;
+	int	cmd_count;
+	int	start_idx;
+	int	i;
+
 	cmd_idx = 0;
 	cmd_count = 0;
 	start_idx = 0;
@@ -97,3 +102,39 @@ void	put_struct(t_mini **mini, char **tmp_command)
 	(*mini)[cmd_idx].command = NULL;
 	(*mini)[cmd_idx].cmd_size = 0;
 }
+
+void	put_struct(t_mini **mini, char **tmp_command)
+{
+	allocate_and_initialize_struct(mini, tmp_command);
+	fill_struct_with_commands(mini, tmp_command);
+}
+
+// void	put_struct(t_mini **mini, char **tmp_command)
+// {
+// 	int	total_commands;
+// 	int	cmd_idx;
+// 	int	cmd_count;
+// 	int	start_idx;
+// 	int	i;
+
+// 	total_commands = count_pipes(tmp_command);
+// 	*mini = (t_mini *)malloc((total_commands + 1) * sizeof(t_mini));
+// 	if (!(*mini))
+// 		error_malloc();
+// 	cmd_idx = 0;
+// 	cmd_count = 0;
+// 	start_idx = 0;
+// 	i = -1;
+// 	while (tmp_command[++i])
+// 	{
+// 		if (ft_strcmp(tmp_command[i], "|") == 0 || tmp_command[i + 1] == NULL)
+// 		{
+// 			cmd_count = get_command_count(tmp_command, start_idx, i);
+// 			allocate_and_set_command(&(*mini)[cmd_idx], \ tmp_command, 
+// 									cmd_count, start_idx);
+// 			update_indices_and_count(&cmd_count, &cmd_idx, &start_idx, i);
+// 		}
+// 	}
+// 	(*mini)[cmd_idx].command = NULL;
+// 	(*mini)[cmd_idx].cmd_size = 0;
+// }

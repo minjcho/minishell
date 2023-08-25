@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
+/*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 19:59:44 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/25 11:54:31 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/25 13:48:46 by minjcho          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,10 +16,8 @@ void	error_cmdnotfound(char *cmd)
 {
 	int			i;
 	char		*str;
-	int			exitcode;
 
 	i = -1;
-	exitcode = 0;
 	while (cmd[++i])
 	{
 		if (cmd[i] == '/')
