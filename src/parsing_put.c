@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_put.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 13:00:37 by minjcho           #+#    #+#             */
-/*   Updated: 2023/08/24 20:34:29 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/08/25 13:42:00 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,8 @@ void	allocate_and_set_command(t_mini *mini, char **tmp_command, \
 	int	k;
 
 	mini->command = (char **)malloc((cmd_count + 1) * sizeof(char *));
+	if (!mini->command)
+		error_malloc();
 	k = -1;
 	while (++k < cmd_count)
 	{
@@ -76,6 +78,8 @@ void	put_struct(t_mini **mini, char **tmp_command)
 
 	total_commands = count_pipes(tmp_command);
 	*mini = (t_mini *)malloc((total_commands + 1) * sizeof(t_mini));
+	if (!(*mini))
+		error_malloc();
 	cmd_idx = 0;
 	cmd_count = 0;
 	start_idx = 0;

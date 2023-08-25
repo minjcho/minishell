@@ -6,7 +6,7 @@
 /*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 20:00:55 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/21 14:50:15 by jinhyeok         ###   ########.fr       */
+/*   Updated: 2023/08/25 13:39:30 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,9 +84,11 @@ void	red_right(t_mini *data, int i)
 	int	fd;
 
 	fd = open(data->command[i + 1], O_WRONLY | O_CREAT | O_TRUNC, 0644);
-	if (fd == -1)
+	if (fd == -1 && data->echo_fail == 0)
 		error_file(data->command[i + 1]);
 	data->output_fd = fd;
+	if (fd == -1 && data->echo_fail == 0)
+		data->echo_fail = 1;
 	set_cmd_null(data, i, i + 1);
 	dup2(fd, 1);
 	close(fd);
@@ -98,9 +100,11 @@ void	red_left(t_mini *data, int i)
 
 	fd = 0;
 	fd = open(data->command[i + 1], O_RDONLY);
-	if (fd == -1)
+	if (fd == -1 && data->echo_fail == 0)
 		error_file(data->command[i + 1]);
 	data->input_fd = fd;
+	if (fd == -1 && data->echo_fail == 0)
+		data->echo_fail = 1;
 	set_cmd_null(data, i, i + 1);
 	dup2(fd, 0);
 	close(fd);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   error2.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 19:59:44 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/24 21:26:11 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/08/25 11:54:31 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,8 +16,10 @@ void	error_cmdnotfound(char *cmd)
 {
 	int			i;
 	char		*str;
+	int			exitcode;
 
 	i = -1;
+	exitcode = 0;
 	while (cmd[++i])
 	{
 		if (cmd[i] == '/')
@@ -56,6 +58,7 @@ void	error_cmd2(char *cmd, int i)
 
 void	error_export_valid(char *key)
 {
+	g_signal = 1;
 	ft_putstr_fd("export: `", 2);
 	ft_putstr_fd(key, 2);
 	ft_putstr_fd("': not a valid identifier\n", 2);
@@ -63,6 +66,7 @@ void	error_export_valid(char *key)
 
 void	error_exit(char *str)
 {
+	g_signal = 1;
 	ft_putstr_fd("exit: ", 2);
 	ft_putstr_fd(str, 2);
 	ft_putstr_fd(": numeric argument required\n", 2);
@@ -70,5 +74,6 @@ void	error_exit(char *str)
 
 void	error_exit2(void)
 {
+	g_signal = 1;
 	ft_putstr_fd("exit: too many arguments\n", 2);
 }

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_split_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 12:58:58 by minjcho           #+#    #+#             */
-/*   Updated: 2023/08/24 21:34:11 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/08/25 13:32:42 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,6 +66,8 @@ void	split_segment(t_state *state, char *input, size_t len)
 		state->i = split_by_char(input, len, state->i, &quote);
 	}
 	state->result[state->idx] = (char *)malloc(state->i - state->start + 1);
+	if (!state->result[state->idx])
+		error_malloc();
 	ft_strncpy(state->result[state->idx], \
 				input + state->start, state->i - state->start);
 	state->result[state->idx][state->i - state->start] = '\0';
@@ -78,6 +80,8 @@ char	**split_string(char *input)
 	t_state			state;
 
 	state.result = (char **)malloc((len + 1) * sizeof(char *));
+	if (!state.result)
+		error_malloc();
 	state.idx = 0;
 	state.i = 0;
 	while (state.i < len)

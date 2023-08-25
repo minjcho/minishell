@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_env_utils.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/23 13:06:49 by minjcho           #+#    #+#             */
-/*   Updated: 2023/08/24 20:37:13 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/08/25 13:30:07 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,8 @@ void	put_g_signal(char **str, int start_idx)
 	{
 		new_str = (char *)malloc(ft_strlen(*str) - \
 								ft_strlen("$?") + ft_strlen(tmp) + 1);
+		if (!new_str)
+			error_malloc();
 		ft_strncpy(new_str, *str, start_ptr - *str);
 		ft_strcpy(new_str + (start_ptr - *str), tmp);
 		ft_strcat(new_str, start_ptr + ft_strlen("$?"));

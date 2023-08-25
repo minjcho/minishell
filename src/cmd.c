@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cmd.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/16 19:34:33 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/24 20:43:30 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/08/25 13:01:26 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,7 +58,7 @@ void	cmd_start(t_mini *data, char **split_path, t_env *env)
 	j = -1;
 	while (++j < data->cmd_size)
 	{
-		if (data->command[j] != NULL)
+		if (data->command[j] != NULL && (*data->command[j]) != 0)
 		{
 			i = -1;
 			while (split_path && split_path[++i])
@@ -74,7 +74,7 @@ void	cmd_start(t_mini *data, char **split_path, t_env *env)
 			break ;
 		}
 	}
-	error_cmdnotfound(data->command[0]);
+	error_cmdnotfound(data->command[j]);
 }
 
 void	cmd_find(t_mini *data, t_env *env)

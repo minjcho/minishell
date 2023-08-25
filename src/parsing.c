@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 14:06:50 by minjcho           #+#    #+#             */
-/*   Updated: 2023/08/24 21:48:53 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/08/25 13:39:39 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ void	fill_rest_struct(t_mini **mini)
 		(*mini)[i].is_heredoc = 0;
 		(*mini)[i].builtin_cnt = 0;
 		(*mini)[i].is_signal = 0;
+		(*mini)[i].echo_fail = 0;
 		i++;
 	}
 }
