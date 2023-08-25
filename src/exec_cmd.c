@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   exec_cmd.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/07/28 14:14:16 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/24 21:50:36 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/08/25 10:06:48 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,10 @@ char	*get_user_input(void)
 	signal_main();
 	temp = readline("minishell : ");
 	if (!temp)
+	{
+		ft_putstr_fd("exit\n", 2);
 		exit(0);
+	}
 	if (*temp)
 		add_history(temp);
 	return (temp);

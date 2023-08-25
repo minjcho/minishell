@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   process_utils.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/07 20:45:27 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/24 16:48:24 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/08/25 10:10:08 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -83,12 +83,12 @@ void	ft_wait(int n)
 	{
 		if (WTERMSIG(status) == SIGQUIT)
 		{
-			ft_putstr_fd("^\\Quit: 3\n", 2);
+			ft_putstr_fd("Quit: 3\n", 2);
 			g_signal = 128 + SIGQUIT;
 		}
 		if (WTERMSIG(status) == SIGINT)
 		{
-			ft_putstr_fd("^C\n", 2);
+			ft_putstr_fd("\n", 2);
 			g_signal = 128 + SIGINT;
 		}
 	}

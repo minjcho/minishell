@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   signal.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/21 14:13:21 by jinhyeok          #+#    #+#             */
-/*   Updated: 2023/08/24 16:48:24 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/08/25 10:19:25 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ void	signal_heredoc(t_mini *data, int status)
 			dup2(pi[0], 0);
 			close(pi[0]);
 			ft_putstr_fd("\n", 2);
-			g_signal = 1;
+			g_signal = 130;
 			data->is_signal = 1;
 		}
 	}
@@ -48,22 +48,12 @@ void	signal_heredoc(t_mini *data, int status)
 
 void	sigint_handler(int signal)
 {
-	struct termios	new_term;
-	struct termios	temp;
-
 	(void)signal;
-	g_signal = 1;
-	tcgetattr(STDIN_FILENO, &new_term);
-	tcgetattr(STDIN_FILENO, &temp);
-	new_term.c_lflag &= ~(ICANON | ECHO | ECHOCTL);
-	new_term.c_cc[VMIN] = 1;
-	new_term.c_cc[VTIME] = 0;
-	tcsetattr(STDIN_FILENO, TCSANOW, &new_term);
+	g_signal = 130;
 	write(1, "\n", 1);
 	rl_on_new_line();
 	rl_replace_line("", 0);
 	rl_redisplay();
-	tcsetattr(STDIN_FILENO, TCSANOW, &temp);
 }
 
 void	signal_main(void)

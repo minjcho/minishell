@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parsing_check_struct.c                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: minjcho <minjcho@student.42.fr>            +#+  +:+       +#+        */
+/*   By: jinhyeok <jinhyeok@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/08/24 21:29:00 by minjcho           #+#    #+#             */
-/*   Updated: 2023/08/24 21:30:23 by minjcho          ###   ########.fr       */
+/*   Updated: 2023/08/25 11:26:55 by jinhyeok         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,10 +26,8 @@ bool	check_pipe(t_mini *mini)
 			if (mini[idx].command[jdx][0] == '|' \
 				&& ft_strlen(mini[idx].command[jdx]) > 1)
 			{
-				ft_putstr_fd("Error: syntax error near \
-								unexpected token `|'\n", 2);
-				ft_putstr_fd("Error: syntax error near \
-								unexpected token `|'\n", 2);
+				ft_putstr_fd(\
+					"Error: syntax error near unexpected token `|'\n", 2);
 				return (true);
 			}
 			jdx++;
